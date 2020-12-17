@@ -3,16 +3,16 @@ class Game {
     private  canvas: HTMLCanvasElement;
     private  ctx: CanvasRenderingContext2D;
 
-    // The hangman parts
-    private base: Rectangle;
-    private rectangle : Rectangle;
-
     private array : HTMLImageElement[];
     private leftArray : HTMLImageElement[];
     private keyboard : KeyboardListener;
     private index : number;
     private xpos :number;
     private ypos :number;
+    private gameState : string;
+
+
+
 
     public constructor(canvasId: HTMLCanvasElement) {
         // Construct all of the canvas
@@ -23,8 +23,8 @@ class Game {
 
         // Set the context of the canvas
         this.ctx = this.canvas.getContext('2d');
-        document.body.style.backgroundImage = "src/moving/back.jpg"
-
+        document.body.style.backgroundImage = "url('src/moving/background 1.jpg')";
+        document.body.style.backgroundSize = "cover";
         requestAnimationFrame(this.loop);
 
         this.xpos = this.canvas.width/10
@@ -34,19 +34,9 @@ class Game {
 
         this.array = [this.loadNewImage("src/moving/PlayerRight/walk 1.png") , this.loadNewImage("src/moving/PlayerRight/walk 2.png"), this.loadNewImage("src/moving/PlayerRight/walk 3.png") ,this.loadNewImage("src/moving/PlayerRight/walk 4.png"), this.loadNewImage("src/moving/PlayerRight/walk 5.png"), this.loadNewImage("src/moving/PlayerRight/walk 6.png"), this.loadNewImage("src/moving/PlayerRight/walk 7.png")];
         this.leftArray = [this.loadNewImage("src/moving/PlayerLeft/walk 1.png") , this.loadNewImage("src/moving/PlayerLeft/walk 2.png"), this.loadNewImage("src/moving/PlayerLeft/walk 3.png") ,this.loadNewImage("src/moving/PlayerLeft/walk 4.png"), this.loadNewImage("src/moving/PlayerLeft/walk 5.png"), this.loadNewImage("src/moving/PlayerLeft/walk 6.png"), this.loadNewImage("src/moving/PlayerLeft/walk 7.png")];
+        this.index = 0;
 
-        this.index = 0
-
-        // Initialize the game items
-        const cx = this.canvas.width / 2 + 250;
-        const cy = this.canvas.height / 2;
-
-        // The base of the hangman
-        this.base = new Rectangle(cx , cy , 200, 10);
-        this.base.fillStyle = "brown";
-
-        this.rectangle = new Rectangle(this.canvas.width/3 - 400 , this.canvas.height/3 + 400 , 300 , 10);
-        this.rectangle.fillStyle="blue";
+        this.gameState = "begin";
     }
 
 
@@ -62,7 +52,6 @@ class Game {
             this.index = 0;
         }
         
-
         if (this.keyboard.isKeyDown(39) === true){
             this.index ++ 
             if (this.index === 4) {
@@ -101,7 +90,10 @@ class Game {
         }
     
         if (this.keyboard.isKeyDown(32) === true) {
-            this.ypos= this.ypos-20;
+            this.ypos= this.ypos-10;
+            if (this.ypos <= this.canvas.height*7/10) {
+                this.ypos =  this.canvas.height*7/10;
+            }
         }
 
 
