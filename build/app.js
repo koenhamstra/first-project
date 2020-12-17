@@ -5,20 +5,70 @@ class Game {
             this.ctx.drawImage(image, this.xpos, this.ypos);
         };
         this.loop = () => {
+            this.drawing(this.loadNewImage("src/moving/enemy/shoot 1.png"));
             if (this.index > 29) {
                 this.index = 0;
             }
             if (this.keyboard.isKeyDown(39) === true) {
                 this.index++;
+                if (this.index === 4) {
+                    this.drawing(this.array[0]);
+                }
+                if (this.index === 8) {
+                    this.drawing(this.array[1]);
+                }
+                if (this.index === 12) {
+                    this.drawing(this.array[2]);
+                }
+                if (this.index === 16) {
+                    this.drawing(this.array[3]);
+                }
+                if (this.index === 20) {
+                    this.drawing(this.array[4]);
+                }
+                if (this.index === 24) {
+                    this.drawing(this.array[5]);
+                }
+                if (this.index === 28) {
+                    this.drawing(this.array[6]);
+                    this.index = 0;
+                }
+                if (this.xpos === this.canvas.width * 5 / 5) {
+                    this.xpos = 0;
+                }
+                this.xpos = this.xpos + 4;
             }
             if (this.keyboard.isKeyDown(32) === true) {
-                this.ypos = this.ypos - 10;
-                if (this.ypos <= this.canvas.height * 7 / 10) {
-                    this.ypos = this.canvas.height * 7 / 10;
-                }
+                this.ypos = this.ypos - 20;
             }
             if (this.keyboard.isKeyDown(37) === true) {
                 this.index++;
+                if (this.index === 4) {
+                    this.drawing(this.leftArray[0]);
+                }
+                if (this.index === 8) {
+                    this.drawing(this.leftArray[1]);
+                }
+                if (this.index === 12) {
+                    this.drawing(this.leftArray[2]);
+                }
+                if (this.index === 16) {
+                    this.drawing(this.leftArray[3]);
+                }
+                if (this.index === 20) {
+                    this.drawing(this.leftArray[4]);
+                }
+                if (this.index === 24) {
+                    this.drawing(this.leftArray[5]);
+                }
+                if (this.index === 28) {
+                    this.drawing(this.leftArray[6]);
+                    this.index = 0;
+                }
+                if (this.xpos === 0) {
+                    this.xpos = this.canvas.width;
+                }
+                this.xpos = this.xpos - 4;
             }
             if (this.keyboard.isKeyDown(32) === false) {
                 this.ypos = this.ypos + 20;
@@ -29,62 +79,6 @@ class Game {
             console.log(this.index);
             requestAnimationFrame(this.loop);
         };
-        this.moveRight = () => {
-            if (this.index === 4) {
-                this.drawing(this.array[0]);
-            }
-            if (this.index === 8) {
-                this.drawing(this.array[1]);
-            }
-            if (this.index === 12) {
-                this.drawing(this.array[2]);
-            }
-            if (this.index === 16) {
-                this.drawing(this.array[3]);
-            }
-            if (this.index === 20) {
-                this.drawing(this.array[4]);
-            }
-            if (this.index === 24) {
-                this.drawing(this.array[5]);
-            }
-            if (this.index === 28) {
-                this.drawing(this.array[6]);
-                this.index = 0;
-            }
-            if (this.xpos === this.canvas.width * 5 / 5) {
-                this.xpos = this.canvas.width / 10;
-            }
-            this.xpos = this.xpos + 4;
-        };
-        this.moveLeft = () => {
-            if (this.index === 4) {
-                this.drawing(this.leftArray[0]);
-            }
-            if (this.index === 8) {
-                this.drawing(this.leftArray[1]);
-            }
-            if (this.index === 12) {
-                this.drawing(this.leftArray[2]);
-            }
-            if (this.index === 16) {
-                this.drawing(this.leftArray[3]);
-            }
-            if (this.index === 20) {
-                this.drawing(this.leftArray[4]);
-            }
-            if (this.index === 24) {
-                this.drawing(this.leftArray[5]);
-            }
-            if (this.index === 28) {
-                this.drawing(this.leftArray[6]);
-                this.index = 0;
-            }
-            if (this.xpos === 0) {
-                this.xpos = this.canvas.width;
-            }
-            this.xpos = this.xpos - 4;
-        };
         this.loadNewImage = (source) => {
             const img = new Image();
             img.src = source;
@@ -94,7 +88,7 @@ class Game {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.ctx = this.canvas.getContext('2d');
-        document.body.style.backgroundImage = "url('src/moving/background 1.jpg')";
+        document.body.style.backgroundImage = "url('src/moving/back.png')";
         document.body.style.backgroundSize = "cover";
         requestAnimationFrame(this.loop);
         this.xpos = this.canvas.width / 10;
