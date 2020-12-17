@@ -38,7 +38,10 @@ class Game {
                 this.xpos = this.xpos + 4;
             }
             if (this.keyboard.isKeyDown(32) === true) {
-                this.ypos = this.ypos - 20;
+                this.ypos = this.ypos - 10;
+                if (this.ypos <= this.canvas.height * 7 / 10) {
+                    this.ypos = this.canvas.height * 7 / 10;
+                }
             }
             if (this.keyboard.isKeyDown(37) === true) {
                 this.index++;
@@ -87,7 +90,8 @@ class Game {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.ctx = this.canvas.getContext('2d');
-        document.body.style.backgroundImage = "src/moving/back.jpg";
+        document.body.style.backgroundImage = "url('src/moving/background 1.jpg')";
+        document.body.style.backgroundSize = "cover";
         requestAnimationFrame(this.loop);
         this.xpos = this.canvas.width / 10;
         this.ypos = this.canvas.height * 8.6 / 10;
@@ -95,12 +99,7 @@ class Game {
         this.array = [this.loadNewImage("src/moving/PlayerRight/walk 1.png"), this.loadNewImage("src/moving/PlayerRight/walk 2.png"), this.loadNewImage("src/moving/PlayerRight/walk 3.png"), this.loadNewImage("src/moving/PlayerRight/walk 4.png"), this.loadNewImage("src/moving/PlayerRight/walk 5.png"), this.loadNewImage("src/moving/PlayerRight/walk 6.png"), this.loadNewImage("src/moving/PlayerRight/walk 7.png")];
         this.leftArray = [this.loadNewImage("src/moving/PlayerLeft/walk 1.png"), this.loadNewImage("src/moving/PlayerLeft/walk 2.png"), this.loadNewImage("src/moving/PlayerLeft/walk 3.png"), this.loadNewImage("src/moving/PlayerLeft/walk 4.png"), this.loadNewImage("src/moving/PlayerLeft/walk 5.png"), this.loadNewImage("src/moving/PlayerLeft/walk 6.png"), this.loadNewImage("src/moving/PlayerLeft/walk 7.png")];
         this.index = 0;
-        const cx = this.canvas.width / 2 + 250;
-        const cy = this.canvas.height / 2;
-        this.base = new Rectangle(cx, cy, 200, 10);
-        this.base.fillStyle = "brown";
-        this.rectangle = new Rectangle(this.canvas.width / 3 - 400, this.canvas.height / 3 + 400, 300, 10);
-        this.rectangle.fillStyle = "blue";
+        this.gameState = "begin";
     }
 }
 class KeyboardListener {
