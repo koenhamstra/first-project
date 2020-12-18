@@ -147,32 +147,4 @@ class Player {
         this.index = 0;
     }
 }
-class Rectangle {
-    constructor(x, y, width, height) {
-        this.lineWidth = 1;
-        this.strokeStyle = "white";
-        this.fill = true;
-        this.fillStyle = "white";
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-    }
-    drawRectangle(ctx) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.rect(this.x, this.y, this.width, this.height);
-        if (this.fill) {
-            console.log(this.fillStyle);
-            ctx.fillStyle = this.fillStyle;
-            ctx.fill();
-        }
-        else {
-            ctx.lineWidth = this.lineWidth;
-            ctx.strokeStyle = this.strokeStyle;
-            ctx.stroke();
-        }
-        ctx.restore();
-    }
-}
 //# sourceMappingURL=app.js.map
