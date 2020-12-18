@@ -13,7 +13,7 @@ class Player {
     constructor(canvas: HTMLCanvasElement){
         this.canvas = canvas;
         this.xpos = this.canvas.width/10;
-        this.ypos = this.canvas.height* 8.6/10;
+        this.ypos = this.canvas.height* 8/10;
         this.ctx = this.canvas.getContext('2d');
 
         this.keyboard = new KeyboardListener;
@@ -21,6 +21,7 @@ class Player {
         this.array = [this.loadNewImage("src/moving/PlayerRight/walk 1.png") , this.loadNewImage("src/moving/PlayerRight/walk 2.png"), this.loadNewImage("src/moving/PlayerRight/walk 3.png") ,this.loadNewImage("src/moving/PlayerRight/walk 4.png"), this.loadNewImage("src/moving/PlayerRight/walk 5.png"), this.loadNewImage("src/moving/PlayerRight/walk 6.png"), this.loadNewImage("src/moving/PlayerRight/walk 7.png")];
         this.leftArray = [this.loadNewImage("src/moving/PlayerLeft/walk 1.png") , this.loadNewImage("src/moving/PlayerLeft/walk 2.png"), this.loadNewImage("src/moving/PlayerLeft/walk 3.png") ,this.loadNewImage("src/moving/PlayerLeft/walk 4.png"), this.loadNewImage("src/moving/PlayerLeft/walk 5.png"), this.loadNewImage("src/moving/PlayerLeft/walk 6.png"), this.loadNewImage("src/moving/PlayerLeft/walk 7.png")];
         this.index = 0;
+        this.ctx.drawImage(this.array[1],this.xpos,this.ypos);
     }
     public moveLeft = () => {
         if (this.keyboard.isKeyDown(37) === true) {
@@ -58,7 +59,9 @@ class Player {
             }
 
             this.xpos = this.xpos - 4;
+            
         }
+        this.jump();
     }
 
 
@@ -98,24 +101,38 @@ class Player {
             }
 
             this.xpos = this.xpos + 4;
+            
         }
+        this.jump();
     }
 
     public jump = () =>{
         if (this.keyboard.isKeyDown(32) === true) {
             this.ypos = this.ypos - 20;
+            this.drawing(this.array[1])
             // if (this.ypos <= this.canvas.height*7/10) {
             //     this.ypos =  this.canvas.height*7/10;
+            //     this.ypos= this.ypos+20;
+            //     this.keyboard.isKeyDown(32)===false;
             // }
         }
 
         if (this.keyboard.isKeyDown(32) === false) {
             this.ypos = this.ypos + 20;
-            if (this.ypos > this.canvas.height * 8.6 / 10) {
-                this.ypos = this.canvas.height * 8.6 / 10;
+            if (this.ypos > this.canvas.height * 8 / 10) {
+                this.ypos = this.canvas.height * 8 / 10;
             }
         }
     }
+
+
+    public start = () =>{
+        if (this.keyboard.isKeyDown(32)===false && this.keyboard.isKeyDown(39)===false&&this.keyboard.isKeyDown(37)===false) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.drawImage(this.array[0],this.xpos,this.ypos);
+            this.jump();
+        }
+    } 
 
 
     private loadNewImage = ( source: string): HTMLImageElement => {
@@ -130,4 +147,15 @@ class Player {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(image,this.xpos , this.ypos);
     }
+
+    public getXPos= () => {
+        return this.xpos;
+    }
+    public getyPos= () => {
+        return this.xpos;
+    }
+
+    // public playerImage= () => {
+    //     return this.ctx.drawImage(this.array[0],this.xpos,this.ypos);
+    // }
 }
