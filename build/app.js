@@ -1,43 +1,13 @@
-class Car {
-    constructor(name, colour, xPos, yPos, source) {
-        this._xPosition = xPos;
-        this._yPosition = yPos;
-        this._name = name;
-        this.image = this.loadNewImage(source);
-    }
-    setDistance(distanceRaced) {
-        this._distance = distanceRaced;
-    }
-    smoothDistance() {
-        this._xPosition += 1;
-    }
-    roughDistance() {
-        this._xPosition += 100;
-    }
-    xPosition() {
-        return this._xPosition;
-    }
-    stopTheCar() {
-        this._xPosition += 0;
-    }
-    startPosition(carYPosition) {
-        this._xPosition = 100;
-        this._yPosition = carYPosition;
-    }
-    getDistance() {
-        return 1400;
-    }
-    getxPostition() {
-        return this._xPosition;
-    }
-    getyPostition() {
-        return this._yPosition;
-    }
-    getName() {
-        return this._name;
-    }
-    draw(ctx) {
-        ctx.drawImage(this.image, this._xPosition, this._yPosition);
+class Enemy {
+    constructor(canvas) {
+        this.draw = () => {
+            this.ctx.drawImage(this.image, this.xPos, this.yPos);
+        };
+        this.canvas = canvas;
+        this.image = this.loadNewImage("./assets/img/players/enemy.png");
+        this.ctx = this.canvas.getContext("2d");
+        this.xPos = this.canvas.width / 2;
+        this.yPos = this.canvas.height / 2;
     }
     loadNewImage(source) {
         const img = new Image();
@@ -45,134 +15,148 @@ class Car {
         return img;
     }
 }
-class Rectangles {
-    constructor(xPos, yPos, color, height, width) {
-        this.height = height;
-        this.width = width;
-        this.xPos = xPos;
-        this.yPos = yPos;
-        this.color = color;
-    }
-    draw(ctx) {
-        ctx.beginPath();
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = 10;
-        ctx.strokeRect(this.xPos, this.yPos, this.width, this.height);
-    }
-    getXPos() {
-        return this.xPos;
-    }
-    getYPos() {
-        return this.yPos;
-    }
-    getWidth() {
-        return this.width;
-    }
-    getHeight() {
-        return this.height;
-    }
-}
 class Game {
     constructor(canvas) {
-        this.loop = () => {
-            this.gameState = "animate";
-            this.draw();
-            requestAnimationFrame(this.loop);
-        };
-        this.mouseHandler = (event) => {
-            console.log(`xPos ${event.clientX}, yPos ${event.clientY}`);
-            for (let i = 0; i < this.rectangles.length; i++) {
-                if (this.numberOfQuestion === 1) {
-                    if (this.detectingRect(event, 1)) {
-                        this.car2.roughDistance();
-                        this.numberOfQuestion = 2;
-                    }
-                    else if (this.detectingRect(event, 0) || this.detectingRect(event, 2)) {
-                        this.numberOfQuestion = 2;
-                    }
+        this.step = () => {
+            console.log(this.frameIndex);
+            this.frameIndex++;
+            this.enemy.draw();
+            if (this.frameIndex % 150 === 0) {
+                this.projectiles.push(new Projectile(this.canvas));
+                for (let i = 0; i < this.projectiles.length; i++) {
+                    this.projectiles[i].spawn();
                 }
             }
-            ;
+            for (let i = 0; i < this.projectiles.length; i++) {
+                this.projectiles[i].move();
+            }
+            this.collidesWithCanvasBorder();
+            requestAnimationFrame(this.step);
         };
         this.canvas = canvas;
-        this.ctx = this.canvas.getContext("2d");
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.car1 = new Car("Bullet", "red", 100, 50, "assets/img/walk 1 (1).png");
-        this.car2 = new Car("Greek Arrow", "green", 100, 250, "assets/img/walk 1 (1).png");
-        console.log(this.car1);
-        this.rectangles = [
-            new Rectangles(100, 600, "red", 70, 400),
-            new Rectangles(570, 600, "red", 70, 400),
-            new Rectangles(1100, 600, "red", 70, 400),
-        ];
-        document.addEventListener("click", this.mouseHandler);
-        this.numberOfQuestion = 1;
-        this.gameState = "begin";
-        this.loop();
+        this.frameIndex = 0;
+        console.log('start animation');
+        requestAnimationFrame(this.step);
+        this.enemy = new Enemy(this.canvas);
+        this.projectiles = [];
     }
-    draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.car1.draw(this.ctx);
-        this.car2.draw(this.ctx);
-        for (let i = 0; i < this.rectangles.length; i++) {
-            this.rectangles[i].draw(this.ctx);
-        }
-        if (this.numberOfQuestion === 1) {
-            this.writeTextToCanvas("Which password is good?", 40, this.canvas.width / 2, 580, "center", "black");
-            this.writeTextToCanvas("12345", 40, 300, 650, "center", "black");
-            this.writeTextToCanvas("GoodPassword2020", 40, 770, 650, "center", "black");
-            this.writeTextToCanvas("myname", 40, 1300, 650, "center", "black");
-        }
-        if (this.numberOfQuestion === 2) {
-            this.writeTextToCanvas("How to protect your computer?", 40, this.canvas.width / 2, 580, "center", "black");
-            this.writeTextToCanvas("Be careless", 40, 300, 650, "center", "black");
-            this.writeTextToCanvas("Use firewall", 40, 770, 650, "center", "black");
-            this.writeTextToCanvas("Do not use firewall", 40, 1300, 650, "center", "black");
-        }
-        if (this.numberOfQuestion === 3) {
-            this.writeTextToCanvas("What do you do when you detect strange activity on your social media account?", 40, this.canvas.width / 2, 580, "center", "black");
-            this.writeTextToCanvas("Nothing", 40, 300, 650, "center", "black");
-            this.writeTextToCanvas("Chanege your password", 40, 770, 650, "center", "black");
-            this.writeTextToCanvas("Sell your device", 40, 1300, 650, "center", "black");
-        }
-        if (this.gameState === "animate") {
-            console.log(this.car1.xPosition());
-            console.log(this.car1.getDistance());
-            if (this.car1.xPosition() < this.car1.getDistance()) {
-                this.car1.smoothDistance();
-            }
-            if (this.car2.xPosition() >= this.car2.getDistance()) {
-                this.gameState = "end2";
-            }
-            else if (this.car1.xPosition() >= this.car1.getDistance()) {
-                this.gameState = "end1";
+    collidesWithCanvasBorder() {
+        for (let i = 0; i < this.projectiles.length; i++) {
+            if (this.projectiles[i].getXPos() < -100) {
+                this.projectiles.splice(i, 1);
+                console.log("removed");
             }
         }
-        if (this.gameState === "end1") {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.car1.stopTheCar();
-            this.writeTextToCanvas(`You lost the game :( `, 60, this.canvas.width / 2, this.canvas.height / 2, "center", "red");
-        }
-        if (this.gameState === "end2") {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.car1.stopTheCar();
-            this.writeTextToCanvas(`You are the winner`, 60, this.canvas.width / 2, this.canvas.height / 2, "center", "red");
-        }
-    }
-    detectingRect(event, i) {
-        return event.clientX >= this.rectangles[i].getXPos() &&
-            event.clientX < this.rectangles[i].getXPos() + this.rectangles[i].getWidth() &&
-            event.clientY >= this.rectangles[i].getYPos() &&
-            event.clientY <= this.rectangles[i].getYPos() + this.rectangles[i].getHeight();
-    }
-    writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "red") {
-        this.ctx.font = `${fontSize}px Minecraft`;
-        this.ctx.fillStyle = color;
-        this.ctx.textAlign = alignment;
-        this.ctx.fillText(text, xCoordinate, yCoordinate);
     }
 }
-let init = () => new Game(document.getElementById("canvas"));
-window.addEventListener("load", init);
+class KeyListener {
+    constructor() {
+        this.keyCodeStates = new Array();
+        this.keyCodeTyped = new Array();
+        this.previousState = new Array();
+        window.addEventListener("keydown", (ev) => {
+            this.keyCodeStates[ev.keyCode] = true;
+        });
+        window.addEventListener("keyup", (ev) => {
+            this.keyCodeStates[ev.keyCode] = false;
+        });
+    }
+    onFrameStart() {
+        this.keyCodeTyped = new Array();
+        this.keyCodeStates.forEach((val, key) => {
+            if (this.previousState[key] != val && !this.keyCodeStates[key]) {
+                this.keyCodeTyped[key] = true;
+                this.previousState[key] = val;
+            }
+        });
+    }
+    isKeyDown(keyCode) {
+        return this.keyCodeStates[keyCode] == true;
+    }
+    isKeyTyped(keyCode) {
+        return this.keyCodeTyped[keyCode] == true;
+    }
+}
+KeyListener.KEY_ENTER = 13;
+KeyListener.KEY_SHIFT = 16;
+KeyListener.KEY_CTRL = 17;
+KeyListener.KEY_ALT = 18;
+KeyListener.KEY_ESC = 27;
+KeyListener.KEY_SPACE = 32;
+KeyListener.KEY_LEFT = 37;
+KeyListener.KEY_UP = 38;
+KeyListener.KEY_RIGHT = 39;
+KeyListener.KEY_DOWN = 40;
+KeyListener.KEY_DEL = 46;
+KeyListener.KEY_1 = 49;
+KeyListener.KEY_2 = 50;
+KeyListener.KEY_3 = 51;
+KeyListener.KEY_4 = 52;
+KeyListener.KEY_5 = 53;
+KeyListener.KEY_6 = 54;
+KeyListener.KEY_7 = 55;
+KeyListener.KEY_8 = 56;
+KeyListener.KEY_9 = 57;
+KeyListener.KEY_0 = 58;
+KeyListener.KEY_A = 65;
+KeyListener.KEY_B = 66;
+KeyListener.KEY_C = 67;
+KeyListener.KEY_D = 68;
+KeyListener.KEY_E = 69;
+KeyListener.KEY_F = 70;
+KeyListener.KEY_G = 71;
+KeyListener.KEY_H = 72;
+KeyListener.KEY_I = 73;
+KeyListener.KEY_J = 74;
+KeyListener.KEY_K = 75;
+KeyListener.KEY_L = 76;
+KeyListener.KEY_M = 77;
+KeyListener.KEY_N = 78;
+KeyListener.KEY_O = 79;
+KeyListener.KEY_P = 80;
+KeyListener.KEY_Q = 81;
+KeyListener.KEY_R = 82;
+KeyListener.KEY_S = 83;
+KeyListener.KEY_T = 84;
+KeyListener.KEY_U = 85;
+KeyListener.KEY_V = 86;
+KeyListener.KEY_W = 87;
+KeyListener.KEY_X = 88;
+KeyListener.KEY_Y = 89;
+KeyListener.KEY_Z = 90;
+class Projectile {
+    constructor(canvas) {
+        this.spawn = () => {
+            this.ctx.drawImage(this.image, this.xPos, this.yPos);
+        };
+        this.move = () => {
+            this.ctx.clearRect(this.xPos, this.yPos, 80, 80);
+            this.ctx.drawImage(this.image, this.xPos, this.yPos);
+            this.xPos -= 2;
+        };
+        this.draw = () => {
+            this.ctx.drawImage(this.image, this.xPos, this.yPos);
+        };
+        this.getXPos = () => {
+            return this.xPos;
+        };
+        this.canvas = canvas;
+        this.xPos = this.canvas.width / 2;
+        this.yPos = this.canvas.height / 2;
+        this.ctx = this.canvas.getContext("2d");
+        this.image = this.loadNewImage("./assets/img/objects/enemy.png");
+    }
+    loadNewImage(source) {
+        const img = new Image();
+        img.src = source;
+        return img;
+    }
+}
+console.log("Javascript is working!");
+window.addEventListener('load', () => {
+    console.log("Handling the Load event");
+    const game = new Game(document.getElementById('canvas'));
+});
 //# sourceMappingURL=app.js.map
