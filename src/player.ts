@@ -110,14 +110,14 @@ class Player {
         if (this.keyboard.isKeyDown(32) === true) {
             this.ypos = this.ypos - 20;
             this.drawing(this.array[1])
-            // if (this.ypos <= this.canvas.height*7/10) {
-            //     this.ypos =  this.canvas.height*7/10;
-            //     this.ypos= this.ypos+20;
-            //     this.keyboard.isKeyDown(32)===false;
-            // }
-        }
+            if (this.ypos <= this.canvas.height*8/20 && this.xpos > this.canvas.width/20*1 && this.xpos< this.canvas.width/20*1 + 300) {
+                this.ypos =  this.canvas.height*8/20+20;
+                // this.ypos= this.ypos+20;
+                this.keyboard.isKeyDown(32)===false;
+                }
+            }
 
-        if (this.keyboard.isKeyDown(32) === false) {
+        if (this.keyboard.isKeyDown(32) === false && (this.xpos < this.canvas.width/20*1 || this.xpos> this.canvas.width/20*1 + 300)) {
             this.ypos = this.ypos + 20;
             if (this.ypos > this.canvas.height * 8 / 10) {
                 this.ypos = this.canvas.height * 8 / 10;
