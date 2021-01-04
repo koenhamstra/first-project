@@ -134,37 +134,37 @@ class FullGame {
     private createPlatform() {
       //create platform
       for (let i = 0; i < 10; i++) {
-        this.platform.push(new Layout(this.platformPos[0] += 30, 500, "src/moving/pics/smallBrick.png"));
+        this.platform.push(new Layout(this.platformPos[0] += 30, this.canvas.height/20*14, "src/moving/pics/smallBrick.png"));
       }
   
       //create platform
       for (let i = 0; i < 8; i++) {
-        this.platform.push(new Layout(this.platformPos[1] += 30, 300,"src/moving/pics/smallBrick.png"));
+        this.platform.push(new Layout(this.platformPos[1] += 30, this.canvas.height/20 * 8,"src/moving/pics/smallBrick.png"));
       }
   
        //create platform
        for (let i = 0; i < 12; i++) {
-        this.platform.push(new Layout(this.platformPos[2] += 30, 100, "src/moving/pics/smallBrick.png"));
+        this.platform.push(new Layout(this.platformPos[2] += 30, this.canvas.height/20 * 3, "src/moving/pics/smallBrick.png"));
       }
   
        //create platform
        for (let i = 0; i < 4; i++) {
-        this.platform.push(new Layout(this.platformPos[3] += 30, 500, "src/moving/pics/smallBrick.png"));
+        this.platform.push(new Layout(this.platformPos[3] += 30, this.canvas.height/20*14, "src/moving/pics/smallBrick.png"));
       }
   
        //create platform
        for (let i = 0; i < 12; i++) {
-        this.platform.push(new Layout(this.platformPos[4] += 30, 300, "src/moving/pics/smallBrick.png"));
+        this.platform.push(new Layout(this.platformPos[4] += 30, this.canvas.height/20 * 8, "src/moving/pics/smallBrick.png"));
       }
   
        //create platform
        for (let i = 0; i < 8; i++) {
-        this.platform.push(new Layout(this.platformPos[6] += 30, 100, "src/moving/pics/smallBrick.png"));
+        this.platform.push(new Layout(this.platformPos[6] += 30, this.canvas.height/20 * 3, "src/moving/pics/smallBrick.png"));
       }
   
        //create platform
        for (let i = 0; i < 8; i++) {
-        this.platform.push(new Layout(this.platformPos[5] += 30, 500, "src/moving/pics/smallBrick.png"));
+        this.platform.push(new Layout(this.platformPos[5] += 30, this.canvas.height/20 * 14, "src/moving/pics/smallBrick.png"));
       }
   
        // Create floor
@@ -193,8 +193,8 @@ class FullGame {
       });
   
       //draw the servers
-      this.ctx.drawImage(this.image,1250,10);
-      this.ctx.drawImage(this.image,1290,10);
+      this.ctx.drawImage(this.image,this.canvas.width / 20 * 17,this.canvas.height/20 * 1.3);
+      this.ctx.drawImage(this.image,this.canvas.width / 20 * 16.5,this.canvas.height/20 * 1.3);
     }
   
   
