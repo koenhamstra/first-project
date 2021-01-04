@@ -5,8 +5,7 @@ class FullGame {
   
     // KeyboardListener so the player can move
     private keyboardListener: KeyboardListener;
-  
-    private score: number;
+
   
     //properties for the level
     private floor: Layout[];
@@ -86,7 +85,7 @@ class FullGame {
         this.index = 0;
         }
 
-        this.player.start()
+        this.player.start();
         this.player.moveRight();
         this.player.moveLeft();
         
@@ -115,10 +114,6 @@ class FullGame {
       // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       // Draw everything
       this.draw();
-  
-      // Show score
-      // TODO: fix actual score system
-      this.writeTextToCanvas(`Score: ${this.score}`, 36, 120, 50);
   
       // Make sure the game actually loops
       requestAnimationFrame(this.loop);
