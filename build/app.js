@@ -107,25 +107,25 @@ class FullGame {
     }
     createPlatform() {
         for (let i = 0; i < 10; i++) {
-            this.platform.push(new Layout(this.platformPos[0] += 30, 500, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[0] += 30, this.canvas.height / 20 * 14, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 8; i++) {
-            this.platform.push(new Layout(this.platformPos[1] += 30, 300, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[1] += 30, this.canvas.height / 20 * 8, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 12; i++) {
-            this.platform.push(new Layout(this.platformPos[2] += 30, 100, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[2] += 30, this.canvas.height / 20 * 3, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 4; i++) {
-            this.platform.push(new Layout(this.platformPos[3] += 30, 500, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[3] += 30, this.canvas.height / 20 * 14, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 12; i++) {
-            this.platform.push(new Layout(this.platformPos[4] += 30, 300, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[4] += 30, this.canvas.height / 20 * 8, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 8; i++) {
-            this.platform.push(new Layout(this.platformPos[6] += 30, 100, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[6] += 30, this.canvas.height / 20 * 3, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 8; i++) {
-            this.platform.push(new Layout(this.platformPos[5] += 30, 500, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[5] += 30, this.canvas.height / 20 * 14, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 100; i++) {
             this.floor.push(new Layout(this.floors += 40, this.canvas.height * 20 / 21, "src/moving/pics/brick.png"));
@@ -138,8 +138,8 @@ class FullGame {
         this.platform.forEach(element => {
             element.draw(this.ctx);
         });
-        this.ctx.drawImage(this.image, 1250, 10);
-        this.ctx.drawImage(this.image, 1290, 10);
+        this.ctx.drawImage(this.image, this.canvas.width / 20 * 17, this.canvas.height / 20 * 1.3);
+        this.ctx.drawImage(this.image, this.canvas.width / 20 * 16.5, this.canvas.height / 20 * 1.3);
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "white") {
         this.ctx.font = `${fontSize}px sans-serif`;
@@ -255,15 +255,15 @@ class Player {
             if (this.keyboard.isKeyDown(32) === true) {
                 this.ypos = this.ypos - 20;
                 this.drawing(this.array[1]);
-                if (this.ypos <= this.canvas.height * 8 / 20 && this.xpos > this.canvas.width / 20 * 1 && this.xpos < this.canvas.width / 20 * 1 + 300) {
-                    this.ypos = this.canvas.height * 8 / 20 + 20;
+                if (this.ypos <= this.canvas.height * 14 / 20 && this.xpos > this.canvas.width / 20 * 1 && this.xpos < this.canvas.width / 20 * 1 + 300) {
+                    this.ypos = this.canvas.height * 14 / 20 + 20;
                     this.keyboard.isKeyDown(32) === false;
                 }
             }
             if (this.keyboard.isKeyDown(32) === false && (this.xpos < this.canvas.width / 20 * 1 || this.xpos > this.canvas.width / 20 * 1 + 300)) {
                 this.ypos = this.ypos + 20;
                 if (this.ypos > this.canvas.height * 8 / 10) {
-                    this.ypos = this.canvas.height * 8 / 10;
+                    this.ypos = this.canvas.height * 16.7 / 20;
                 }
             }
         };
@@ -291,7 +291,7 @@ class Player {
         };
         this.canvas = canvas;
         this.xpos = this.canvas.width / 10;
-        this.ypos = this.canvas.height * 8 / 10;
+        this.ypos = this.canvas.height * 16.7 / 20;
         this.ctx = this.canvas.getContext('2d');
         this.keyboard = new KeyboardListener;
         this.array = [this.loadNewImage("src/moving/PlayerRight/walk 1.png"), this.loadNewImage("src/moving/PlayerRight/walk 2.png"), this.loadNewImage("src/moving/PlayerRight/walk 3.png"), this.loadNewImage("src/moving/PlayerRight/walk 4.png"), this.loadNewImage("src/moving/PlayerRight/walk 5.png"), this.loadNewImage("src/moving/PlayerRight/walk 6.png"), this.loadNewImage("src/moving/PlayerRight/walk 7.png")];
