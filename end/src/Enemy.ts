@@ -13,7 +13,7 @@ class Enemy{
         this.image = this.loadNewImage("./assets/img/players/enemy.png");
         
         this.ctx = this.canvas.getContext("2d");
-        this.xPos = this.canvas.width * 5 / 6;
+        this.xPos = this.canvas.width / 30 * 26.8;
         this.yPos = this.canvas.height * 0.74;
     }
 

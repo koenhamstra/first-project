@@ -9,18 +9,19 @@ class Player {
     private ypos :number;
     private  canvas: HTMLCanvasElement;
     private  ctx: CanvasRenderingContext2D;
-
+  
     constructor(canvas: HTMLCanvasElement, ctx :CanvasRenderingContext2D){
         this.canvas = canvas;
         this.xpos = this.canvas.width / 10;
-        this.ypos = this.canvas.height * 8.6 / 10;
+        this.ypos = this.canvas.height / 20 * 17;
         this.ctx = ctx;
 
         this.keyboard = new KeyboardListener;
-
-        this.array = [this.loadNewImage("end/src/moving/PlayerRight/walk 1.png") , this.loadNewImage("end/src/moving/PlayerRight/walk 2.png"), this.loadNewImage("end/src/moving/PlayerRight/walk 3.png") ,this.loadNewImage("end/src/moving/PlayerRight/walk 4.png"), this.loadNewImage("end/src/moving/PlayerRight/walk 5.png"), this.loadNewImage("end/src/moving/PlayerRight/walk 6.png"), this.loadNewImage("end/src/moving/PlayerRight/walk 7.png")];
-        this.leftArray = [this.loadNewImage("end/src/moving/PlayerLeft/walk 1.png") , this.loadNewImage("end/src/moving/PlayerLeft/walk 2.png"), this.loadNewImage("end/src/moving/PlayerLeft/walk 3.png") ,this.loadNewImage("end/src/moving/PlayerLeft/walk 4.png"), this.loadNewImage("end/src/moving/PlayerLeft/walk 5.png"), this.loadNewImage("end/src/moving/PlayerLeft/walk 6.png"), this.loadNewImage("end/src/moving/PlayerLeft/walk 7.png")];
+       
+        this.array = [this.loadNewImage("./src/moving/PlayerRight/walk 1.png"), this.loadNewImage("./src/moving/PlayerRight/walk 2.png"), this.loadNewImage("./src/moving/PlayerRight/walk 3.png") ,this.loadNewImage("./src/moving/PlayerRight/walk 4.png"), this.loadNewImage("./src/moving/PlayerRight/walk 5.png"), this.loadNewImage("./src/moving/PlayerRight/walk 6.png"), this.loadNewImage("./src/moving/PlayerRight/walk 7.png")];
+        this.leftArray = [this.loadNewImage("./src/moving/PlayerLeft/walk 1.png") , this.loadNewImage("./src/moving/PlayerLeft/walk 2.png"), this.loadNewImage("./src/moving/PlayerLeft/walk 3.png") ,this.loadNewImage("./src/moving/PlayerLeft/walk 4.png"), this.loadNewImage("./src/moving/PlayerLeft/walk 5.png"), this.loadNewImage("./src/moving/PlayerLeft/walk 6.png"), this.loadNewImage("./src/moving/PlayerLeft/walk 7.png")];
         this.index = 0;
+
     }
 
     public moveLeft = () => {
@@ -49,6 +50,7 @@ class Player {
             if (this.index === 24) {
                 this.drawing(this.leftArray[5]);
             }
+            
             if (this.index === 28) {
                 this.drawing(this.leftArray[6]);
                 this.index = 0;
@@ -59,6 +61,7 @@ class Player {
             }
 
             this.xpos = this.xpos - 4;
+           
         }
     }
 
@@ -102,24 +105,26 @@ class Player {
         }
     }
 
-    public jump = () =>{
-        if (this.keyboard.isKeyDown(32) === true) {
-            this.ypos = this.ypos - 20;
-            // if (this.ypos <= this.canvas.height*7/10) {
-            //     this.ypos =  this.canvas.height*7/10;
-            // }
-        }
+    // public jump = () =>{
+    //     if (this.keyboard.isKeyDown(32) === true) {
+    //         this.ypos = this.ypos - 20;
+    //         this.moveLeft();
+    //         if (this.ypos <= this.canvas.height*7/10) {
+    //             this.ypos =  this.canvas.height*7/10;
+    //         }
+    //     }
 
-        if (this.keyboard.isKeyDown(32) === false) {
-            this.ypos = this.ypos + 20;
-            if (this.ypos > this.canvas.height * 8.6 / 10) {
-                this.ypos = this.canvas.height * 8.6 / 10;
-            }
-        }
-    }
+    //     if (this.keyboard.isKeyDown(32) === false) {
+    //         this.ypos = this.ypos + 20;
+    //         this.moveRight();
+    //         if (this.ypos >= this.canvas.height / 20 * 16.5) {
+    //             this.ypos = this.canvas.height / 20 * 16.5;
+    //         }
+    //     }
+    // }
 
 
-    private loadNewImage = ( source: string): HTMLImageElement => {
+    private loadNewImage = (source: string): HTMLImageElement => {
         const img = new Image();
         img.src = source;
         return img;

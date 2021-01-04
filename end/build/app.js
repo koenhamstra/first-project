@@ -12,7 +12,7 @@ class Enemy {
         this.canvas = canvas;
         this.image = this.loadNewImage("./assets/img/players/enemy.png");
         this.ctx = this.canvas.getContext("2d");
-        this.xPos = this.canvas.width * 5 / 6;
+        this.xPos = this.canvas.width / 30 * 26.8;
         this.yPos = this.canvas.height * 0.74;
     }
     loadNewImage(source) {
@@ -52,7 +52,6 @@ class Game {
             }
             this.player.moveRight();
             this.player.moveLeft();
-            this.player.jump();
             console.log(this.frameIndex);
             this.frameIndex++;
             this.enemy.draw();
@@ -67,7 +66,6 @@ class Game {
             }
             this.collidesWithCanvasBorder();
             this.draw();
-            this.writeTextToCanvas(`Score: ${this.score}`, 36, 120, 50);
             requestAnimationFrame(this.loop);
         };
         this.collidesWithCanvasBorder = () => {
@@ -86,10 +84,18 @@ class Game {
         this.floor = [];
         this.floors = -40;
         this.platform = [];
-        this.platformPos = [100, 200, 350, 600, 800, 900, 1100];
+        this.platformPos = [this.canvas.width / 20 * 1,
+            this.canvas.width / 20 * 3,
+            this.canvas.width / 20 * 5,
+            this.canvas.width / 20 * 8,
+            this.canvas.width / 20 * 12,
+            this.canvas.width / 20 * 13,
+            this.canvas.width / 20 * 15,
+        ];
         this.image = this.loadNewImage("./assets/img/Server.png");
         this.index = 0;
         this.player = new Player(canvas, this.ctx);
+        this.ctx.drawImage(this.loadNewImage("./src/moving/PlayerRight/walk 1.png"), this.canvas.width / 10, this.canvas.height / 20 * 17);
         this.frameIndex = 0;
         this.enemy = new Enemy(canvas);
         this.projectiles = [];
@@ -98,28 +104,28 @@ class Game {
     }
     createPlatform() {
         for (let i = 0; i < 10; i++) {
-            this.platform.push(new Layout(this.platformPos[0] += 30, 500, "./free-assets/Terrain/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[0] += 30, this.canvas.height / 20 * 15, "./free-assets/Terrain/smallBrick.png"));
         }
         for (let i = 0; i < 8; i++) {
-            this.platform.push(new Layout(this.platformPos[1] += 30, 300, "./free-assets/Terrain/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[1] += 30, this.canvas.height / 20 * 9, "./free-assets/Terrain/smallBrick.png"));
         }
         for (let i = 0; i < 12; i++) {
-            this.platform.push(new Layout(this.platformPos[2] += 30, 100, "./free-assets/Terrain/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[2] += 30, this.canvas.height / 20 * 4, "./free-assets/Terrain/smallBrick.png"));
         }
         for (let i = 0; i < 4; i++) {
-            this.platform.push(new Layout(this.platformPos[3] += 30, 500, "./free-assets/Terrain/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[3] += 30, this.canvas.height / 20 * 15, "./free-assets/Terrain/smallBrick.png"));
         }
         for (let i = 0; i < 12; i++) {
-            this.platform.push(new Layout(this.platformPos[4] += 30, 300, "./free-assets/Terrain/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[4] += 30, this.canvas.height / 20 * 9, "./free-assets/Terrain/smallBrick.png"));
         }
         for (let i = 0; i < 8; i++) {
-            this.platform.push(new Layout(this.platformPos[6] += 30, 100, "./free-assets/Terrain/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[6] += 30, this.canvas.height / 20 * 3, "./free-assets/Terrain/smallBrick.png"));
         }
         for (let i = 0; i < 8; i++) {
-            this.platform.push(new Layout(this.platformPos[5] += 30, 500, "./free-assets/Terrain/smallBrick.png"));
+            this.platform.push(new Layout(this.platformPos[5] += 30, this.canvas.height / 20 * 15, "./free-assets/Terrain/smallBrick.png"));
         }
         for (let i = 0; i < 100; i++) {
-            this.floor.push(new Layout(this.floors += 40, 655, "./free-assets/Terrain/brick.png"));
+            this.floor.push(new Layout(this.floors += 40, this.canvas.height * 20 / 21, "./free-assets/Terrain/brick.png"));
         }
     }
     draw() {
@@ -132,19 +138,10 @@ class Game {
         this.ctx.drawImage(this.image, 1250, 10);
         this.ctx.drawImage(this.image, 1290, 10);
     }
-    writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "white") {
-        this.ctx.font = `${fontSize}px sans-serif`;
-        this.ctx.fillStyle = color;
-        this.ctx.textAlign = alignment;
-        this.ctx.fillText(text, xCoordinate, yCoordinate);
-    }
     loadNewImage(source) {
         const img = new Image();
         img.src = source;
         return img;
-    }
-    randomNumber(min, max) {
-        return Math.round(Math.random() * (max - min) + min);
     }
 }
 class KeyboardListener {
@@ -174,37 +171,6 @@ class Layout extends GameEntity {
         this.image = this.loadNewImage(imageUrl);
     }
 }
-class Projectile {
-    constructor(canvas) {
-        this.spawn = () => {
-            this.ctx.drawImage(this.image, this.xPos, this.yPos);
-        };
-        this.move = () => {
-            this.ctx.clearRect(this.xPos, this.yPos, 60, 60);
-            this.ctx.drawImage(this.image, this.xPos, this.yPos);
-            this.xPos -= 2;
-        };
-        this.draw = () => {
-            this.ctx.drawImage(this.image, this.xPos, this.yPos);
-        };
-        this.getXPos = () => {
-            return this.xPos;
-        };
-        this.canvas = canvas;
-        this.enemy = new Enemy(canvas);
-        this.xPos = this.enemy.getEnemyXPos();
-        this.yPos = this.enemy.getEnemyYPos();
-        this.ctx = this.canvas.getContext("2d");
-        this.image = this.loadNewImage("./assets/img/objects/enemy.png");
-    }
-    loadNewImage(source) {
-        const img = new Image();
-        img.src = source;
-        return img;
-    }
-}
-let init = () => new Game(document.getElementById("canvas"));
-window.addEventListener("load", init);
 class Player {
     constructor(canvas, ctx) {
         this.moveLeft = () => {
@@ -269,17 +235,6 @@ class Player {
                 this.xpos = this.xpos + 4;
             }
         };
-        this.jump = () => {
-            if (this.keyboard.isKeyDown(32) === true) {
-                this.ypos = this.ypos - 20;
-            }
-            if (this.keyboard.isKeyDown(32) === false) {
-                this.ypos = this.ypos + 20;
-                if (this.ypos > this.canvas.height * 8.6 / 10) {
-                    this.ypos = this.canvas.height * 8.6 / 10;
-                }
-            }
-        };
         this.loadNewImage = (source) => {
             const img = new Image();
             img.src = source;
@@ -291,12 +246,43 @@ class Player {
         };
         this.canvas = canvas;
         this.xpos = this.canvas.width / 10;
-        this.ypos = this.canvas.height * 8.6 / 10;
+        this.ypos = this.canvas.height / 20 * 17;
         this.ctx = ctx;
         this.keyboard = new KeyboardListener;
-        this.array = [this.loadNewImage("end/src/moving/PlayerRight/walk 1.png"), this.loadNewImage("end/src/moving/PlayerRight/walk 2.png"), this.loadNewImage("end/src/moving/PlayerRight/walk 3.png"), this.loadNewImage("end/src/moving/PlayerRight/walk 4.png"), this.loadNewImage("end/src/moving/PlayerRight/walk 5.png"), this.loadNewImage("end/src/moving/PlayerRight/walk 6.png"), this.loadNewImage("end/src/moving/PlayerRight/walk 7.png")];
-        this.leftArray = [this.loadNewImage("end/src/moving/PlayerLeft/walk 1.png"), this.loadNewImage("end/src/moving/PlayerLeft/walk 2.png"), this.loadNewImage("end/src/moving/PlayerLeft/walk 3.png"), this.loadNewImage("end/src/moving/PlayerLeft/walk 4.png"), this.loadNewImage("end/src/moving/PlayerLeft/walk 5.png"), this.loadNewImage("end/src/moving/PlayerLeft/walk 6.png"), this.loadNewImage("end/src/moving/PlayerLeft/walk 7.png")];
+        this.array = [this.loadNewImage("./src/moving/PlayerRight/walk 1.png"), this.loadNewImage("./src/moving/PlayerRight/walk 2.png"), this.loadNewImage("./src/moving/PlayerRight/walk 3.png"), this.loadNewImage("./src/moving/PlayerRight/walk 4.png"), this.loadNewImage("./src/moving/PlayerRight/walk 5.png"), this.loadNewImage("./src/moving/PlayerRight/walk 6.png"), this.loadNewImage("./src/moving/PlayerRight/walk 7.png")];
+        this.leftArray = [this.loadNewImage("./src/moving/PlayerLeft/walk 1.png"), this.loadNewImage("./src/moving/PlayerLeft/walk 2.png"), this.loadNewImage("./src/moving/PlayerLeft/walk 3.png"), this.loadNewImage("./src/moving/PlayerLeft/walk 4.png"), this.loadNewImage("./src/moving/PlayerLeft/walk 5.png"), this.loadNewImage("./src/moving/PlayerLeft/walk 6.png"), this.loadNewImage("./src/moving/PlayerLeft/walk 7.png")];
         this.index = 0;
     }
 }
+class Projectile {
+    constructor(canvas) {
+        this.spawn = () => {
+            this.ctx.drawImage(this.image, this.xPos, this.yPos);
+        };
+        this.move = () => {
+            this.ctx.clearRect(this.xPos, this.yPos, 60, 60);
+            this.ctx.drawImage(this.image, this.xPos, this.yPos);
+            this.xPos -= 2;
+        };
+        this.draw = () => {
+            this.ctx.drawImage(this.image, this.xPos, this.yPos);
+        };
+        this.getXPos = () => {
+            return this.xPos;
+        };
+        this.canvas = canvas;
+        this.enemy = new Enemy(canvas);
+        this.xPos = this.enemy.getEnemyXPos();
+        this.yPos = this.enemy.getEnemyYPos();
+        this.ctx = this.canvas.getContext("2d");
+        this.image = this.loadNewImage("./assets/img/objects/enemy.png");
+    }
+    loadNewImage(source) {
+        const img = new Image();
+        img.src = source;
+        return img;
+    }
+}
+let init = () => new Game(document.getElementById("canvas"));
+window.addEventListener("load", init);
 //# sourceMappingURL=app.js.map
