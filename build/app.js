@@ -69,7 +69,6 @@ class FullGame {
             }
             this.collidesWithCanvasBorder();
             this.draw();
-            this.writeTextToCanvas(`Score: ${this.score}`, 36, 120, 50);
             requestAnimationFrame(this.loop);
         };
         this.collidesWithCanvasBorder = () => {
@@ -256,6 +255,11 @@ class Player {
             if (this.keyboard.isKeyDown(32) === true) {
                 this.ypos = this.ypos - 20;
                 this.drawing(this.array[1]);
+                if (this.ypos <= this.canvas.height * 4 / 10) {
+                    this.ypos = this.canvas.height * 4 / 10;
+                    this.ypos = this.ypos + 20;
+                    this.keyboard.isKeyDown(32) === false;
+                }
             }
             if (this.keyboard.isKeyDown(32) === false) {
                 this.ypos = this.ypos + 20;
