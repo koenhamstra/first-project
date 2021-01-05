@@ -26,8 +26,8 @@ class Game {
   
   
   
-  this.car1 = new Car("Bullet", "red", 100, 50, "assets/img/walk 1 (1).png");
-  this.car2 = new Car("Greek Arrow", "green", 100, 250,"assets/img/walk 1 (1).png");
+  this.car1 = new Car("Bullet", 100, 0, "assets/img/walk 1 (1).png");
+  this.car2 = new Car("Greek Arrow", 100, 250,"assets/img/walk 1 (1).png");
   console.log(this.car1);
 
   this.rectangles = [
@@ -50,7 +50,7 @@ class Game {
   
   this.numberOfQuestion = 1;
 
-  this.gameState = "begin";
+
   
   this.loop();
   }
@@ -104,7 +104,25 @@ class Game {
    
     this.writeTextToCanvas("What do you do when you detect strange activity on your social media account?", 40, this.canvas.width / 2, 580, "center", "black");
     this.writeTextToCanvas("Nothing", 40, 300, 650, "center", "black");
-    this.writeTextToCanvas("Chanege your password", 40, 770 , 650, "center", "black");
+    this.writeTextToCanvas("Change your password", 40, 770 , 650, "center", "black");
+    this.writeTextToCanvas("Sell your device", 40, 1300, 650, "center", "black");
+  }
+
+  if(this.numberOfQuestion === 4){
+    // this.ctx.clearRect(0, 430, this.canvas.width, 400)
+   
+    this.writeTextToCanvas("What do you do when you detect strange activity on your social media account?", 40, this.canvas.width / 2, 580, "center", "black");
+    this.writeTextToCanvas("Nothing", 40, 300, 650, "center", "black");
+    this.writeTextToCanvas("Change your password", 40, 770 , 650, "center", "black");
+    this.writeTextToCanvas("Sell your device", 40, 1300, 650, "center", "black");
+  }
+
+  if(this.numberOfQuestion === 5){
+    // this.ctx.clearRect(0, 430, this.canvas.width, 400)
+   
+    this.writeTextToCanvas("What do you do when you detect strange activity on your social media account?", 40, this.canvas.width / 2, 580, "center", "black");
+    this.writeTextToCanvas("Nothing", 40, 300, 650, "center", "black");
+    this.writeTextToCanvas("Change your password", 40, 770 , 650, "center", "black");
     this.writeTextToCanvas("Sell your device", 40, 1300, 650, "center", "black");
   }
   
@@ -146,33 +164,27 @@ class Game {
       console.log(`xPos ${event.clientX}, yPos ${event.clientY}`);
 
       // Bounding box collision detection
-      //Check every image for a "collision" with the mouseclick
+      //Check every rectangle for a "collision" with the mouseclick
       //If yes, execute the if statement
       //If no, do nothing
       for(let i = 0; i< this.rectangles.length; i++) {
-        if(this.numberOfQuestion === 1){
-          if (
-              this.detectingRect(event, 1) 
-          ) {
+        if(this.numberOfQuestion === 1 && this.detectingRect(event, 1)){
+         
               this.car2.roughDistance();
               this.numberOfQuestion = 2;
-          } else if (this.detectingRect(event, 0) ||  this.detectingRect(event, 2)){
-            this.numberOfQuestion = 2;
+          }
+           
+          if(this.numberOfQuestion === 2 && this.detectingRect(event, 0)){
+            this.car2.roughDistance();
+            this.numberOfQuestion = 3;
+          }
+          
+          if(this.numberOfQuestion === 3 && this.detectingRect(event, 2)){
+            this.car2.roughDistance();
+            
           }
         } 
-        //  if(this.numberOfQuestion === 2){
-        //   if (
-        //       this.detectingRect(event, 1) 
-        //   ) {
-        //       this.car2.roughDistance();
-        //       this.numberOfQuestion = 3;
-        //   }
-        
-        //  else if (this.detectingRect(event, 0) ||  this.detectingRect(event, 2)){
-        //     this.numberOfQuestion = 3;
-        //   }
-        // }
-      };
+     
   };
   
   private detectingRect(event: MouseEvent, i: number) {

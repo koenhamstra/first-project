@@ -1,5 +1,5 @@
 class Car {
-    constructor(name, colour, xPos, yPos, source) {
+    constructor(name, xPos, yPos, source) {
         this._xPosition = xPos;
         this._yPosition = yPos;
         this._name = name;
@@ -82,24 +82,25 @@ class Game {
         this.mouseHandler = (event) => {
             console.log(`xPos ${event.clientX}, yPos ${event.clientY}`);
             for (let i = 0; i < this.rectangles.length; i++) {
-                if (this.numberOfQuestion === 1) {
-                    if (this.detectingRect(event, 1)) {
-                        this.car2.roughDistance();
-                        this.numberOfQuestion = 2;
-                    }
-                    else if (this.detectingRect(event, 0) || this.detectingRect(event, 2)) {
-                        this.numberOfQuestion = 2;
-                    }
+                if (this.numberOfQuestion === 1 && this.detectingRect(event, 1)) {
+                    this.car2.roughDistance();
+                    this.numberOfQuestion = 2;
+                }
+                if (this.numberOfQuestion === 2 && this.detectingRect(event, 0)) {
+                    this.car2.roughDistance();
+                    this.numberOfQuestion = 3;
+                }
+                if (this.numberOfQuestion === 3 && this.detectingRect(event, 2)) {
+                    this.car2.roughDistance();
                 }
             }
-            ;
         };
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.car1 = new Car("Bullet", "red", 100, 50, "assets/img/walk 1 (1).png");
-        this.car2 = new Car("Greek Arrow", "green", 100, 250, "assets/img/walk 1 (1).png");
+        this.car1 = new Car("Bullet", 100, 0, "assets/img/walk 1 (1).png");
+        this.car2 = new Car("Greek Arrow", 100, 250, "assets/img/walk 1 (1).png");
         console.log(this.car1);
         this.rectangles = [
             new Rectangles(100, 600, "red", 70, 400),
@@ -108,7 +109,6 @@ class Game {
         ];
         document.addEventListener("click", this.mouseHandler);
         this.numberOfQuestion = 1;
-        this.gameState = "begin";
         this.loop();
     }
     draw() {
@@ -133,7 +133,19 @@ class Game {
         if (this.numberOfQuestion === 3) {
             this.writeTextToCanvas("What do you do when you detect strange activity on your social media account?", 40, this.canvas.width / 2, 580, "center", "black");
             this.writeTextToCanvas("Nothing", 40, 300, 650, "center", "black");
-            this.writeTextToCanvas("Chanege your password", 40, 770, 650, "center", "black");
+            this.writeTextToCanvas("Change your password", 40, 770, 650, "center", "black");
+            this.writeTextToCanvas("Sell your device", 40, 1300, 650, "center", "black");
+        }
+        if (this.numberOfQuestion === 4) {
+            this.writeTextToCanvas("What do you do when you detect strange activity on your social media account?", 40, this.canvas.width / 2, 580, "center", "black");
+            this.writeTextToCanvas("Nothing", 40, 300, 650, "center", "black");
+            this.writeTextToCanvas("Change your password", 40, 770, 650, "center", "black");
+            this.writeTextToCanvas("Sell your device", 40, 1300, 650, "center", "black");
+        }
+        if (this.numberOfQuestion === 5) {
+            this.writeTextToCanvas("What do you do when you detect strange activity on your social media account?", 40, this.canvas.width / 2, 580, "center", "black");
+            this.writeTextToCanvas("Nothing", 40, 300, 650, "center", "black");
+            this.writeTextToCanvas("Change your password", 40, 770, 650, "center", "black");
             this.writeTextToCanvas("Sell your device", 40, 1300, 650, "center", "black");
         }
         if (this.gameState === "animate") {

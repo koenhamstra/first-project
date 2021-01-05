@@ -6,13 +6,12 @@ class Car {
     private _yPosition: number;
     // private upgrade: number;
 
-    constructor(name:string, colour:string, xPos:number, yPos:number, source: string) {
+    constructor(name:string, xPos:number, yPos:number, source: string) {
         this._xPosition = xPos;
         this._yPosition = yPos;
         this._name = name;
         this.image = this.loadNewImage(source);
-        //console.log(this.image);
-        // this.upgrade =  200;
+        
     }
 
     public setDistance(distanceRaced : number) {
