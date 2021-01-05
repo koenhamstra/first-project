@@ -12,8 +12,8 @@ class Player {
 
     constructor(canvas: HTMLCanvasElement){
         this.canvas = canvas;
-        this.xpos = this.canvas.width/10;
-        this.ypos = this.canvas.height* 16.7/20;
+        this.xpos = this.canvas.width /10;
+        this.ypos = this.canvas.height * 16.7/20;
         this.ctx = this.canvas.getContext('2d');
 
         this.keyboard = new KeyboardListener;
@@ -110,19 +110,21 @@ class Player {
         if (this.keyboard.isKeyDown(32) === true) {
             this.ypos = this.ypos - 20;
             this.drawing(this.array[1])
-            if (this.ypos <= this.canvas.height *14/20 && this.xpos > this.canvas.width/20*1 && this.xpos< this.canvas.width/20*1 + 300) {
-                this.ypos =  this.canvas.height* 14 / 20 +20;
-                // this.ypos= this.ypos+20;
-                this.keyboard.isKeyDown(32)===false;
-                }
             }
 
-        if (this.keyboard.isKeyDown(32) === false && (this.xpos < this.canvas.width/20*1 || this.xpos> this.canvas.width/20*1 + 300)) {
+        if (this.keyboard.isKeyDown(32) === false) {
             this.ypos = this.ypos + 20;
             if (this.ypos > this.canvas.height * 8 / 10) {
                 this.ypos = this.canvas.height * 16.7 / 20;
             }
-        }
+        } 
+        if (this.xpos > this.canvas.width / 20 * 1 && 
+            this.xpos < this.canvas.width / 20 + 300 && 
+            this.ypos < this.canvas.height / 20 * 14 &&
+            this.ypos > this.canvas.height / 20 * 10){
+            console.log("it works");
+            this.ypos = this.canvas.height / 20 * 11; 
+        } 
     }
 
 

@@ -79,7 +79,7 @@ class FullGame {
      * the logic needed to draw the individual frames.
      */
     private loop = () => {
-  
+
       //player
       if (this.index > 29) {
         this.index = 0;
@@ -193,8 +193,8 @@ class FullGame {
       });
   
       //draw the servers
-      this.ctx.drawImage(this.image,this.canvas.width / 20 * 17,this.canvas.height/20 * 1.3);
-      this.ctx.drawImage(this.image,this.canvas.width / 20 * 16.5,this.canvas.height/20 * 1.3);
+      this.ctx.drawImage(this.image,this.canvas.width / 20 * 17,this.canvas.height/20 * 0.8);
+      this.ctx.drawImage(this.image,this.canvas.width / 20 * 16.5,this.canvas.height/20 * 0.8);
     }
   
   

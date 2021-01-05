@@ -138,8 +138,8 @@ class FullGame {
         this.platform.forEach(element => {
             element.draw(this.ctx);
         });
-        this.ctx.drawImage(this.image, this.canvas.width / 20 * 17, this.canvas.height / 20 * 1.3);
-        this.ctx.drawImage(this.image, this.canvas.width / 20 * 16.5, this.canvas.height / 20 * 1.3);
+        this.ctx.drawImage(this.image, this.canvas.width / 20 * 17, this.canvas.height / 20 * 0.8);
+        this.ctx.drawImage(this.image, this.canvas.width / 20 * 16.5, this.canvas.height / 20 * 0.8);
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "white") {
         this.ctx.font = `${fontSize}px sans-serif`;
@@ -255,16 +255,19 @@ class Player {
             if (this.keyboard.isKeyDown(32) === true) {
                 this.ypos = this.ypos - 20;
                 this.drawing(this.array[1]);
-                if (this.ypos <= this.canvas.height * 14 / 20 && this.xpos > this.canvas.width / 20 * 1 && this.xpos < this.canvas.width / 20 * 1 + 300) {
-                    this.ypos = this.canvas.height * 14 / 20 + 20;
-                    this.keyboard.isKeyDown(32) === false;
-                }
             }
-            if (this.keyboard.isKeyDown(32) === false && (this.xpos < this.canvas.width / 20 * 1 || this.xpos > this.canvas.width / 20 * 1 + 300)) {
+            if (this.keyboard.isKeyDown(32) === false) {
                 this.ypos = this.ypos + 20;
                 if (this.ypos > this.canvas.height * 8 / 10) {
                     this.ypos = this.canvas.height * 16.7 / 20;
                 }
+            }
+            if (this.xpos > this.canvas.width / 20 * 1 &&
+                this.xpos < this.canvas.width / 20 + 300 &&
+                this.ypos < this.canvas.height / 20 * 14 &&
+                this.ypos > this.canvas.height / 20 * 10) {
+                console.log("it works");
+                this.ypos = this.canvas.height / 20 * 11;
             }
         };
         this.start = () => {
