@@ -5,7 +5,6 @@ class FullGame {
   
     // KeyboardListener so the player can move
     private keyboardListener: KeyboardListener;
-
   
     //properties for the level
     private floor: Layout[];
@@ -20,7 +19,7 @@ class FullGame {
     private index  :number ;
   
     //properties for the enemy
-    private frameIndex: number;
+    public frameIndex: number;
     private enemy: Enemy;
     private projectiles: Projectile[];
     
@@ -132,37 +131,37 @@ class FullGame {
     }
   
     private createPlatform() {
-      //create platform
+      //create platform 1 
       for (let i = 0; i < 10; i++) {
         this.platform.push(new Layout(this.platformPos[0] += 30, this.canvas.height/20*14, "src/moving/pics/smallBrick.png"));
       }
   
-      //create platform
+      //create platform 2
       for (let i = 0; i < 8; i++) {
         this.platform.push(new Layout(this.platformPos[1] += 30, this.canvas.height/20 * 8,"src/moving/pics/smallBrick.png"));
       }
   
-       //create platform
+       //create platform 3
        for (let i = 0; i < 12; i++) {
         this.platform.push(new Layout(this.platformPos[2] += 30, this.canvas.height/20 * 3, "src/moving/pics/smallBrick.png"));
       }
   
-       //create platform
+       //create platform 4
        for (let i = 0; i < 4; i++) {
         this.platform.push(new Layout(this.platformPos[3] += 30, this.canvas.height/20*14, "src/moving/pics/smallBrick.png"));
       }
   
-       //create platform
+       //create platform 5
        for (let i = 0; i < 12; i++) {
         this.platform.push(new Layout(this.platformPos[4] += 30, this.canvas.height/20 * 8, "src/moving/pics/smallBrick.png"));
       }
   
-       //create platform
+       //create platform 6
        for (let i = 0; i < 8; i++) {
         this.platform.push(new Layout(this.platformPos[6] += 30, this.canvas.height/20 * 3, "src/moving/pics/smallBrick.png"));
       }
   
-       //create platform
+       //create platform 7
        for (let i = 0; i < 8; i++) {
         this.platform.push(new Layout(this.platformPos[5] += 30, this.canvas.height/20 * 14, "src/moving/pics/smallBrick.png"));
       }
@@ -171,7 +170,7 @@ class FullGame {
        for (let i = 0; i < 100; i++){
         this.floor.push(
           new Layout(
-            this.floors += 40, this.canvas.height *20/21, "src/moving/pics/brick.png"
+            this.floors += 40, this.canvas.height * 20 / 21, "src/moving/pics/brick.png"
           ) 
         ); 
       }
@@ -193,8 +192,8 @@ class FullGame {
       });
   
       //draw the servers
-      this.ctx.drawImage(this.image,this.canvas.width / 20 * 17,this.canvas.height/20 * 0.8);
-      this.ctx.drawImage(this.image,this.canvas.width / 20 * 16.5,this.canvas.height/20 * 0.8);
+      this.ctx.drawImage(this.image,this.canvas.width / 20 * 18,this.canvas.height/20 * 0.8);
+      this.ctx.drawImage(this.image,this.canvas.width / 20 * 17.5,this.canvas.height/20 * 0.8);
     }
   
   

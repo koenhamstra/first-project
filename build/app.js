@@ -38,7 +38,7 @@ class Enemy {
         this.image = this.loadNewImage("src/moving/pics/players/enemy.png");
         this.ctx = this.canvas.getContext("2d");
         this.xPos = this.canvas.width * 5 / 6;
-        this.yPos = this.canvas.height * 0.74;
+        this.yPos = this.canvas.height * 0.78;
     }
     loadNewImage(source) {
         const img = new Image();
@@ -138,8 +138,8 @@ class FullGame {
         this.platform.forEach(element => {
             element.draw(this.ctx);
         });
-        this.ctx.drawImage(this.image, this.canvas.width / 20 * 17, this.canvas.height / 20 * 0.8);
-        this.ctx.drawImage(this.image, this.canvas.width / 20 * 16.5, this.canvas.height / 20 * 0.8);
+        this.ctx.drawImage(this.image, this.canvas.width / 20 * 18, this.canvas.height / 20 * 0.8);
+        this.ctx.drawImage(this.image, this.canvas.width / 20 * 17.5, this.canvas.height / 20 * 0.8);
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "white") {
         this.ctx.font = `${fontSize}px sans-serif`;
@@ -244,7 +244,7 @@ class Player {
                     this.drawing(this.array[6]);
                     this.index = 0;
                 }
-                if (this.xpos === this.canvas.width * 5 / 5) {
+                if (this.xpos === (this.canvas.width * 5) / 5) {
                     this.xpos = 0;
                 }
                 this.xpos = this.xpos + 4;
@@ -252,26 +252,74 @@ class Player {
             this.jump();
         };
         this.jump = () => {
+            this.walkOnPlatform();
             if (this.keyboard.isKeyDown(32) === true) {
-                this.ypos = this.ypos - 20;
+                console.log("pressed");
+                this.ypos = this.ypos - 10;
                 this.drawing(this.array[1]);
             }
             if (this.keyboard.isKeyDown(32) === false) {
-                this.ypos = this.ypos + 20;
-                if (this.ypos > this.canvas.height * 8 / 10) {
-                    this.ypos = this.canvas.height * 16.7 / 20;
+                this.ypos = this.ypos + 10;
+                if (this.ypos > (this.canvas.height * 20) / 21 - 105) {
+                    this.ypos = (this.canvas.height * 20) / 21 - 105;
                 }
             }
-            if (this.xpos > this.canvas.width / 20 * 1 &&
+        };
+        this.walkOnPlatform = () => {
+            if (this.xpos > (this.canvas.width / 20) * 1 &&
                 this.xpos < this.canvas.width / 20 + 300 &&
-                this.ypos < this.canvas.height / 20 * 14 &&
-                this.ypos > this.canvas.height / 20 * 10) {
+                this.ypos < (this.canvas.height / 20) * 12 &&
+                this.ypos > (this.canvas.height / 20) * 10.95) {
                 console.log("it works");
-                this.ypos = this.canvas.height / 20 * 11;
+                this.ypos = (this.canvas.height / 20) * 10.94;
+            }
+            if (this.xpos > (this.canvas.width / 20) * 3 &&
+                this.xpos < (this.canvas.width / 20) * 3 + 240 &&
+                this.ypos < (this.canvas.height / 20) * 6 &&
+                this.ypos > (this.canvas.height / 20) * 4.95) {
+                console.log("it works");
+                this.ypos = (this.canvas.height / 20) * 4.94;
+            }
+            if (this.xpos > (this.canvas.width / 20) * 5 &&
+                this.xpos < (this.canvas.width / 20) * 5 + 360 &&
+                this.ypos < (this.canvas.height / 20) * 1 &&
+                this.ypos > (this.canvas.height / 20) * -0.05) {
+                console.log("it works");
+                this.ypos = (this.canvas.height / 20) * -0.06;
+            }
+            if (this.xpos > (this.canvas.width / 20) * 8 &&
+                this.xpos < (this.canvas.width / 20) * 8 + 120 &&
+                this.ypos < (this.canvas.height / 20) * 12 &&
+                this.ypos > (this.canvas.height / 20) * 10.95) {
+                console.log("it works");
+                this.ypos = (this.canvas.height / 20) * 10.94;
+            }
+            if (this.xpos > (this.canvas.width / 20) * 12 &&
+                this.xpos < (this.canvas.width / 20) * 12 + 360 &&
+                this.ypos < (this.canvas.height / 20) * 6 &&
+                this.ypos > (this.canvas.height / 20) * 4.95) {
+                console.log("it works");
+                this.ypos = (this.canvas.height / 20) * 4.94;
+            }
+            if (this.xpos > (this.canvas.width / 20) * 15 &&
+                this.xpos < (this.canvas.width / 20) * 15 + 240 &&
+                this.ypos < (this.canvas.height / 20) * 1 &&
+                this.ypos > (this.canvas.height / 20) * -0.05) {
+                console.log("it works");
+                this.ypos = (this.canvas.height / 20) * -0.06;
+            }
+            if (this.xpos > (this.canvas.width / 20) * 13 &&
+                this.xpos < (this.canvas.width / 20) * 13 + 240 &&
+                this.ypos < (this.canvas.height / 20) * 12 &&
+                this.ypos > (this.canvas.height / 20) * 10.95) {
+                console.log("it works");
+                this.ypos = (this.canvas.height / 20) * 10.94;
             }
         };
         this.start = () => {
-            if (this.keyboard.isKeyDown(32) === false && this.keyboard.isKeyDown(39) === false && this.keyboard.isKeyDown(37) === false) {
+            if (this.keyboard.isKeyDown(32) === false &&
+                this.keyboard.isKeyDown(39) === false &&
+                this.keyboard.isKeyDown(37) === false) {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 this.ctx.drawImage(this.array[0], this.xpos, this.ypos);
                 this.jump();
@@ -293,12 +341,28 @@ class Player {
             return this.xpos;
         };
         this.canvas = canvas;
-        this.xpos = this.canvas.width / 10;
-        this.ypos = this.canvas.height * 16.7 / 20;
-        this.ctx = this.canvas.getContext('2d');
-        this.keyboard = new KeyboardListener;
-        this.array = [this.loadNewImage("src/moving/PlayerRight/walk 1.png"), this.loadNewImage("src/moving/PlayerRight/walk 2.png"), this.loadNewImage("src/moving/PlayerRight/walk 3.png"), this.loadNewImage("src/moving/PlayerRight/walk 4.png"), this.loadNewImage("src/moving/PlayerRight/walk 5.png"), this.loadNewImage("src/moving/PlayerRight/walk 6.png"), this.loadNewImage("src/moving/PlayerRight/walk 7.png")];
-        this.leftArray = [this.loadNewImage("src/moving/PlayerLeft/walk 1.png"), this.loadNewImage("src/moving/PlayerLeft/walk 2.png"), this.loadNewImage("src/moving/PlayerLeft/walk 3.png"), this.loadNewImage("src/moving/PlayerLeft/walk 4.png"), this.loadNewImage("src/moving/PlayerLeft/walk 5.png"), this.loadNewImage("src/moving/PlayerLeft/walk 6.png"), this.loadNewImage("src/moving/PlayerLeft/walk 7.png")];
+        this.xpos = this.canvas.width / 50;
+        this.ypos = this.canvas.height / this.canvas.height;
+        this.ctx = this.canvas.getContext("2d");
+        this.keyboard = new KeyboardListener();
+        this.array = [
+            this.loadNewImage("src/moving/PlayerRight/walk 1.png"),
+            this.loadNewImage("src/moving/PlayerRight/walk 2.png"),
+            this.loadNewImage("src/moving/PlayerRight/walk 3.png"),
+            this.loadNewImage("src/moving/PlayerRight/walk 4.png"),
+            this.loadNewImage("src/moving/PlayerRight/walk 5.png"),
+            this.loadNewImage("src/moving/PlayerRight/walk 6.png"),
+            this.loadNewImage("src/moving/PlayerRight/walk 7.png"),
+        ];
+        this.leftArray = [
+            this.loadNewImage("src/moving/PlayerLeft/walk 1.png"),
+            this.loadNewImage("src/moving/PlayerLeft/walk 2.png"),
+            this.loadNewImage("src/moving/PlayerLeft/walk 3.png"),
+            this.loadNewImage("src/moving/PlayerLeft/walk 4.png"),
+            this.loadNewImage("src/moving/PlayerLeft/walk 5.png"),
+            this.loadNewImage("src/moving/PlayerLeft/walk 6.png"),
+            this.loadNewImage("src/moving/PlayerLeft/walk 7.png"),
+        ];
         this.index = 0;
         this.ctx.drawImage(this.array[1], this.xpos, this.ypos);
     }

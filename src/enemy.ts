@@ -14,7 +14,7 @@ class Enemy{
         
         this.ctx = this.canvas.getContext("2d");
         this.xPos = this.canvas.width * 5 / 6;
-        this.yPos = this.canvas.height * 0.74;
+        this.yPos = this.canvas.height * 0.78;
     }
 
     /**
