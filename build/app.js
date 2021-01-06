@@ -55,8 +55,8 @@ class Game {
         this.xPos = this.canvas.width * 0.7 / 2;
         this.yPos = this.canvas.height * 0.3 / 2;
         this.phoneImage = this.loadNewImage("assets/img/phone.png");
-        this.xPos_whatsapp = this.canvas.width * 0.74 / 2;
-        this.yPos_whatsapp = this.canvas.width * 0.63 / 2;
+        this.xPos_whatsapp = this.canvas.width * 0.5 / 2;
+        this.yPos_whatsapp = this.canvas.width * 0.5 / 2;
         this.whatsAppImage = this.loadNewImage("assets/img/whatsapp.png");
         this.xPos_answer1 = this.canvas.width * 8 / 20;
         this.xPos_answer2 = this.canvas.width * 14 / 20;
