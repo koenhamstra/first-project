@@ -255,11 +255,14 @@ class Player {
             this.walkOnPlatform();
             if (this.keyboard.isKeyDown(32) === true) {
                 console.log("pressed");
-                this.ypos = this.ypos - 10;
+                this.ypos = this.ypos - 8;
+                if (this.ypos < this.canvas.height - this.canvas.height - this.ypos) {
+                    this.ypos = this.ypos + 8;
+                }
                 this.drawing(this.array[1]);
             }
             if (this.keyboard.isKeyDown(32) === false) {
-                this.ypos = this.ypos + 10;
+                this.ypos = this.ypos + 8;
                 if (this.ypos > (this.canvas.height * 20) / 21 - 105) {
                     this.ypos = (this.canvas.height * 20) / 21 - 105;
                 }
