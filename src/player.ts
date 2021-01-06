@@ -1,18 +1,15 @@
 class Player {
   private array: HTMLImageElement[];
   private leftArray: HTMLImageElement[];
-
   private keyboard: KeyboardListener;
-
   private index: number;
-
   private xpos: number;
   private ypos: number;
-
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
+  private projectile: Projectile;
 
-  private jumpIndex: number;
+  // private jumpIndex: number;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -20,8 +17,9 @@ class Player {
     this.ypos = this.canvas.height / this.canvas.height;
     this.ctx = this.canvas.getContext("2d");
 
-    this.jumpIndex = 0;
+    // this.jumpIndex = 0;
 
+    //Arrays that make sure the player is animated
     this.keyboard = new KeyboardListener();
     this.array = [
       this.loadNewImage("src/moving/PlayerRight/walk 1.png"),
@@ -47,13 +45,19 @@ class Player {
     //this.jumpLoop();
   }
 
-  //count frames for jump method
-  public jumpLoop = () => {
-    this.jumpIndex++;
-    requestAnimationFrame(this.jumpLoop);
-    console.log(this.jumpIndex);
-  };
+  /**
+   * Counts frames for jump method
+   * CURRENTLY NOT USED, WE CAN USE THIS FUNCTION LATER IS WE WANT TO
+   */
+  // public jumpLoop = () => {
+  //   this.jumpIndex++;
+  //   requestAnimationFrame(this.jumpLoop);
+  //   console.log(this.jumpIndex);
+  // };
 
+  /**
+   * Function that moves the player to the right when the corresponding key is pressed
+   */
   public moveLeft = () => {
     if (this.keyboard.isKeyDown(37) === true) {
       this.index++;
@@ -94,6 +98,9 @@ class Player {
     this.jump();
   };
 
+  /**
+   * Function that moves the player to the right when the corresponding key is pressed
+   */
   public moveRight = () => {
     if (this.keyboard.isKeyDown(39) === true) {
       this.index++;
@@ -134,13 +141,17 @@ class Player {
     this.jump();
   };
 
+  /**
+   * Function that checks if the spacebar is pressed
+   * If SPACE is not pressed, the player will fall down
+   */
   public jump = () => {
     this.walkOnPlatform();
     if (this.keyboard.isKeyDown(32) === true) {
       console.log("pressed");
       this.ypos = this.ypos - 8;
       //this.jumpIndex = 0;
-      if (this.ypos <  this.canvas.height - this.canvas.height - this.ypos){
+      if (this.ypos < this.canvas.height - this.canvas.height - this.ypos) {
         this.ypos = this.ypos + 8;
       }
       this.drawing(this.array[1]);
@@ -154,7 +165,9 @@ class Player {
     }
   };
 
-
+  /**
+   * Detects wether or not the player is in contact with a platform
+   */
   public walkOnPlatform = () => {
     //Platform 1, lower left of the canvas
     if (
@@ -264,7 +277,5 @@ class Player {
     return this.xpos;
   };
 
-  // public playerImage= () => {
-  //     return this.ctx.drawImage(this.array[0],this.xpos,this.ypos);
-  // }
+  
 }

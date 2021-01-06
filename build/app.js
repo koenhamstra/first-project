@@ -44,7 +44,7 @@ class Enemy {
         this.canvas = canvas;
         this.image = this.loadNewImage("src/moving/pics/players/enemy.png");
         this.ctx = this.canvas.getContext("2d");
-        this.xPos = this.canvas.width / 20 * 17.5;
+        this.xPos = (this.canvas.width / 20) * 17.5;
         this.yPos = this.canvas.height / 2;
         this.speed = 2;
     }
@@ -67,10 +67,11 @@ class FullGame {
             this.player.start();
             this.player.moveRight();
             this.player.moveLeft();
+            this.collidesWithProjectile();
             this.frameIndex++;
             this.enemy.draw();
             if (this.frameIndex % 70 === 0) {
-                this.projectiles.push(new Projectile(this.canvas, this.enemy.getEnemyXPos(), this.enemy.moveEnemy(), 3));
+                this.projectiles.push(new Projectile(this.canvas, this.enemy.getEnemyXPos(), this.enemy.moveEnemy(), this.generateProjectile()));
                 for (let i = 0; i < this.projectiles.length; i++) {
                     this.projectiles[i].spawn();
                 }
@@ -82,11 +83,34 @@ class FullGame {
             this.draw();
             requestAnimationFrame(this.loop);
         };
+        this.generateProjectile = () => {
+            let projectileDirection = this.randomNumber(1, 2);
+            if (projectileDirection === 1) {
+                return -3;
+            }
+            else {
+                return 3;
+            }
+        };
         this.collidesWithCanvasBorder = () => {
             for (let i = 0; i < this.projectiles.length; i++) {
                 if (this.projectiles[i].getXPos() < -100) {
                     this.projectiles.splice(i, 1);
                     console.log("removed");
+                }
+            }
+        };
+        this.collidesWithProjectile = () => {
+            for (let i = 0; i < this.projectiles.length; i++) {
+                if (this.player.getXPos() > this.projectiles[i].getXPos() &&
+                    this.player.getXPos() <
+                        this.projectiles[i].getXPos() + this.projectiles[i].getImage().width) {
+                    console.log("Collides with Player");
+                }
+                if (this.player.getyPos() < this.projectiles[i].getYPos() &&
+                    this.player.getyPos() >
+                        this.projectiles[i].getYPos() + this.projectiles[i].getImage().height) {
+                    console.log("overlaps");
                 }
             }
         };
@@ -100,13 +124,15 @@ class FullGame {
         this.floor = [];
         this.floors = -40;
         this.platform = [];
-        this.platformPos = [this.canvas.width / 20 * 1,
-            this.canvas.width / 20 * 3,
-            this.canvas.width / 20 * 5,
-            this.canvas.width / 20 * 8,
-            this.canvas.width / 20 * 12,
-            this.canvas.width / 20 * 13,
-            this.canvas.width / 20 * 15,];
+        this.platformPos = [
+            (this.canvas.width / 20) * 1,
+            (this.canvas.width / 20) * 3,
+            (this.canvas.width / 20) * 5,
+            (this.canvas.width / 20) * 8,
+            (this.canvas.width / 20) * 12,
+            (this.canvas.width / 20) * 13,
+            (this.canvas.width / 20) * 15,
+        ];
         this.image = this.loadNewImage("src/moving/pics/Server.png");
         this.index = 0;
         this.player = new Player(canvas);
@@ -118,39 +144,39 @@ class FullGame {
     }
     createPlatform() {
         for (let i = 0; i < 10; i++) {
-            this.platform.push(new Layout(this.platformPos[0] += 30, this.canvas.height / 20 * 14, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout((this.platformPos[0] += 30), (this.canvas.height / 20) * 14, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 8; i++) {
-            this.platform.push(new Layout(this.platformPos[1] += 30, this.canvas.height / 20 * 8, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout((this.platformPos[1] += 30), (this.canvas.height / 20) * 8, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 12; i++) {
-            this.platform.push(new Layout(this.platformPos[2] += 30, this.canvas.height / 20 * 3, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout((this.platformPos[2] += 30), (this.canvas.height / 20) * 3, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 4; i++) {
-            this.platform.push(new Layout(this.platformPos[3] += 30, this.canvas.height / 20 * 14, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout((this.platformPos[3] += 30), (this.canvas.height / 20) * 14, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 12; i++) {
-            this.platform.push(new Layout(this.platformPos[4] += 30, this.canvas.height / 20 * 8, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout((this.platformPos[4] += 30), (this.canvas.height / 20) * 8, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 8; i++) {
-            this.platform.push(new Layout(this.platformPos[6] += 30, this.canvas.height / 20 * 3, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout((this.platformPos[6] += 30), (this.canvas.height / 20) * 3, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 8; i++) {
-            this.platform.push(new Layout(this.platformPos[5] += 30, this.canvas.height / 20 * 14, "src/moving/pics/smallBrick.png"));
+            this.platform.push(new Layout((this.platformPos[5] += 30), (this.canvas.height / 20) * 14, "src/moving/pics/smallBrick.png"));
         }
         for (let i = 0; i < 100; i++) {
-            this.floor.push(new Layout(this.floors += 40, this.canvas.height * 20 / 21, "src/moving/pics/brick.png"));
+            this.floor.push(new Layout((this.floors += 40), (this.canvas.height * 20) / 21, "src/moving/pics/brick.png"));
         }
     }
     draw() {
-        this.floor.forEach(element => {
+        this.floor.forEach((element) => {
             element.draw(this.ctx);
         });
-        this.platform.forEach(element => {
+        this.platform.forEach((element) => {
             element.draw(this.ctx);
         });
-        this.ctx.drawImage(this.image, this.canvas.width / 20 * 18, this.canvas.height / 20 * 0.8);
-        this.ctx.drawImage(this.image, this.canvas.width / 20 * 17.5, this.canvas.height / 20 * 0.8);
+        this.ctx.drawImage(this.image, (this.canvas.width / 20) * 18, (this.canvas.height / 20) * 0.8);
+        this.ctx.drawImage(this.image, (this.canvas.width / 20) * 17.5, (this.canvas.height / 20) * 0.8);
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "white") {
         this.ctx.font = `${fontSize}px sans-serif`;
@@ -198,11 +224,6 @@ class Layout extends GameEntity {
 }
 class Player {
     constructor(canvas) {
-        this.jumpLoop = () => {
-            this.jumpIndex++;
-            requestAnimationFrame(this.jumpLoop);
-            console.log(this.jumpIndex);
-        };
         this.moveLeft = () => {
             if (this.keyboard.isKeyDown(37) === true) {
                 this.index++;
@@ -363,7 +384,6 @@ class Player {
         this.xpos = this.canvas.width / 50;
         this.ypos = this.canvas.height / this.canvas.height;
         this.ctx = this.canvas.getContext("2d");
-        this.jumpIndex = 0;
         this.keyboard = new KeyboardListener();
         this.array = [
             this.loadNewImage("src/moving/PlayerRight/walk 1.png"),
@@ -390,12 +410,10 @@ class Player {
 class Projectile {
     constructor(canvas, xPos, yPos, verticalSpeed) {
         this.spawn = () => {
-            this.projectileCount++;
-            console.log("counting is " + this.projectileCount);
             this.ctx.drawImage(this.image, this.xPos, this.yPos);
         };
         this.move = () => {
-            this.ctx.clearRect(this.xPos, this.yPos, 60, 60);
+            this.ctx.clearRect(this.xPos, this.yPos, 40, 40);
             this.ctx.drawImage(this.image, this.xPos, this.yPos);
             this.xPos -= this.horizontalSpeed;
         };
@@ -415,6 +433,12 @@ class Projectile {
         this.getXPos = () => {
             return this.xPos;
         };
+        this.getYPos = () => {
+            return this.yPos;
+        };
+        this.getImage = () => {
+            return this.image;
+        };
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
         this.image = this.loadNewImage("src/moving/pics/objects/enemy.png");
@@ -422,7 +446,6 @@ class Projectile {
         this.horizontalSpeed = 2;
         this.xPos = xPos;
         this.yPos = yPos;
-        this.projectileCount = 0;
     }
     loadNewImage(source) {
         const img = new Image();
