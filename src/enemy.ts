@@ -5,7 +5,9 @@ class Enemy{
     private image: HTMLImageElement;
 
     private xPos: number;
-    private yPos: number;    
+    private yPos: number;  
+    
+    private speed: number;
 
     public constructor(canvas: HTMLCanvasElement){
         
@@ -13,9 +15,25 @@ class Enemy{
         this.image = this.loadNewImage("src/moving/pics/players/enemy.png");
         
         this.ctx = this.canvas.getContext("2d");
-        this.xPos = this.canvas.width * 5 / 6;
-        this.yPos = this.canvas.height * 0.78;
+        this.xPos = this.canvas.width / 20 * 17.5;
+        this.yPos = this.canvas.height / 2;
+
+        this.speed = 2;
+     
     }
+
+    public moveEnemy = (): number => {
+        this.yPos = this.yPos + this.speed;
+     
+        if (this.yPos >= this.canvas.height - this.image.height - 10) {
+          this.speed = -this.speed;
+        }
+     
+        if (this.yPos <= 1 + this.image.height + 10) {
+          this.speed = -this.speed;
+        }
+        return this.yPos;
+      };
 
     /**
     * Loads an image in such a way that the screen doesn't constantly flicker
@@ -34,9 +52,5 @@ class Enemy{
 
     public getEnemyXPos = ():number => {
         return this.xPos
-    }
-
-    public getEnemyYPos = () => {
-        return this.yPos
     }
 }

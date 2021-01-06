@@ -79,6 +79,14 @@ class FullGame {
      */
     private loop = () => {
 
+      //enemy moving
+      this.enemy.moveEnemy();
+
+      //moving projectiles
+      for (let i = 0; i < this.projectiles.length; i++) {
+        this.projectiles[i].moveProjectiles();            
+    }
+
       //player
       if (this.index > 29) {
         this.index = 0;
@@ -91,13 +99,13 @@ class FullGame {
         // this.player.jump()
   
     //enemy
-      console.log(this.frameIndex);
+      //console.log(this.frameIndex);
       this.frameIndex++;
       this.enemy.draw();
   
       //Creates a new projectile every 150 frames and pushed the projectile to projectiles[]
-      if(this.frameIndex % 150 === 0) {
-          this.projectiles.push(new Projectile(this.canvas));
+      if(this.frameIndex % 70 === 0) {
+          this.projectiles.push(new Projectile(this.canvas, this.enemy.getEnemyXPos(), this.enemy.moveEnemy(),3));
           for (let i = 0; i < this.projectiles.length; i++) {
               this.projectiles[i].spawn()   
           }

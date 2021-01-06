@@ -25,20 +25,28 @@ let init = () => {
 window.addEventListener("load", init);
 class Enemy {
     constructor(canvas) {
+        this.moveEnemy = () => {
+            this.yPos = this.yPos + this.speed;
+            if (this.yPos >= this.canvas.height - this.image.height - 10) {
+                this.speed = -this.speed;
+            }
+            if (this.yPos <= 1 + this.image.height + 10) {
+                this.speed = -this.speed;
+            }
+            return this.yPos;
+        };
         this.draw = () => {
             this.ctx.drawImage(this.image, this.xPos, this.yPos);
         };
         this.getEnemyXPos = () => {
             return this.xPos;
         };
-        this.getEnemyYPos = () => {
-            return this.yPos;
-        };
         this.canvas = canvas;
         this.image = this.loadNewImage("src/moving/pics/players/enemy.png");
         this.ctx = this.canvas.getContext("2d");
-        this.xPos = this.canvas.width * 5 / 6;
-        this.yPos = this.canvas.height * 0.78;
+        this.xPos = this.canvas.width / 20 * 17.5;
+        this.yPos = this.canvas.height / 2;
+        this.speed = 2;
     }
     loadNewImage(source) {
         const img = new Image();
@@ -49,17 +57,20 @@ class Enemy {
 class FullGame {
     constructor(canvas) {
         this.loop = () => {
+            this.enemy.moveEnemy();
+            for (let i = 0; i < this.projectiles.length; i++) {
+                this.projectiles[i].moveProjectiles();
+            }
             if (this.index > 29) {
                 this.index = 0;
             }
             this.player.start();
             this.player.moveRight();
             this.player.moveLeft();
-            console.log(this.frameIndex);
             this.frameIndex++;
             this.enemy.draw();
-            if (this.frameIndex % 150 === 0) {
-                this.projectiles.push(new Projectile(this.canvas));
+            if (this.frameIndex % 70 === 0) {
+                this.projectiles.push(new Projectile(this.canvas, this.enemy.getEnemyXPos(), this.enemy.moveEnemy(), 3));
                 for (let i = 0; i < this.projectiles.length; i++) {
                     this.projectiles[i].spawn();
                 }
@@ -187,6 +198,11 @@ class Layout extends GameEntity {
 }
 class Player {
     constructor(canvas) {
+        this.jumpLoop = () => {
+            this.jumpIndex++;
+            requestAnimationFrame(this.jumpLoop);
+            console.log(this.jumpIndex);
+        };
         this.moveLeft = () => {
             if (this.keyboard.isKeyDown(37) === true) {
                 this.index++;
@@ -347,6 +363,7 @@ class Player {
         this.xpos = this.canvas.width / 50;
         this.ypos = this.canvas.height / this.canvas.height;
         this.ctx = this.canvas.getContext("2d");
+        this.jumpIndex = 0;
         this.keyboard = new KeyboardListener();
         this.array = [
             this.loadNewImage("src/moving/PlayerRight/walk 1.png"),
@@ -371,14 +388,26 @@ class Player {
     }
 }
 class Projectile {
-    constructor(canvas) {
+    constructor(canvas, xPos, yPos, verticalSpeed) {
         this.spawn = () => {
+            this.projectileCount++;
+            console.log("counting is " + this.projectileCount);
             this.ctx.drawImage(this.image, this.xPos, this.yPos);
         };
         this.move = () => {
             this.ctx.clearRect(this.xPos, this.yPos, 60, 60);
             this.ctx.drawImage(this.image, this.xPos, this.yPos);
-            this.xPos -= 2;
+            this.xPos -= this.horizontalSpeed;
+        };
+        this.moveProjectiles = () => {
+            this.yPos = this.yPos + this.verticalSpeed;
+            if (this.yPos >= this.canvas.height - this.image.height - 10) {
+                this.verticalSpeed = -this.verticalSpeed;
+            }
+            if (this.yPos <= 1) {
+                this.verticalSpeed = -this.verticalSpeed;
+            }
+            return this.yPos;
         };
         this.draw = () => {
             this.ctx.drawImage(this.image, this.xPos, this.yPos);
@@ -387,11 +416,13 @@ class Projectile {
             return this.xPos;
         };
         this.canvas = canvas;
-        this.enemy = new Enemy(canvas);
-        this.xPos = this.enemy.getEnemyXPos();
-        this.yPos = this.enemy.getEnemyYPos();
         this.ctx = this.canvas.getContext("2d");
         this.image = this.loadNewImage("src/moving/pics/objects/enemy.png");
+        this.verticalSpeed = verticalSpeed;
+        this.horizontalSpeed = 2;
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.projectileCount = 0;
     }
     loadNewImage(source) {
         const img = new Image();
