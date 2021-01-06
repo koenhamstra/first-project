@@ -126,8 +126,8 @@ class Game {
         }
         if (this.numberOfQuestion === 2) {
             this.writeTextToCanvas("How to protect your computer?", 40, this.canvas.width / 2, 580, "center", "black");
-            this.writeTextToCanvas("Be careless", 40, 300, 650, "center", "black");
-            this.writeTextToCanvas("Use firewall", 40, 770, 650, "center", "black");
+            this.writeTextToCanvas("Use firewall", 40, 300, 650, "center", "black");
+            this.writeTextToCanvas("Be careless", 40, 770, 650, "center", "black");
             this.writeTextToCanvas("Do not use firewall", 40, 1300, 650, "center", "black");
         }
         if (this.numberOfQuestion === 3) {
