@@ -12,6 +12,8 @@ class Player {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
 
+  private jumpIndex: number;
+
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.xpos = this.canvas.width / 50;
@@ -39,7 +41,18 @@ class Player {
     ];
     this.index = 0;
     this.ctx.drawImage(this.array[1], this.xpos, this.ypos);
+
+    this.jumpIndex = 0;
+
+    this.jumpLoop();
   }
+
+  public jumpLoop = () => {
+    this.jumpIndex++;
+    requestAnimationFrame(this.jumpLoop);
+    console.log(this.jumpIndex);
+  };
+
   public moveLeft = () => {
     if (this.keyboard.isKeyDown(37) === true) {
       this.index++;
@@ -122,10 +135,11 @@ class Player {
 
   public jump = () => {
     this.walkOnPlatform();
-    if (this.keyboard.isKeyDown(32) === true) {
-      console.log("pressed");
-      this.ypos = this.ypos - 10;
+    if (this.keyboard.isKeyDown(32) === true && this.jumpIndex > 60) {
+      // console.log("pressed");
+      this.ypos = this.ypos - 200;
       this.drawing(this.array[1]);
+      this.jumpIndex = 0;
     }
 
     if (this.keyboard.isKeyDown(32) === false) {
