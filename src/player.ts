@@ -139,7 +139,7 @@ class Player {
     if (this.keyboard.isKeyDown(32) === true) {
       console.log("pressed");
       this.ypos = this.ypos - 8;
-      //this.jumpIndex = 0 ;
+      //this.jumpIndex = 0;
       if (this.ypos <  this.canvas.height - this.canvas.height - this.ypos){
         this.ypos = this.ypos + 8;
       }
