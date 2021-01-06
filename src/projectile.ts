@@ -1,49 +1,78 @@
-class Projectile {
-  private canvas: HTMLCanvasElement;
-  private xPos: number;
-  private yPos: number;
-  private ctx: CanvasRenderingContext2D;
-  private image: HTMLImageElement;
-  private enemy: Enemy;
+class Projectile{
+    
+    private canvas: HTMLCanvasElement;
+    private xPos: number;
+    private yPos: number;
+    private ctx: CanvasRenderingContext2D;
+    private image: HTMLImageElement;
+    private enemy: Enemy;
+    private verticalSpeed: number;
+    private horizontalSpeed: number;
+    private projectileCount: number;
 
-  public constructor(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
-    this.enemy = new Enemy(canvas);
-    this.xPos = this.enemy.getEnemyXPos();
-    this.yPos = this.enemy.moveEnemy();
-    this.ctx = this.canvas.getContext("2d");
-    this.image = this.loadNewImage("src/moving/pics/objects/enemy.png");
-  }
+    public constructor(canvas: HTMLCanvasElement, xPos : number, yPos: number, verticalSpeed: number){
+        
+        this.canvas = canvas;
+        this.ctx = this.canvas.getContext("2d");
+        this.image = this.loadNewImage("src/moving/pics/objects/enemy.png");
+        this.verticalSpeed = verticalSpeed;
+        this.horizontalSpeed = 2;
 
-  //Function that loads the image onto the screen
-  public spawn = () => {
-    this.ctx.drawImage(this.image, this.xPos, this.yPos);
-  };
+        this.xPos = xPos;
+        this.yPos = yPos;
 
-  //function that moves the image across the screen
-  public move = () => {
-    this.ctx.clearRect(this.xPos, this.yPos, 60, 60); //Only clears the area directly around the projectile. Doesn't clear the entire canvas because that would make everything disappear
-    this.ctx.drawImage(this.image, this.xPos, this.yPos);
-    this.xPos -= 2;
-    // console.log("moves");
-  };
+        this.projectileCount = 0;
 
-  /**
-   * Loads an image in such a way that the screen doesn't constantly flicker
-   * @param {HTMLImageElement} source
-   * @return HTMLImageElement - returns an image
-   */
-  public loadNewImage(source: string): HTMLImageElement {
-    const img = new Image();
-    img.src = source;
-    return img;
-  }
+    }    
 
-  public draw = () => {
-    this.ctx.drawImage(this.image, this.xPos, this.yPos);
-  };
+    //Function that loads the image onto the screen
+    public spawn = () => {
+        this.projectileCount++;
+        console.log("counting is " + this.projectileCount);
+        this.ctx.drawImage(this.image,this.xPos, this.yPos);
+    }
 
-  public getXPos = (): number => {
-    return this.xPos;
-  };
+    //function that moves the image across the screen 
+    public move = () => {
+        this.ctx.clearRect(this.xPos, this.yPos, 60, 60); //Only clears the area directly around the projectile. Doesn't clear the entire canvas because that would make everything disappear
+        this.ctx.drawImage(this.image,this.xPos, this.yPos);
+        this.xPos -= this.horizontalSpeed;     
+        // console.log("moves");  
+    }
+
+
+    public moveProjectiles = (): number => {
+        this.yPos = this.yPos + this.verticalSpeed;
+     
+        if (this.yPos >= this.canvas.height - this.image.height - 10) {
+          this.verticalSpeed = -this.verticalSpeed;
+        }
+     
+        if (this.yPos <= 1) {
+          this.verticalSpeed = -this.verticalSpeed;
+        }
+        return this.yPos;
+      };
+
+
+    /**
+    * Loads an image in such a way that the screen doesn't constantly flicker
+    * @param {HTMLImageElement} source
+    * @return HTMLImageElement - returns an image
+    */
+    public loadNewImage(source: string): HTMLImageElement {
+        const img = new Image();
+        img.src = source;
+        return img;
+    }  
+
+    public draw = () => {
+        this.ctx.drawImage(this.image, this.xPos, this.yPos);
+    }   
+
+    public getXPos = (): number => {
+        return this.xPos;
+    }    
+
+    
 }
