@@ -44,8 +44,8 @@ class Game {
         this.phoneImage = this.loadNewImage("assets/img/phone.png");
 
         //X and Y positions for the whatsapp picture 
-        this.xPos_whatsapp = this.canvas.width*0.74/2 ;
-        this.yPos_whatsapp = this.canvas.width*0.63/2 ;
+        this.xPos_whatsapp = this.canvas.width*0.5/2 ;
+        this.yPos_whatsapp = this.canvas.width*0.5/2 ;
         
         this.whatsAppImage = this.loadNewImage("assets/img/whatsapp.png");
 
