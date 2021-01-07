@@ -19,7 +19,7 @@ class Player {
     this.ctx = this.canvas.getContext("2d");
     this.health = 3;
 
-    // this.jumpIndex = 0;
+    // this.jumpIndex = 0 ;
 
     //Arrays that make sure the player is animated
     this.keyboard = new KeyboardListener();
