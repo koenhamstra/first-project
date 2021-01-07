@@ -17,7 +17,7 @@ class Player {
     this.ypos = this.canvas.height / this.canvas.height;
     this.ctx = this.canvas.getContext("2d");
 
-    // this.jumpIndex = 0;
+    // this.jumpIndex = 0 ;
 
     //Arrays that make sure the player is animated
     this.keyboard = new KeyboardListener();
