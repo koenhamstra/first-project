@@ -8,14 +8,16 @@ class Player {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private projectile: Projectile;
+  private health: number;
 
   // private jumpIndex: number;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.xpos = this.canvas.width / 50;
-    this.ypos = this.canvas.height / this.canvas.height;
+    this.ypos = this.canvas.height * 0.9;
     this.ctx = this.canvas.getContext("2d");
+    this.health = 3;
 
     // this.jumpIndex = 0;
 
@@ -44,10 +46,12 @@ class Player {
 
     //this.jumpLoop();
   }
+  
+  
 
   /**
    * Counts frames for jump method
-   * CURRENTLY NOT USED, WE CAN USE THIS FUNCTION LATER IS WE WANT TO
+   * CURRENTLY NOT USED, WE CAN USE THIS FUNCTION LATER IS WE WANT TO PUT A COOLDOWN ON THE JUMP
    */
   // public jumpLoop = () => {
   //   this.jumpIndex++;
@@ -148,7 +152,7 @@ class Player {
   public jump = () => {
     this.walkOnPlatform();
     if (this.keyboard.isKeyDown(32) === true) {
-      console.log("pressed");
+      // console.log("pressed");
       this.ypos = this.ypos - 8;
       //this.jumpIndex = 0;
       if (this.ypos < this.canvas.height - this.canvas.height - this.ypos) {
@@ -176,7 +180,7 @@ class Player {
       this.ypos < (this.canvas.height / 20) * 12 &&
       this.ypos > (this.canvas.height / 20) * 10.95
     ) {
-      console.log("it works");
+      // console.log("it works");
       this.ypos = (this.canvas.height / 20) * 10.94;
     }
 
@@ -187,7 +191,7 @@ class Player {
       this.ypos < (this.canvas.height / 20) * 6 &&
       this.ypos > (this.canvas.height / 20) * 4.95
     ) {
-      console.log("it works");
+      // console.log("it works");
       this.ypos = (this.canvas.height / 20) * 4.94;
     }
 
@@ -198,7 +202,7 @@ class Player {
       this.ypos < (this.canvas.height / 20) * 1 &&
       this.ypos > (this.canvas.height / 20) * -0.05
     ) {
-      console.log("it works");
+      // console.log("it works");
       this.ypos = (this.canvas.height / 20) * -0.06;
     }
 
@@ -209,7 +213,7 @@ class Player {
       this.ypos < (this.canvas.height / 20) * 12 &&
       this.ypos > (this.canvas.height / 20) * 10.95
     ) {
-      console.log("it works");
+      // console.log("it works");
       this.ypos = (this.canvas.height / 20) * 10.94;
     }
 
@@ -220,7 +224,7 @@ class Player {
       this.ypos < (this.canvas.height / 20) * 6 &&
       this.ypos > (this.canvas.height / 20) * 4.95
     ) {
-      console.log("it works");
+      // console.log("it works");
       this.ypos = (this.canvas.height / 20) * 4.94;
     }
 
@@ -231,7 +235,7 @@ class Player {
       this.ypos < (this.canvas.height / 20) * 1 &&
       this.ypos > (this.canvas.height / 20) * -0.05
     ) {
-      console.log("it works");
+      // console.log("it works");
       this.ypos = (this.canvas.height / 20) * -0.06;
     }
 
@@ -242,7 +246,7 @@ class Player {
       this.ypos < (this.canvas.height / 20) * 12 &&
       this.ypos > (this.canvas.height / 20) * 10.95
     ) {
-      console.log("it works");
+      // console.log("it works");
       this.ypos = (this.canvas.height / 20) * 10.94;
     }
   };
@@ -274,8 +278,24 @@ class Player {
     return this.xpos;
   };
   public getyPos = () => {
-    return this.xpos;
+    return this.ypos;
   };
 
-  
+  public getImage = () => {
+    return this.array[1];
+  };
+
+  public setHealth = (damage: number): number =>{
+    this.health = this.health - damage;
+    return this.health;
+  }
+
+  public getHealth = () => {
+    return this.health;
+  }
+
+  public setXPos = (number: number) => {
+    this.xpos = this.xpos + number;
+    
+  }
 }

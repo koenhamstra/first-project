@@ -12,7 +12,7 @@ class FullGame {
   private platform: Layout[];
   private platformPos: number[];
 
-  private image: HTMLImageElement;
+  private server: HTMLImageElement;
 
   //properties for the player
   private player: Player;
@@ -22,6 +22,8 @@ class FullGame {
   public frameIndex: number;
   private enemy: Enemy;
   private projectiles: Projectile[];
+
+  private healthBar: HTMLImageElement;
 
   /**
    * Initialize the game
@@ -55,7 +57,7 @@ class FullGame {
     ];
 
     //Creating the servers
-    this.image = this.loadNewImage("src/moving/pics/Server.png");
+    this.server = this.loadNewImage("src/moving/pics/Server.png");
 
     //Player
     this.index = 0;
@@ -90,10 +92,12 @@ class FullGame {
     this.player.start();
     this.player.moveRight();
     this.player.moveLeft();
-    this.collidesWithProjectile();
-
+    this.collidesWithProjectile(this.player);
+    this.collidesWithCanvasBorder();
+    // this.collidesWithServer();
     this.frameIndex++;
     this.enemy.draw();
+    this.checkHealthBar();
 
     //Creates a new projectile every X amount of frames and pushes the projectile to projectiles[]
     if (this.frameIndex % 70 === 0) {
@@ -115,8 +119,6 @@ class FullGame {
       this.projectiles[i].move();
     }
 
-    this.collidesWithCanvasBorder();
-
     // Draw everything
     this.draw();
 
@@ -124,6 +126,35 @@ class FullGame {
     requestAnimationFrame(this.loop);
   };
 
+  /**
+   * Function that checks the health of the player and updates the image accordingly
+   */
+  public checkHealthBar = () => {
+    if (this.player.getHealth() === 3) {
+      this.healthBar = this.loadNewImage("src/moving/pics/Health Bar Full.png");
+    } else if (this.player.getHealth() === 2) {
+      this.healthBar = this.loadNewImage(
+        "src/moving/pics/Health Bar Two Thirds.png"
+      );
+    } else if (this.player.getHealth() === 1) {
+      this.healthBar = this.loadNewImage(
+        "src/moving/pics/Health Bar One Third.png"
+      );
+    } else {
+      this.player.setXPos(10000);
+      this.writeTextToCanvas(
+        "GAME OVER",
+        50,
+        this.canvas.width / 2,
+        this.canvas.height / 2
+      );
+      this.healthBar = this.loadNewImage("");
+    }
+  };
+
+  /**
+   * Function that randomly decides if a projectile if launched up or down
+   */
   public generateProjectile = (): number => {
     let projectileDirection = this.randomNumber(1, 2);
     if (projectileDirection === 1) {
@@ -140,7 +171,7 @@ class FullGame {
     for (let i = 0; i < this.projectiles.length; i++) {
       if (this.projectiles[i].getXPos() < -100) {
         this.projectiles.splice(i, 1); // remove an element from the array
-        console.log("removed");
+        // console.log("removed");
       }
     }
   };
@@ -148,25 +179,42 @@ class FullGame {
   /**
    * Method that checks if the player collides with a projectile
    */
-  public collidesWithProjectile = () => {
+  public collidesWithProjectile = (player: Player) => {
     for (let i = 0; i < this.projectiles.length; i++) {
       if (
-        this.player.getXPos() > this.projectiles[i].getXPos() &&
-        this.player.getXPos() <
-          this.projectiles[i].getXPos() + this.projectiles[i].getImage().width
+        this.projectiles[i].getXPos() > player.getXPos() &&
+        this.projectiles[i].getXPos() <
+          player.getXPos() + player.getImage().width &&
+        this.projectiles[i].getYPos() > player.getyPos() &&
+        this.projectiles[i].getYPos() <
+          player.getyPos() + player.getImage().height
       ) {
-        console.log("Collides with Player");
-      }
-
-      if (
-        this.player.getyPos() < this.projectiles[i].getYPos() &&
-        this.player.getyPos() >
-          this.projectiles[i].getYPos() + this.projectiles[i].getImage().height
-      ) {
-        console.log("overlaps");
+        // console.log("Collides with Player");
+        this.projectiles.splice(i, 1);
+        console.log(this.player.setHealth(1));
       }
     }
   };
+
+  // public collidesWithServer = () => {
+  //   if((this.canvas.width / 20) * 16.8 < this.player.getXPos() &&
+  //   (this.canvas.width / 20) * 16.8 + this.server.width > this.player.getXPos() &&
+  //   (this.canvas.height / 20) * 0.8 < this.player.getyPos() &&
+  //   (this.canvas.height / 20) * 0.8 + this.server.height > this.player.getyPos()){
+  //     console.log("asdf");
+  //   }
+  // }
+
+  // public collidesWithServer = () => {
+  //   if(this.player.getXPos() > (this.canvas.width / 20) * 16.8 &&
+  //       this.player.getXPos() < (this.canvas.width / 20) * 16.8 + this.server.width){
+  //         console.log("X Collision");
+  //         if(this.player.getyPos() > (this.canvas.height / 20) * 0.8 + this.server.height &&
+  //         this.player.getyPos() < (this.canvas.height / 20) * 0.8){
+  //         console.log("Y Collision");
+  //       }
+  //     }
+  // }
 
   private createPlatform() {
     //create platform 1
@@ -272,14 +320,16 @@ class FullGame {
       element.draw(this.ctx);
     });
 
+    this.ctx.drawImage(this.healthBar, 50, 50);
+
     //Draws the servers
     this.ctx.drawImage(
-      this.image,
+      this.server,
       (this.canvas.width / 20) * 18,
       (this.canvas.height / 20) * 0.8
     );
     this.ctx.drawImage(
-      this.image,
+      this.server,
       (this.canvas.width / 20) * 17.5,
       (this.canvas.height / 20) * 0.8
     );

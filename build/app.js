@@ -67,9 +67,11 @@ class FullGame {
             this.player.start();
             this.player.moveRight();
             this.player.moveLeft();
-            this.collidesWithProjectile();
+            this.collidesWithProjectile(this.player);
+            this.collidesWithCanvasBorder();
             this.frameIndex++;
             this.enemy.draw();
+            this.checkHealthBar();
             if (this.frameIndex % 70 === 0) {
                 this.projectiles.push(new Projectile(this.canvas, this.enemy.getEnemyXPos(), this.enemy.moveEnemy(), this.generateProjectile()));
                 for (let i = 0; i < this.projectiles.length; i++) {
@@ -79,9 +81,24 @@ class FullGame {
             for (let i = 0; i < this.projectiles.length; i++) {
                 this.projectiles[i].move();
             }
-            this.collidesWithCanvasBorder();
             this.draw();
             requestAnimationFrame(this.loop);
+        };
+        this.checkHealthBar = () => {
+            if (this.player.getHealth() === 3) {
+                this.healthBar = this.loadNewImage("src/moving/pics/Health Bar Full.png");
+            }
+            else if (this.player.getHealth() === 2) {
+                this.healthBar = this.loadNewImage("src/moving/pics/Health Bar Two Thirds.png");
+            }
+            else if (this.player.getHealth() === 1) {
+                this.healthBar = this.loadNewImage("src/moving/pics/Health Bar One Third.png");
+            }
+            else {
+                this.player.setXPos(10000);
+                this.writeTextToCanvas("GAME OVER", 50, this.canvas.width / 2, this.canvas.height / 2);
+                this.healthBar = this.loadNewImage("");
+            }
         };
         this.generateProjectile = () => {
             let projectileDirection = this.randomNumber(1, 2);
@@ -96,21 +113,19 @@ class FullGame {
             for (let i = 0; i < this.projectiles.length; i++) {
                 if (this.projectiles[i].getXPos() < -100) {
                     this.projectiles.splice(i, 1);
-                    console.log("removed");
                 }
             }
         };
-        this.collidesWithProjectile = () => {
+        this.collidesWithProjectile = (player) => {
             for (let i = 0; i < this.projectiles.length; i++) {
-                if (this.player.getXPos() > this.projectiles[i].getXPos() &&
-                    this.player.getXPos() <
-                        this.projectiles[i].getXPos() + this.projectiles[i].getImage().width) {
-                    console.log("Collides with Player");
-                }
-                if (this.player.getyPos() < this.projectiles[i].getYPos() &&
-                    this.player.getyPos() >
-                        this.projectiles[i].getYPos() + this.projectiles[i].getImage().height) {
-                    console.log("overlaps");
+                if (this.projectiles[i].getXPos() > player.getXPos() &&
+                    this.projectiles[i].getXPos() <
+                        player.getXPos() + player.getImage().width &&
+                    this.projectiles[i].getYPos() > player.getyPos() &&
+                    this.projectiles[i].getYPos() <
+                        player.getyPos() + player.getImage().height) {
+                    this.projectiles.splice(i, 1);
+                    console.log(this.player.setHealth(1));
                 }
             }
         };
@@ -133,7 +148,7 @@ class FullGame {
             (this.canvas.width / 20) * 13,
             (this.canvas.width / 20) * 15,
         ];
-        this.image = this.loadNewImage("src/moving/pics/Server.png");
+        this.server = this.loadNewImage("src/moving/pics/Server.png");
         this.index = 0;
         this.player = new Player(canvas);
         this.frameIndex = 0;
@@ -175,8 +190,9 @@ class FullGame {
         this.platform.forEach((element) => {
             element.draw(this.ctx);
         });
-        this.ctx.drawImage(this.image, (this.canvas.width / 20) * 18, (this.canvas.height / 20) * 0.8);
-        this.ctx.drawImage(this.image, (this.canvas.width / 20) * 17.5, (this.canvas.height / 20) * 0.8);
+        this.ctx.drawImage(this.healthBar, 50, 50);
+        this.ctx.drawImage(this.server, (this.canvas.width / 20) * 18, (this.canvas.height / 20) * 0.8);
+        this.ctx.drawImage(this.server, (this.canvas.width / 20) * 17.5, (this.canvas.height / 20) * 0.8);
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "white") {
         this.ctx.font = `${fontSize}px sans-serif`;
@@ -291,7 +307,6 @@ class Player {
         this.jump = () => {
             this.walkOnPlatform();
             if (this.keyboard.isKeyDown(32) === true) {
-                console.log("pressed");
                 this.ypos = this.ypos - 8;
                 if (this.ypos < this.canvas.height - this.canvas.height - this.ypos) {
                     this.ypos = this.ypos + 8;
@@ -310,49 +325,42 @@ class Player {
                 this.xpos < this.canvas.width / 20 + 300 &&
                 this.ypos < (this.canvas.height / 20) * 12 &&
                 this.ypos > (this.canvas.height / 20) * 10.95) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * 10.94;
             }
             if (this.xpos > (this.canvas.width / 20) * 3 &&
                 this.xpos < (this.canvas.width / 20) * 3 + 240 &&
                 this.ypos < (this.canvas.height / 20) * 6 &&
                 this.ypos > (this.canvas.height / 20) * 4.95) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * 4.94;
             }
             if (this.xpos > (this.canvas.width / 20) * 5 &&
                 this.xpos < (this.canvas.width / 20) * 5 + 360 &&
                 this.ypos < (this.canvas.height / 20) * 1 &&
                 this.ypos > (this.canvas.height / 20) * -0.05) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * -0.06;
             }
             if (this.xpos > (this.canvas.width / 20) * 8 &&
                 this.xpos < (this.canvas.width / 20) * 8 + 120 &&
                 this.ypos < (this.canvas.height / 20) * 12 &&
                 this.ypos > (this.canvas.height / 20) * 10.95) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * 10.94;
             }
             if (this.xpos > (this.canvas.width / 20) * 12 &&
                 this.xpos < (this.canvas.width / 20) * 12 + 360 &&
                 this.ypos < (this.canvas.height / 20) * 6 &&
                 this.ypos > (this.canvas.height / 20) * 4.95) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * 4.94;
             }
             if (this.xpos > (this.canvas.width / 20) * 15 &&
                 this.xpos < (this.canvas.width / 20) * 15 + 240 &&
                 this.ypos < (this.canvas.height / 20) * 1 &&
                 this.ypos > (this.canvas.height / 20) * -0.05) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * -0.06;
             }
             if (this.xpos > (this.canvas.width / 20) * 13 &&
                 this.xpos < (this.canvas.width / 20) * 13 + 240 &&
                 this.ypos < (this.canvas.height / 20) * 12 &&
                 this.ypos > (this.canvas.height / 20) * 10.95) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * 10.94;
             }
         };
@@ -378,12 +386,26 @@ class Player {
             return this.xpos;
         };
         this.getyPos = () => {
-            return this.xpos;
+            return this.ypos;
+        };
+        this.getImage = () => {
+            return this.array[1];
+        };
+        this.setHealth = (damage) => {
+            this.health = this.health - damage;
+            return this.health;
+        };
+        this.getHealth = () => {
+            return this.health;
+        };
+        this.setXPos = (number) => {
+            this.xpos = this.xpos + number;
         };
         this.canvas = canvas;
         this.xpos = this.canvas.width / 50;
-        this.ypos = this.canvas.height / this.canvas.height;
+        this.ypos = this.canvas.height * 0.9;
         this.ctx = this.canvas.getContext("2d");
+        this.health = 3;
         this.keyboard = new KeyboardListener();
         this.array = [
             this.loadNewImage("src/moving/PlayerRight/walk 1.png"),
