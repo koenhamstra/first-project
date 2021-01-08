@@ -64,14 +64,18 @@ class FullGame {
             if (this.index > 29) {
                 this.index = 0;
             }
+            this.frameIndex++;
             this.player.start();
             this.player.moveRight();
             this.player.moveLeft();
             this.collidesWithProjectile(this.player);
             this.collidesWithCanvasBorder();
-            this.frameIndex++;
-            this.enemy.draw();
+            this.collidesWithServer();
             this.checkHealthBar();
+            this.enemy.draw();
+            if (this.frameIndex % 60 === 0) {
+                console.log(`X = ${this.player.getXPos()}  Y = ${this.player.getYPos()}`);
+            }
             if (this.frameIndex % 70 === 0) {
                 this.projectiles.push(new Projectile(this.canvas, this.enemy.getEnemyXPos(), this.enemy.moveEnemy(), this.generateProjectile()));
                 for (let i = 0; i < this.projectiles.length; i++) {
@@ -95,7 +99,7 @@ class FullGame {
                 this.healthBar = this.loadNewImage("src/moving/pics/Health Bar One Third.png");
             }
             else {
-                this.player.setXPos(10000);
+                this.player.setXPos(500);
                 this.writeTextToCanvas("GAME OVER", 50, this.canvas.width / 2, this.canvas.height / 2);
                 this.healthBar = this.loadNewImage("");
             }
@@ -121,12 +125,21 @@ class FullGame {
                 if (this.projectiles[i].getXPos() > player.getXPos() &&
                     this.projectiles[i].getXPos() <
                         player.getXPos() + player.getImage().width &&
-                    this.projectiles[i].getYPos() > player.getyPos() &&
+                    this.projectiles[i].getYPos() > player.getYPos() &&
                     this.projectiles[i].getYPos() <
-                        player.getyPos() + player.getImage().height) {
+                        player.getYPos() + player.getImage().height) {
                     this.projectiles.splice(i, 1);
                     console.log(this.player.setHealth(1));
                 }
+            }
+        };
+        this.collidesWithServer = () => {
+            if (this.canvas.width * 0.84 < this.player.getXPos() &&
+                this.canvas.width * 0.84 + 100 > this.player.getXPos() &&
+                0 < this.player.getYPos() &&
+                this.canvas.height * 0.1 > this.player.getYPos()) {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.writeTextToCanvas("You've reached the server", 50, this.canvas.width / 2, this.canvas.height / 2);
             }
         };
         document.body.style.backgroundImage = "url('src/moving/back.png')";
@@ -191,8 +204,8 @@ class FullGame {
             element.draw(this.ctx);
         });
         this.ctx.drawImage(this.healthBar, 50, 50);
-        this.ctx.drawImage(this.server, (this.canvas.width / 20) * 18, (this.canvas.height / 20) * 0.8);
-        this.ctx.drawImage(this.server, (this.canvas.width / 20) * 17.5, (this.canvas.height / 20) * 0.8);
+        this.ctx.drawImage(this.server, (this.canvas.width / 20) * 18, this.canvas.height * 0.04);
+        this.ctx.drawImage(this.server, (this.canvas.width / 20) * 17.5, this.canvas.height * 0.04);
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "white") {
         this.ctx.font = `${fontSize}px sans-serif`;
@@ -385,7 +398,7 @@ class Player {
         this.getXPos = () => {
             return this.xpos;
         };
-        this.getyPos = () => {
+        this.getYPos = () => {
             return this.ypos;
         };
         this.getImage = () => {

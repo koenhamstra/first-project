@@ -89,15 +89,19 @@ class FullGame {
       this.index = 0;
     }
 
+    this.frameIndex++;
     this.player.start();
     this.player.moveRight();
     this.player.moveLeft();
     this.collidesWithProjectile(this.player);
     this.collidesWithCanvasBorder();
-    // this.collidesWithServer();
-    this.frameIndex++;
-    this.enemy.draw();
+    this.collidesWithServer();
     this.checkHealthBar();
+    this.enemy.draw();
+
+    if (this.frameIndex % 60 === 0) {
+      console.log(`X = ${this.player.getXPos()}  Y = ${this.player.getYPos()}`);
+    }
 
     //Creates a new projectile every X amount of frames and pushes the projectile to projectiles[]
     if (this.frameIndex % 70 === 0) {
@@ -141,7 +145,7 @@ class FullGame {
         "src/moving/pics/Health Bar One Third.png"
       );
     } else {
-      this.player.setXPos(10000);
+      this.player.setXPos(500);
       this.writeTextToCanvas(
         "GAME OVER",
         50,
@@ -185,9 +189,9 @@ class FullGame {
         this.projectiles[i].getXPos() > player.getXPos() &&
         this.projectiles[i].getXPos() <
           player.getXPos() + player.getImage().width &&
-        this.projectiles[i].getYPos() > player.getyPos() &&
+        this.projectiles[i].getYPos() > player.getYPos() &&
         this.projectiles[i].getYPos() <
-          player.getyPos() + player.getImage().height
+          player.getYPos() + player.getImage().height
       ) {
         // console.log("Collides with Player");
         this.projectiles.splice(i, 1);
@@ -196,25 +200,26 @@ class FullGame {
     }
   };
 
-  // public collidesWithServer = () => {
-  //   if((this.canvas.width / 20) * 16.8 < this.player.getXPos() &&
-  //   (this.canvas.width / 20) * 16.8 + this.server.width > this.player.getXPos() &&
-  //   (this.canvas.height / 20) * 0.8 < this.player.getyPos() &&
-  //   (this.canvas.height / 20) * 0.8 + this.server.height > this.player.getyPos()){
-  //     console.log("asdf");
-  //   }
-  // }
-
-  // public collidesWithServer = () => {
-  //   if(this.player.getXPos() > (this.canvas.width / 20) * 16.8 &&
-  //       this.player.getXPos() < (this.canvas.width / 20) * 16.8 + this.server.width){
-  //         console.log("X Collision");
-  //         if(this.player.getyPos() > (this.canvas.height / 20) * 0.8 + this.server.height &&
-  //         this.player.getyPos() < (this.canvas.height / 20) * 0.8){
-  //         console.log("Y Collision");
-  //       }
-  //     }
-  // }
+  /**
+   * Function that detects when the player collides with the server
+   */
+  public collidesWithServer = () => {
+    if (
+      this.canvas.width * 0.84 < this.player.getXPos() &&
+      this.canvas.width * 0.84 + 100 > this.player.getXPos() &&
+      0 < this.player.getYPos() &&
+      this.canvas.height * 0.1 > this.player.getYPos()
+    ) {
+      // console.log("asdf");
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.writeTextToCanvas(
+        "You've reached the server",
+        50,
+        this.canvas.width / 2,
+        this.canvas.height / 2
+      );
+    }
+  };
 
   private createPlatform() {
     //create platform 1
@@ -326,12 +331,12 @@ class FullGame {
     this.ctx.drawImage(
       this.server,
       (this.canvas.width / 20) * 18,
-      (this.canvas.height / 20) * 0.8
+      this.canvas.height * 0.04
     );
     this.ctx.drawImage(
       this.server,
       (this.canvas.width / 20) * 17.5,
-      (this.canvas.height / 20) * 0.8
+      this.canvas.height * 0.04
     );
   }
 

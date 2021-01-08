@@ -46,8 +46,6 @@ class Player {
 
     //this.jumpLoop();
   }
-  
-  
 
   /**
    * Counts frames for jump method
@@ -277,7 +275,7 @@ class Player {
   public getXPos = () => {
     return this.xpos;
   };
-  public getyPos = () => {
+  public getYPos = () => {
     return this.ypos;
   };
 
@@ -285,17 +283,20 @@ class Player {
     return this.array[1];
   };
 
-  public setHealth = (damage: number): number =>{
+  /**
+   * Function to adapt the total health
+   * @param damage amount of health to be taken from the total amount of health
+   */
+  public setHealth = (damage: number): number => {
     this.health = this.health - damage;
     return this.health;
-  }
+  };
 
   public getHealth = () => {
     return this.health;
-  }
+  };
 
   public setXPos = (number: number) => {
     this.xpos = this.xpos + number;
-    
-  }
+  };
 }
