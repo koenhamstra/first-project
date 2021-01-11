@@ -1,4 +1,5 @@
-class Go {
+///<reference path="ClassLoader.ts"/>
+class Go  extends ClassLoader{
         // Necessary canvas attributes
         private readonly canvas: HTMLCanvasElement;
         private readonly ctx: CanvasRenderingContext2D;
@@ -8,6 +9,7 @@ class Go {
         public state : string;
     
         public constructor(canvas:HTMLCanvasElement){
+        super (canvas);
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
 
@@ -16,7 +18,7 @@ class Go {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
 
-        document.body.style.backgroundImage = "url('assets/img/hacker-background.jpg')";
+        document.body.style.backgroundImage = "url('src/moving/pics/hacker.jpg')";
         document.body.style.backgroundSize = "cover";
     
         this.rectangles =new Rectangles(canvas.width*0.77/2 , canvas.height*1.5/2, "red", 70, 200);
@@ -24,7 +26,7 @@ class Go {
         // add an mouse event
         document.addEventListener("click", this.mouseHandler);
         // this.compleet();
-        this.loop();
+        this.draw();
     
         }
     
@@ -34,7 +36,7 @@ class Go {
         * Method for the Game Loop
         * Based on the game state some actions have to be executed
         */
-       private loop = () => {
+       public loop = () => {
 
         this.draw();
         requestAnimationFrame(this.loop);
@@ -44,9 +46,6 @@ class Go {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.rectangles.draw(this.ctx);
             this.writeTextToCanvas("GO", 35, this.rectangles.getXPos()+this.rectangles.getWidth()/2, this.rectangles.getYPos()+this.rectangles.getHeight()*1.2/2,"center","red");
-            if (this.state === "go") {
-                this.done()===false;
-            }
         }
     
            /**
@@ -75,11 +74,15 @@ class Go {
     
         public done = () =>{
             if (this.state === "go") {
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                document.body.style.backgroundImage = "";
+                document.body.style.backgroundImage = "url('assets/img/hacker-background.jpg')";
+
+                return true;
+            } else {
                 return false;
             }
-            return true;
-          }
+        }
+
 
         /**
         * Writes text to the canvas
