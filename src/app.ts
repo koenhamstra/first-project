@@ -1,4 +1,4 @@
-/// <reference path="Car.ts" />
+/// <reference path="Player.ts" />
 
 
 class Game {
@@ -13,9 +13,8 @@ class Game {
 
   private rectangles: Rectangles[];
   
-  // Car instances, one for each player
-  private car1: Car;
-  private car2: Car;
+  private player1: Player;
+  private player2: Player;
   
   constructor(canvas: HTMLCanvasElement) {
   this.canvas = canvas;
@@ -26,23 +25,14 @@ class Game {
   
   
   
-  this.car1 = new Car("Bullet", 100, 0, "assets/img/walk 1 (1).png");
-  this.car2 = new Car("Greek Arrow", 100, 250,"assets/img/walk 1 (1).png");
-  console.log(this.car1);
+  this.player1 = new Player("Bullet", 100, 0, "assets/img/walk 1 (1).png");
+  this.player2 = new Player("Greek Arrow", 100, 250,"assets/img/walk 1 (1).png");
+  console.log(this.player1);
 
   this.rectangles = [
      new Rectangles(100, 600, "red", 70, 400), //0
      new Rectangles(570, 600, "red", 70, 400), //1
      new Rectangles(1100, 600, "red", 70, 400), //2
-    //  new Rectangles(100, 500, "red", 70, 400), //3
-    //  new Rectangles(570, 500, "red", 70, 400), //4
-    //  new Rectangles(1100, 500, "red", 70, 400), //5
-    //  new Rectangles(100, 500, "red", 70, 400), //6
-    //  new Rectangles(570, 500, "red", 70, 400), //7
-    //  new Rectangles(1100, 500, "red", 70, 400), //8
-    //   new Rectangles(100, 500, "red", 70, 400), //9
-    //   new Rectangles(570, 500, "red", 70, 400), //10
-    //   new Rectangles(1100, 500, "red", 70, 400) //11
   ]
 
   // add an mouse event
@@ -69,13 +59,13 @@ class Game {
 
   
   /**
-  * Function to draw all the cars on the canvas
+  * Function to draw all the players on the canvas
   */
   private draw() {
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   
-  this.car1.draw(this.ctx);
-  this.car2.draw(this.ctx);
+  this.player1.draw(this.ctx);
+  this.player2.draw(this.ctx);
   
   for(let i = 0; i<this.rectangles.length; i++){
     this.rectangles[i].draw(this.ctx);
@@ -84,73 +74,83 @@ class Game {
   if(this.numberOfQuestion === 1){
     // this.ctx.clearRect(0, 430, this.canvas.width, 400);
     
-    this.writeTextToCanvas("Which password is good?", 40, this.canvas.width / 2, 580, "center", "black");
-    this.writeTextToCanvas("12345", 40, 300, 650, "center", "black");
-    this.writeTextToCanvas("GoodPassword2020", 40, 770 , 650, "center", "black");
-    this.writeTextToCanvas("myname", 40, 1300, 650, "center", "black");
+    this.writeTextToCanvas("Which password is good?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
+    this.writeTextToCanvas("12345", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
+    this.writeTextToCanvas("GoodPassword2020", 40, this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
+    this.writeTextToCanvas("myname", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
   }
 
   if(this.numberOfQuestion === 2){
     // this.ctx.clearRect(0, 430, this.canvas.width, 400)
 
-    this.writeTextToCanvas("How to protect your computer?", 40, this.canvas.width / 2, 580, "center", "black");
-    this.writeTextToCanvas("Use firewall", 40, 300, 650, "center", "black");
-    this.writeTextToCanvas("Be careless", 40, 770 , 650, "center", "black");
-    this.writeTextToCanvas("Do not use firewall", 40, 1300, 650, "center", "black");
+    this.writeTextToCanvas("How to protect your computer?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
+    this.writeTextToCanvas("Use firewall", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
+    this.writeTextToCanvas("Be careless", 40, this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
+    this.writeTextToCanvas("Do not use firewall", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
   }
 
   if(this.numberOfQuestion === 3){
     // this.ctx.clearRect(0, 430, this.canvas.width, 400)
    
-    this.writeTextToCanvas("What do you do when you detect strange activity on your social media account?", 40, this.canvas.width / 2, 580, "center", "black");
-    this.writeTextToCanvas("Nothing", 40, 300, 650, "center", "black");
-    this.writeTextToCanvas("Change your password", 40, 770 , 650, "center", "black");
-    this.writeTextToCanvas("Sell your device", 40, 1300, 650, "center", "black");
+    this.writeTextToCanvas("What do you do when you detect strange activity on your social media account?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
+    this.writeTextToCanvas("Nothing", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
+    this.writeTextToCanvas("Change your password", 40, this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
+    this.writeTextToCanvas("Sell your device", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
   }
 
   if(this.numberOfQuestion === 4){
     // this.ctx.clearRect(0, 430, this.canvas.width, 400)
    
-    this.writeTextToCanvas("What do you do when you detect strange activity on your social media account?", 40, this.canvas.width / 2, 580, "center", "black");
-    this.writeTextToCanvas("Nothing", 40, 300, 650, "center", "black");
-    this.writeTextToCanvas("Change your password", 40, 770 , 650, "center", "black");
-    this.writeTextToCanvas("Sell your device", 40, 1300, 650, "center", "black");
+    this.writeTextToCanvas("Is it good to use your name as a password?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
+    this.writeTextToCanvas("No", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
+    this.writeTextToCanvas("Yes", 40, this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
+    this.writeTextToCanvas("No matter", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
   }
 
   if(this.numberOfQuestion === 5){
     // this.ctx.clearRect(0, 430, this.canvas.width, 400)
    
-    this.writeTextToCanvas("What do you do when you detect strange activity on your social media account?", 40, this.canvas.width / 2, 580, "center", "black");
-    this.writeTextToCanvas("Nothing", 40, 300, 650, "center", "black");
-    this.writeTextToCanvas("Change your password", 40, 770 , 650, "center", "black");
-    this.writeTextToCanvas("Sell your device", 40, 1300, 650, "center", "black");
+    this.writeTextToCanvas("Is it good the password to consist uppercase letters, lowercase letters and numbers?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
+    this.writeTextToCanvas("No matter", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
+    this.writeTextToCanvas("No", 40,this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
+    this.writeTextToCanvas("Yes", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
   }
+
+  if(this.numberOfQuestion === 6){
+    // this.ctx.clearRect(0, 430, this.canvas.width, 400)
+   
+    this.writeTextToCanvas("Is it good to use your birth date as a password?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
+    this.writeTextToCanvas("Yes", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
+    this.writeTextToCanvas("No", 40,this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
+    this.writeTextToCanvas("No matter", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
+  }
+
   
   if(this.gameState === "animate"){
-    console.log(this.car1.xPosition())
-    console.log(this.car1.getDistance())
-    if(this.car1.xPosition()<this.car1.getDistance()){
-      this.car1.smoothDistance();
+    console.log(this.player1.xPosition())
+    console.log(this.player1.getDistance())
+    if(this.player1.xPosition()<this.player1.getDistance()){
+      this.player1.smoothDistance();
     }
     
    
-    if (this.car2.xPosition()>=this.car2.getDistance()) {
+    if (this.player2.xPosition()>=this.player2.getDistance()) {
       this.gameState = "end2"
     }
-      else if (this.car1.xPosition()>=this.car1.getDistance() ){
+      else if (this.player1.xPosition()>=this.player1.getDistance() ){
     this.gameState = "end1"
     }  
 }
   
   if (this.gameState === "end1") {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.car1.stopTheCar();
+    this.player1.stopThePlayer();
     this.writeTextToCanvas(`You lost the game :( `, 60, this.canvas.width / 2, this.canvas.height / 2, "center", "red")
     }
 
   if (this.gameState === "end2") {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.car1.stopTheCar();
+    this.player1.stopThePlayer();
     this.writeTextToCanvas(`You are the winner`, 60, this.canvas.width / 2, this.canvas.height / 2, "center", "red")
   }
   }
@@ -170,18 +170,32 @@ class Game {
       for(let i = 0; i< this.rectangles.length; i++) {
         if(this.numberOfQuestion === 1 && this.detectingRect(event, 1)){
          
-              this.car2.roughDistance();
+              this.player2.roughDistance();
               this.numberOfQuestion = 2;
           }
            
           if(this.numberOfQuestion === 2 && this.detectingRect(event, 0)){
-            this.car2.roughDistance();
+            this.player2.roughDistance();
             this.numberOfQuestion = 3;
           }
           
-          if(this.numberOfQuestion === 3 && this.detectingRect(event, 2)){
-            this.car2.roughDistance();
-            
+          if(this.numberOfQuestion === 3 && this.detectingRect(event, 1)){
+            this.player2.roughDistance();
+            this.numberOfQuestion = 4;
+          }
+
+          if(this.numberOfQuestion === 4 && this.detectingRect(event, 0)){
+            this.player2.roughDistance();
+            this.numberOfQuestion = 5;
+          }
+
+          if(this.numberOfQuestion === 5 && this.detectingRect(event, 2)){
+            this.player2.roughDistance();
+            this.numberOfQuestion = 6;
+          }
+
+          if(this.numberOfQuestion === 6 && this.detectingRect(event, 1)){
+            this.player2.roughDistance();
           }
         } 
      

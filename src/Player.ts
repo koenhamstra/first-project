@@ -1,4 +1,4 @@
-class Car {
+class Player {
     private image: HTMLImageElement;
     private _name: string;
     private _distance: number;
@@ -19,18 +19,18 @@ class Car {
     }
 
     public smoothDistance() {
-        this._xPosition += 1;
+        this._xPosition += 0.5;
     }
 
     public roughDistance() {
-        this._xPosition += 100;
+        this._xPosition += 200;
     }
 
     public xPosition(){
         return this._xPosition;
     }
 
-    public stopTheCar(){
+    public stopThePlayer(){
     this._xPosition += 0;
     }
     
