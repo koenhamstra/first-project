@@ -63,7 +63,7 @@ class Begin extends ClassLoader {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.rectangles = [
-            new Rectangles(canvas.width * 0.7 / 2, canvas.height * 0.5 / 2, "red", 70, 300),
+            new Rectangles(canvas.width * 0.77 / 2, canvas.height * 1.5 / 2, "red", 70, 300),
         ];
         this.characters = [
             new Character1(canvas.width * 0.85 / 2, 350)
@@ -114,9 +114,8 @@ class CompleetGame {
     constructor(canvas) {
         this.loop = () => {
             if (this.classLoader[this.level].done() === true) {
-                console.log("ásdsd");
-                this.level++;
-                this.classLoader[this.level].loop();
+                console.log(this.level);
+                this.classLoader.splice(0, 1);
             }
             requestAnimationFrame(this.loop);
         };
@@ -124,10 +123,9 @@ class CompleetGame {
         };
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
-        this.classLoader = [new Go(canvas), new Begin(canvas), new Start(canvas)];
+        this.classLoader = [new Go(canvas), new Begin(canvas), new Start(canvas), new FullMarioGame(canvas)];
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.classLoader.push(new Go(canvas));
         this.level = 0;
         this.loop();
     }
@@ -224,6 +222,9 @@ class Start extends ClassLoader {
                 event.clientY < this.rectangles.getYPos() + this.rectangles.getHeight()) {
                 this.state = "start";
             }
+            else {
+                this.state = "nothing";
+            }
             return this.state;
         };
         this.done = () => {
@@ -257,27 +258,6 @@ class Start extends ClassLoader {
 }
 let init = () => new CompleetGame(document.getElementById("canvas"));
 window.addEventListener("load", init);
-class KeyboardListener {
-    constructor() {
-        this.keyDown = (ev) => {
-            this.keyCodeStates[ev.keyCode] = true;
-        };
-        this.keyUp = (ev) => {
-            this.keyCodeStates[ev.keyCode] = false;
-        };
-        this.keyCodeStates = new Array();
-        window.addEventListener("keydown", this.keyDown);
-        window.addEventListener("keyup", this.keyUp);
-    }
-    isKeyDown(keyCode) {
-        return this.keyCodeStates[keyCode] === true;
-    }
-}
-KeyboardListener.KEY_SPACE = 32;
-KeyboardListener.KEY_LEFT = 37;
-KeyboardListener.KEY_UP = 38;
-KeyboardListener.KEY_RIGHT = 39;
-KeyboardListener.KEY_DOWN = 40;
 class Enemy {
     constructor(canvas) {
         this.moveEnemy = () => {
@@ -309,7 +289,7 @@ class Enemy {
         return img;
     }
 }
-class FullGame extends ClassLoader {
+class FullMarioGame extends ClassLoader {
     constructor(canvas) {
         super(canvas);
         this.loop = () => {
@@ -330,6 +310,7 @@ class FullGame extends ClassLoader {
             this.checkHealthBar();
             this.enemy.draw();
             if (this.frameIndex % 60 === 0) {
+                console.log(`X = ${this.player.getXPos()}  Y = ${this.player.getYPos()}`);
             }
             if (this.frameIndex % 70 === 0) {
                 this.projectiles.push(new Projectile(this.canvas, this.enemy.getEnemyXPos(), this.enemy.moveEnemy(), this.generateProjectile()));
@@ -342,14 +323,6 @@ class FullGame extends ClassLoader {
             }
             this.draw();
             requestAnimationFrame(this.loop);
-        };
-        this.done = () => {
-            if (this.state === "done") {
-                return true;
-            }
-            else {
-                return false;
-            }
         };
         this.checkHealthBar = () => {
             if (this.player.getHealth() === 3) {
@@ -392,6 +365,7 @@ class FullGame extends ClassLoader {
                     this.projectiles[i].getYPos() <
                         player.getYPos() + player.getImage().height) {
                     this.projectiles.splice(i, 1);
+                    console.log(this.player.setHealth(1));
                 }
             }
         };
@@ -402,7 +376,6 @@ class FullGame extends ClassLoader {
                 this.canvas.height * 0.1 > this.player.getYPos()) {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 this.writeTextToCanvas("You've reached the server", 50, this.canvas.width / 2, this.canvas.height / 2);
-                this.state = "done";
             }
         };
         document.body.style.backgroundImage = "url('src/moving/back.png')";
@@ -424,7 +397,6 @@ class FullGame extends ClassLoader {
             (this.canvas.width / 20) * 13,
             (this.canvas.width / 20) * 15,
         ];
-        this.state = "";
         this.server = this.loadNewImage("src/moving/pics/Server.png");
         this.index = 0;
         this.player = new Player(canvas);
@@ -485,6 +457,27 @@ class FullGame extends ClassLoader {
         return Math.round(Math.random() * (max - min) + min);
     }
 }
+class KeyboardListener {
+    constructor() {
+        this.keyDown = (ev) => {
+            this.keyCodeStates[ev.keyCode] = true;
+        };
+        this.keyUp = (ev) => {
+            this.keyCodeStates[ev.keyCode] = false;
+        };
+        this.keyCodeStates = new Array();
+        window.addEventListener("keydown", this.keyDown);
+        window.addEventListener("keyup", this.keyUp);
+    }
+    isKeyDown(keyCode) {
+        return this.keyCodeStates[keyCode] === true;
+    }
+}
+KeyboardListener.KEY_SPACE = 32;
+KeyboardListener.KEY_LEFT = 37;
+KeyboardListener.KEY_UP = 38;
+KeyboardListener.KEY_RIGHT = 39;
+KeyboardListener.KEY_DOWN = 40;
 class GameEntity {
     constructor(xPos, yPos) {
         this.xPos = xPos;
