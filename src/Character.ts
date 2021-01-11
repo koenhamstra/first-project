@@ -9,13 +9,16 @@
         this.image = this.loadNewImage(image);
     }
 
+
     public getXPos(){
         return this.xPos;
     }
 
+
     public getYPos(){
         return this.yPos;
     }
+
 
     public getWidth(){
         return this.image.width;
