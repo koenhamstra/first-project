@@ -24,7 +24,7 @@ class Begin extends ClassLoader {
     this.canvas.height = window.innerHeight;
     
     this.rectangles = [
-       new Rectangles(canvas.width*0.7/2 , canvas.height*0.5/2, "red", 70, 300),
+       new Rectangles(canvas.width*0.77/2 , canvas.height*1.5/2, "red", 70, 300),
     ];
   
     this.characters = [
@@ -63,8 +63,8 @@ class Begin extends ClassLoader {
     this.writeTextToCanvas("Instructions:", 40, this.canvas.width / 2, 50,"center");
     this.writeTextToCanvas("Try to reach the computer and solve the mini-game.", 25, this.canvas.width / 2, 100,"center");
     this.writeTextToCanvas("Watch out for enemies!!", 25, this.canvas.width / 2, 150,"center");
-  
     this.writeTextToCanvas("Pick your character", 25,this.rectangles[0].getXPos()+this.rectangles[0].getWidth()/2, this.rectangles[0].getYPos()+this.rectangles[0].getHeight()*1.2/2,"center");
+    
 
     if (this.stage === "showCharacters"){
       for(let i = 0; i< this.characters.length; i++)
