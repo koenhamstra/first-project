@@ -1,6 +1,17 @@
-class Begin {
+class ClassLoader {
     constructor(canvas) {
+        this.done = () => {
+            return false;
+        };
         this.loop = () => {
+        };
+    }
+}
+class Begin extends ClassLoader {
+    constructor(canvas) {
+        super(canvas);
+        this.loop = () => {
+            this.done();
             this.draw();
             requestAnimationFrame(this.loop);
         };
@@ -17,17 +28,14 @@ class Begin {
                 for (let i = 0; i < this.characters.length; i++)
                     this.characters[i].draw(this.ctx);
             }
-            if (this.stage === "characterChosen") {
-                this.stage = "compleet";
-            }
-            this.compleet();
         };
-        this.compleet = () => {
-            if (this.stage === "compleet") {
-                this.start = new Start(this.canvas);
+        this.done = () => {
+            if (this.stage === "characterChosen") {
                 return true;
             }
-            return false;
+            else {
+                return false;
+            }
         };
         this.mouseHandler = (event) => {
             for (let i = 0; i < this.rectangles.length; i++) {
@@ -61,7 +69,7 @@ class Begin {
             new Character1(canvas.width * 0.85 / 2, 350)
         ];
         document.addEventListener("click", this.mouseHandler);
-        this.loop();
+        this.draw();
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "red") {
         this.ctx.font = `${fontSize}px Minecraft`;
@@ -105,27 +113,28 @@ class Character1 extends Character {
 class CompleetGame {
     constructor(canvas) {
         this.loop = () => {
-            if (this.go.done() === false) {
-                this.begin = new Begin(this.canvas);
-                this.begin;
-                if (this.begin.stage === "compleet") {
-                    console.log("hahahahaah");
-                    this.start = new Start(this.canvas);
-                    this.start;
-                }
+            if (this.classLoader[this.level].done() === true) {
+                console.log("ásdsd");
+                this.level++;
+                this.classLoader[this.level].loop();
             }
             requestAnimationFrame(this.loop);
         };
+        this.chooseLevel = () => {
+        };
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
-        this.go = new Go(this.canvas);
+        this.classLoader = [new Go(canvas), new Begin(canvas), new Start(canvas)];
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
+        this.classLoader.push(new Go(canvas));
+        this.level = 0;
         this.loop();
     }
 }
-class Go {
+class Go extends ClassLoader {
     constructor(canvas) {
+        super(canvas);
         this.loop = () => {
             this.draw();
             requestAnimationFrame(this.loop);
@@ -143,29 +152,29 @@ class Go {
         };
         this.done = () => {
             if (this.state === "go") {
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                document.body.style.backgroundImage = "";
+                document.body.style.backgroundImage = "url('assets/img/hacker-background.jpg')";
+                return true;
+            }
+            else {
                 return false;
             }
-            return true;
         };
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
         this.state = "";
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        document.body.style.backgroundImage = "url('assets/img/hacker-background.jpg')";
+        document.body.style.backgroundImage = "url('src/moving/pics/hacker.jpg')";
         document.body.style.backgroundSize = "cover";
         this.rectangles = new Rectangles(canvas.width * 0.77 / 2, canvas.height * 1.5 / 2, "red", 70, 200);
         document.addEventListener("click", this.mouseHandler);
-        this.loop();
+        this.draw();
     }
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.rectangles.draw(this.ctx);
         this.writeTextToCanvas("GO", 35, this.rectangles.getXPos() + this.rectangles.getWidth() / 2, this.rectangles.getYPos() + this.rectangles.getHeight() * 1.2 / 2, "center", "red");
-        if (this.state === "go") {
-            this.done() === false;
-        }
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "red") {
         this.ctx.font = `${fontSize}px Minecraft`;
@@ -201,31 +210,38 @@ class Rectangles {
         return this.height;
     }
 }
-class Start {
+class Start extends ClassLoader {
     constructor(canvas) {
+        super(canvas);
         this.loop = () => {
             this.draw();
             requestAnimationFrame(this.loop);
         };
         this.mouseHandler = (event) => {
-            if (event.clientX >= this.rectangles.getXPos() &&
+            if (event.clientX > this.rectangles.getXPos() &&
                 event.clientX < this.rectangles.getXPos() + this.rectangles.getWidth() &&
-                event.clientY >= this.rectangles.getYPos() &&
-                event.clientY <= this.rectangles.getYPos() + this.rectangles.getHeight()) {
+                event.clientY > this.rectangles.getYPos() &&
+                event.clientY < this.rectangles.getYPos() + this.rectangles.getHeight()) {
                 this.state = "start";
-                this.mario = new FullGame(this.canvas);
             }
+            return this.state;
         };
-        this.compleet = () => {
-            this.mario = new FullGame(this.canvas);
+        this.done = () => {
+            if (this.state === "start") {
+                console.log("meme");
+                return true;
+            }
+            return false;
         };
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
+        document.body.style.backgroundImage = "url('assets/img/hacker-background.jpg')";
+        document.body.style.backgroundSize = "cover";
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.rectangles = new Rectangles(canvas.width * 0.77 / 2, canvas.height * 1.5 / 2, "red", 70, 200);
         document.addEventListener("click", this.mouseHandler);
-        this.loop();
+        this.draw();
     }
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -262,52 +278,6 @@ KeyboardListener.KEY_LEFT = 37;
 KeyboardListener.KEY_UP = 38;
 KeyboardListener.KEY_RIGHT = 39;
 KeyboardListener.KEY_DOWN = 40;
-class Projectile {
-    constructor(canvas, xPos, yPos, verticalSpeed) {
-        this.spawn = () => {
-            this.ctx.drawImage(this.image, this.xPos, this.yPos);
-        };
-        this.move = () => {
-            this.ctx.clearRect(this.xPos, this.yPos, 40, 40);
-            this.ctx.drawImage(this.image, this.xPos, this.yPos);
-            this.xPos -= this.horizontalSpeed;
-        };
-        this.moveProjectiles = () => {
-            this.yPos = this.yPos + this.verticalSpeed;
-            if (this.yPos >= this.canvas.height - this.image.height - 10) {
-                this.verticalSpeed = -this.verticalSpeed;
-            }
-            if (this.yPos <= 1) {
-                this.verticalSpeed = -this.verticalSpeed;
-            }
-            return this.yPos;
-        };
-        this.draw = () => {
-            this.ctx.drawImage(this.image, this.xPos, this.yPos);
-        };
-        this.getXPos = () => {
-            return this.xPos;
-        };
-        this.getYPos = () => {
-            return this.yPos;
-        };
-        this.getImage = () => {
-            return this.image;
-        };
-        this.canvas = canvas;
-        this.ctx = this.canvas.getContext("2d");
-        this.image = this.loadNewImage("src/moving/pics/objects/enemy.png");
-        this.verticalSpeed = verticalSpeed;
-        this.horizontalSpeed = 2;
-        this.xPos = xPos;
-        this.yPos = yPos;
-    }
-    loadNewImage(source) {
-        const img = new Image();
-        img.src = source;
-        return img;
-    }
-}
 class Enemy {
     constructor(canvas) {
         this.moveEnemy = () => {
@@ -339,8 +309,9 @@ class Enemy {
         return img;
     }
 }
-class FullGame {
+class FullGame extends ClassLoader {
     constructor(canvas) {
+        super(canvas);
         this.loop = () => {
             this.enemy.moveEnemy();
             for (let i = 0; i < this.projectiles.length; i++) {
@@ -349,12 +320,17 @@ class FullGame {
             if (this.index > 29) {
                 this.index = 0;
             }
+            this.frameIndex++;
             this.player.start();
             this.player.moveRight();
             this.player.moveLeft();
-            this.collidesWithProjectile();
-            this.frameIndex++;
+            this.collidesWithProjectile(this.player);
+            this.collidesWithCanvasBorder();
+            this.collidesWithServer();
+            this.checkHealthBar();
             this.enemy.draw();
+            if (this.frameIndex % 60 === 0) {
+            }
             if (this.frameIndex % 70 === 0) {
                 this.projectiles.push(new Projectile(this.canvas, this.enemy.getEnemyXPos(), this.enemy.moveEnemy(), this.generateProjectile()));
                 for (let i = 0; i < this.projectiles.length; i++) {
@@ -364,9 +340,32 @@ class FullGame {
             for (let i = 0; i < this.projectiles.length; i++) {
                 this.projectiles[i].move();
             }
-            this.collidesWithCanvasBorder();
             this.draw();
             requestAnimationFrame(this.loop);
+        };
+        this.done = () => {
+            if (this.state === "done") {
+                return true;
+            }
+            else {
+                return false;
+            }
+        };
+        this.checkHealthBar = () => {
+            if (this.player.getHealth() === 3) {
+                this.healthBar = this.loadNewImage("src/moving/pics/Health Bar Full.png");
+            }
+            else if (this.player.getHealth() === 2) {
+                this.healthBar = this.loadNewImage("src/moving/pics/Health Bar Two Thirds.png");
+            }
+            else if (this.player.getHealth() === 1) {
+                this.healthBar = this.loadNewImage("src/moving/pics/Health Bar One Third.png");
+            }
+            else {
+                this.player.setXPos(500);
+                this.writeTextToCanvas("GAME OVER", 50, this.canvas.width / 2, this.canvas.height / 2);
+                this.healthBar = this.loadNewImage("");
+            }
         };
         this.generateProjectile = () => {
             let projectileDirection = this.randomNumber(1, 2);
@@ -381,22 +380,29 @@ class FullGame {
             for (let i = 0; i < this.projectiles.length; i++) {
                 if (this.projectiles[i].getXPos() < -100) {
                     this.projectiles.splice(i, 1);
-                    console.log("removed");
                 }
             }
         };
-        this.collidesWithProjectile = () => {
+        this.collidesWithProjectile = (player) => {
             for (let i = 0; i < this.projectiles.length; i++) {
-                if (this.player.getXPos() > this.projectiles[i].getXPos() &&
-                    this.player.getXPos() <
-                        this.projectiles[i].getXPos() + this.projectiles[i].getImage().width) {
-                    console.log("Collides with Player");
+                if (this.projectiles[i].getXPos() > player.getXPos() &&
+                    this.projectiles[i].getXPos() <
+                        player.getXPos() + player.getImage().width &&
+                    this.projectiles[i].getYPos() > player.getYPos() &&
+                    this.projectiles[i].getYPos() <
+                        player.getYPos() + player.getImage().height) {
+                    this.projectiles.splice(i, 1);
                 }
-                if (this.player.getyPos() < this.projectiles[i].getYPos() &&
-                    this.player.getyPos() >
-                        this.projectiles[i].getYPos() + this.projectiles[i].getImage().height) {
-                    console.log("overlaps");
-                }
+            }
+        };
+        this.collidesWithServer = () => {
+            if (this.canvas.width * 0.84 < this.player.getXPos() &&
+                this.canvas.width * 0.84 + 100 > this.player.getXPos() &&
+                0 < this.player.getYPos() &&
+                this.canvas.height * 0.1 > this.player.getYPos()) {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.writeTextToCanvas("You've reached the server", 50, this.canvas.width / 2, this.canvas.height / 2);
+                this.state = "done";
             }
         };
         document.body.style.backgroundImage = "url('src/moving/back.png')";
@@ -418,14 +424,14 @@ class FullGame {
             (this.canvas.width / 20) * 13,
             (this.canvas.width / 20) * 15,
         ];
-        this.image = this.loadNewImage("src/moving/pics/Server.png");
+        this.state = "";
+        this.server = this.loadNewImage("src/moving/pics/Server.png");
         this.index = 0;
         this.player = new Player(canvas);
         this.frameIndex = 0;
         this.enemy = new Enemy(canvas);
         this.projectiles = [];
         this.createPlatform();
-        this.loop();
     }
     createPlatform() {
         for (let i = 0; i < 10; i++) {
@@ -460,8 +466,9 @@ class FullGame {
         this.platform.forEach((element) => {
             element.draw(this.ctx);
         });
-        this.ctx.drawImage(this.image, (this.canvas.width / 20) * 18, (this.canvas.height / 20) * 0.8);
-        this.ctx.drawImage(this.image, (this.canvas.width / 20) * 17.5, (this.canvas.height / 20) * 0.8);
+        this.ctx.drawImage(this.healthBar, 50, 50);
+        this.ctx.drawImage(this.server, (this.canvas.width / 20) * 18, this.canvas.height * 0.04);
+        this.ctx.drawImage(this.server, (this.canvas.width / 20) * 17.5, this.canvas.height * 0.04);
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "white") {
         this.ctx.font = `${fontSize}px sans-serif`;
@@ -576,7 +583,6 @@ class Player {
         this.jump = () => {
             this.walkOnPlatform();
             if (this.keyboard.isKeyDown(32) === true) {
-                console.log("pressed");
                 this.ypos = this.ypos - 8;
                 if (this.ypos < this.canvas.height - this.canvas.height - this.ypos) {
                     this.ypos = this.ypos + 8;
@@ -595,49 +601,42 @@ class Player {
                 this.xpos < this.canvas.width / 20 + 300 &&
                 this.ypos < (this.canvas.height / 20) * 12 &&
                 this.ypos > (this.canvas.height / 20) * 10.95) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * 10.94;
             }
             if (this.xpos > (this.canvas.width / 20) * 3 &&
                 this.xpos < (this.canvas.width / 20) * 3 + 240 &&
                 this.ypos < (this.canvas.height / 20) * 6 &&
                 this.ypos > (this.canvas.height / 20) * 4.95) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * 4.94;
             }
             if (this.xpos > (this.canvas.width / 20) * 5 &&
                 this.xpos < (this.canvas.width / 20) * 5 + 360 &&
                 this.ypos < (this.canvas.height / 20) * 1 &&
                 this.ypos > (this.canvas.height / 20) * -0.05) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * -0.06;
             }
             if (this.xpos > (this.canvas.width / 20) * 8 &&
                 this.xpos < (this.canvas.width / 20) * 8 + 120 &&
                 this.ypos < (this.canvas.height / 20) * 12 &&
                 this.ypos > (this.canvas.height / 20) * 10.95) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * 10.94;
             }
             if (this.xpos > (this.canvas.width / 20) * 12 &&
                 this.xpos < (this.canvas.width / 20) * 12 + 360 &&
                 this.ypos < (this.canvas.height / 20) * 6 &&
                 this.ypos > (this.canvas.height / 20) * 4.95) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * 4.94;
             }
             if (this.xpos > (this.canvas.width / 20) * 15 &&
                 this.xpos < (this.canvas.width / 20) * 15 + 240 &&
                 this.ypos < (this.canvas.height / 20) * 1 &&
                 this.ypos > (this.canvas.height / 20) * -0.05) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * -0.06;
             }
             if (this.xpos > (this.canvas.width / 20) * 13 &&
                 this.xpos < (this.canvas.width / 20) * 13 + 240 &&
                 this.ypos < (this.canvas.height / 20) * 12 &&
                 this.ypos > (this.canvas.height / 20) * 10.95) {
-                console.log("it works");
                 this.ypos = (this.canvas.height / 20) * 10.94;
             }
         };
@@ -662,13 +661,27 @@ class Player {
         this.getXPos = () => {
             return this.xpos;
         };
-        this.getyPos = () => {
-            return this.xpos;
+        this.getYPos = () => {
+            return this.ypos;
+        };
+        this.getImage = () => {
+            return this.array[1];
+        };
+        this.setHealth = (damage) => {
+            this.health = this.health - damage;
+            return this.health;
+        };
+        this.getHealth = () => {
+            return this.health;
+        };
+        this.setXPos = (number) => {
+            this.xpos = this.xpos + number;
         };
         this.canvas = canvas;
         this.xpos = this.canvas.width / 50;
-        this.ypos = this.canvas.height / this.canvas.height;
+        this.ypos = this.canvas.height * 0.9;
         this.ctx = this.canvas.getContext("2d");
+        this.health = 3;
         this.keyboard = new KeyboardListener();
         this.array = [
             this.loadNewImage("src/moving/PlayerRight/walk 1.png"),
@@ -690,6 +703,52 @@ class Player {
         ];
         this.index = 0;
         this.ctx.drawImage(this.array[1], this.xpos, this.ypos);
+    }
+}
+class Projectile {
+    constructor(canvas, xPos, yPos, verticalSpeed) {
+        this.spawn = () => {
+            this.ctx.drawImage(this.image, this.xPos, this.yPos);
+        };
+        this.move = () => {
+            this.ctx.clearRect(this.xPos, this.yPos, 40, 40);
+            this.ctx.drawImage(this.image, this.xPos, this.yPos);
+            this.xPos -= this.horizontalSpeed;
+        };
+        this.moveProjectiles = () => {
+            this.yPos = this.yPos + this.verticalSpeed;
+            if (this.yPos >= this.canvas.height - this.image.height - 10) {
+                this.verticalSpeed = -this.verticalSpeed;
+            }
+            if (this.yPos <= 1) {
+                this.verticalSpeed = -this.verticalSpeed;
+            }
+            return this.yPos;
+        };
+        this.draw = () => {
+            this.ctx.drawImage(this.image, this.xPos, this.yPos);
+        };
+        this.getXPos = () => {
+            return this.xPos;
+        };
+        this.getYPos = () => {
+            return this.yPos;
+        };
+        this.getImage = () => {
+            return this.image;
+        };
+        this.canvas = canvas;
+        this.ctx = this.canvas.getContext("2d");
+        this.image = this.loadNewImage("src/moving/pics/objects/enemy.png");
+        this.verticalSpeed = verticalSpeed;
+        this.horizontalSpeed = 2;
+        this.xPos = xPos;
+        this.yPos = yPos;
+    }
+    loadNewImage(source) {
+        const img = new Image();
+        img.src = source;
+        return img;
     }
 }
 //# sourceMappingURL=app.js.map
