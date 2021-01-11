@@ -1,4 +1,6 @@
-class Begin {
+///<reference path="ClassLoader.ts"/>
+
+class Begin extends ClassLoader {
     // Necessary canvas attributes
     private readonly canvas: HTMLCanvasElement;
     private readonly ctx: CanvasRenderingContext2D;
@@ -9,11 +11,9 @@ class Begin {
     private characters: Character[];
   
     public stage: string;
-
-    private start : Start;
     
     constructor(canvas: HTMLCanvasElement) {
-
+      super(canvas);
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
 
@@ -34,7 +34,7 @@ class Begin {
     // add an mouse event
     document.addEventListener("click", this.mouseHandler);
 
-    this.loop();
+    this.draw();
     
   }
     
@@ -44,8 +44,8 @@ class Begin {
     * Method for the Game Loop
     * Based on the game state some actions have to be executed
     */
-    private loop = () => {
-    
+    public loop = () => {
+    this.done();
     this.draw();
     requestAnimationFrame(this.loop);
     };
@@ -70,21 +70,16 @@ class Begin {
       for(let i = 0; i< this.characters.length; i++)
       this.characters[i].draw(this.ctx);
     }
-    if (this.stage === "characterChosen"){
-      this.stage = "compleet"
-    }
-
-    this.compleet();
     }
 
 
-    public compleet =()=>{
-      if (this.stage === "compleet"){
-        this.start= new Start (this.canvas);
+    public done =()=>{
+      if (this.stage ==="characterChosen"){
         return true;
-
       }
+      else {
       return false;
+    }
     }
     
   
