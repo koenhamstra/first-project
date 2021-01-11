@@ -1,4 +1,5 @@
-class Start {
+///<reference path="ClassLoader.ts"/>
+class Start extends ClassLoader {
     // Necessary canvas attributes
     private readonly canvas: HTMLCanvasElement;
     private readonly ctx: CanvasRenderingContext2D;
@@ -9,9 +10,12 @@ class Start {
     private mario : FullGame;
 
     public constructor(canvas:HTMLCanvasElement){
+      super (canvas);
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
-        
+    document.body.style.backgroundImage = "url('assets/img/hacker-background.jpg')";
+    document.body.style.backgroundSize = "cover";
+
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
 
@@ -20,7 +24,7 @@ class Start {
     // add an mouse event
     document.addEventListener("click", this.mouseHandler);
     
-    this.loop();
+    this.draw();
 
     }
 
@@ -30,7 +34,7 @@ class Start {
     * Method for the Game Loop
     * Based on the game state some actions have to be executed
     */
-   private loop = () => {
+   public loop = () => {
     this.draw();
     requestAnimationFrame(this.loop);
     };
@@ -52,21 +56,22 @@ class Start {
         //Check every image for a "collision" with the mouseclick
         //If yes, execute the if statement
         //If no, do nothing
-    if (event.clientX >= this.rectangles.getXPos() &&
+    if (event.clientX > this.rectangles.getXPos() &&
               event.clientX < this.rectangles.getXPos() + this.rectangles.getWidth() &&
-              event.clientY >= this.rectangles.getYPos() &&
-              event.clientY <= this.rectangles.getYPos() + this.rectangles.getHeight()){
+              event.clientY >this.rectangles.getYPos() &&
+              event.clientY < this.rectangles.getYPos() + this.rectangles.getHeight()){
             this.state="start";
-            this.mario = new FullGame (this.canvas)
               }
-              
+              return this.state;
             }
 
 
-    public compleet =() =>{
-
-            this.mario = new FullGame (this.canvas)
-
+    public done =() =>{
+      if (this.state==="start") {
+        console.log("meme")
+      return true
+    }
+      return false
     }
 
 
