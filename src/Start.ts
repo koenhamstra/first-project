@@ -7,8 +7,6 @@ class Start extends ClassLoader {
   
     private rectangles: Rectangles;
 
-    private mario : FullGame;
-
     public constructor(canvas:HTMLCanvasElement){
       super (canvas);
     this.canvas = canvas;
@@ -62,6 +60,7 @@ class Start extends ClassLoader {
               event.clientY < this.rectangles.getYPos() + this.rectangles.getHeight()){
             this.state="start";
               }
+              else {this.state ="nothing"}
               return this.state;
             }
 
