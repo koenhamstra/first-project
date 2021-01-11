@@ -4,7 +4,7 @@ class Projectile {
   private yPos: number;
   private ctx: CanvasRenderingContext2D;
   private image: HTMLImageElement;
-//   private enemy: Enemy;
+  //   private enemy: Enemy;
   private verticalSpeed: number;
   private horizontalSpeed: number;
 
