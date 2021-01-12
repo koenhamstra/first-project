@@ -29,20 +29,9 @@ class Go  extends ClassLoader{
         this.draw();
     
         }
-    
-    
-    
-        /**
-        * Method for the Game Loop
-        * Based on the game state some actions have to be executed
-        */
-       public loop = () => {
 
-        this.draw();
-        requestAnimationFrame(this.loop);
-        };
     
-        private draw() {
+        public draw =()=> {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.rectangles.draw(this.ctx);
             this.writeTextToCanvas("GO", 35, this.rectangles.getXPos()+this.rectangles.getWidth()/2, this.rectangles.getYPos()+this.rectangles.getHeight()*1.2/2,"center","red");
@@ -74,8 +63,9 @@ class Go  extends ClassLoader{
     
         public done = () =>{
             if (this.state === "go") {
-                document.body.style.backgroundImage = "";
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 document.body.style.backgroundImage = "url('assets/img/hacker-background.jpg')";
+                document.body.style.backgroundSize = "cover";
 
                 return true;
             } else {
