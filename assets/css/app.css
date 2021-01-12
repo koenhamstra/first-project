@@ -5,5 +5,8 @@ body {
 
 canvas{
     background-image: url("../../Untitled.png");
+    /* background-position: center; */
+    background-repeat: no-repeat;
+    background-size: cover;
     /* background-color: rgb(232, 247, 177) */
 }

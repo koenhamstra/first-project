@@ -45,33 +45,6 @@ class Player {
         return img;
     }
 }
-class Rectangles {
-    constructor(xPos, yPos, color, height, width) {
-        this.height = height;
-        this.width = width;
-        this.xPos = xPos;
-        this.yPos = yPos;
-        this.color = color;
-    }
-    draw(ctx) {
-        ctx.beginPath();
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = 10;
-        ctx.strokeRect(this.xPos, this.yPos, this.width, this.height);
-    }
-    getXPos() {
-        return this.xPos;
-    }
-    getYPos() {
-        return this.yPos;
-    }
-    getWidth() {
-        return this.width;
-    }
-    getHeight() {
-        return this.height;
-    }
-}
 class Game {
     constructor(canvas) {
         this.loop = () => {
@@ -103,6 +76,10 @@ class Game {
                     this.numberOfQuestion = 6;
                 }
                 if (this.numberOfQuestion === 6 && this.detectingRect(event, 1)) {
+                    this.player2.roughDistance();
+                    this.numberOfQuestion = 7;
+                }
+                if (this.numberOfQuestion === 7 && this.detectingRect(event, 1)) {
                     this.player2.roughDistance();
                 }
             }
@@ -166,6 +143,12 @@ class Game {
             this.writeTextToCanvas("No", 40, this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
             this.writeTextToCanvas("No matter", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
         }
+        if (this.numberOfQuestion === 7) {
+            this.writeTextToCanvas("Is it a good practice to give your password to your friends?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
+            this.writeTextToCanvas("Yes", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
+            this.writeTextToCanvas("No matter", 40, this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
+            this.writeTextToCanvas("No", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
+        }
         if (this.gameState === "animate") {
             console.log(this.player1.xPosition());
             console.log(this.player1.getDistance());
@@ -201,6 +184,33 @@ class Game {
         this.ctx.fillStyle = color;
         this.ctx.textAlign = alignment;
         this.ctx.fillText(text, xCoordinate, yCoordinate);
+    }
+}
+class Rectangles {
+    constructor(xPos, yPos, color, height, width) {
+        this.height = height;
+        this.width = width;
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.color = color;
+    }
+    draw(ctx) {
+        ctx.beginPath();
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 10;
+        ctx.strokeRect(this.xPos, this.yPos, this.width, this.height);
+    }
+    getXPos() {
+        return this.xPos;
+    }
+    getYPos() {
+        return this.yPos;
+    }
+    getWidth() {
+        return this.width;
+    }
+    getHeight() {
+        return this.height;
     }
 }
 let init = () => new Game(document.getElementById("canvas"));
