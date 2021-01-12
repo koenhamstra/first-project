@@ -1,20 +1,17 @@
+let init = () => new CompleetGame(document.getElementById("canvas"));
+window.addEventListener("load", init);
 class ClassLoader {
     constructor(canvas) {
         this.done = () => {
             return false;
         };
-        this.loop = () => {
+        this.draw = () => {
         };
     }
 }
 class Begin extends ClassLoader {
     constructor(canvas) {
         super(canvas);
-        this.loop = () => {
-            this.done();
-            this.draw();
-            requestAnimationFrame(this.loop);
-        };
         this.draw = () => {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             for (let i = 0; i < this.rectangles.length; i++) {
@@ -31,6 +28,9 @@ class Begin extends ClassLoader {
         };
         this.done = () => {
             if (this.stage === "characterChosen") {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                document.body.style.backgroundImage = "url('assets/img/hacker-background.jpg')";
+                document.body.style.backgroundSize = "cover";
                 return true;
             }
             else {
@@ -58,8 +58,6 @@ class Begin extends ClassLoader {
         };
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
-        document.body.style.backgroundImage = "url('assets/img/hacker-background.jpg')";
-        document.body.style.backgroundSize = "cover";
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.rectangles = [
@@ -114,18 +112,18 @@ class CompleetGame {
     constructor(canvas) {
         this.loop = () => {
             if (this.classLoader[this.level].done() === true) {
-                console.log(this.level);
-                this.classLoader.splice(0, 1);
+                console.log("ásdsd");
+                this.level++;
             }
+            this.classLoader[this.level].draw();
             requestAnimationFrame(this.loop);
-        };
-        this.chooseLevel = () => {
         };
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
         this.classLoader = [new Go(canvas), new Begin(canvas), new Start(canvas), new FullMarioGame(canvas)];
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
+        this.classLoader.push(new Go(canvas));
         this.level = 0;
         this.loop();
     }
@@ -133,9 +131,10 @@ class CompleetGame {
 class Go extends ClassLoader {
     constructor(canvas) {
         super(canvas);
-        this.loop = () => {
-            this.draw();
-            requestAnimationFrame(this.loop);
+        this.draw = () => {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.rectangles.draw(this.ctx);
+            this.writeTextToCanvas("GO", 35, this.rectangles.getXPos() + this.rectangles.getWidth() / 2, this.rectangles.getYPos() + this.rectangles.getHeight() * 1.2 / 2, "center", "red");
         };
         this.mouseHandler = (event) => {
             if (event.clientX >= this.rectangles.getXPos() &&
@@ -150,8 +149,9 @@ class Go extends ClassLoader {
         };
         this.done = () => {
             if (this.state === "go") {
-                document.body.style.backgroundImage = "";
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 document.body.style.backgroundImage = "url('assets/img/hacker-background.jpg')";
+                document.body.style.backgroundSize = "cover";
                 return true;
             }
             else {
@@ -168,11 +168,6 @@ class Go extends ClassLoader {
         this.rectangles = new Rectangles(canvas.width * 0.77 / 2, canvas.height * 1.5 / 2, "red", 70, 200);
         document.addEventListener("click", this.mouseHandler);
         this.draw();
-    }
-    draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.rectangles.draw(this.ctx);
-        this.writeTextToCanvas("GO", 35, this.rectangles.getXPos() + this.rectangles.getWidth() / 2, this.rectangles.getYPos() + this.rectangles.getHeight() * 1.2 / 2, "center", "red");
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "red") {
         this.ctx.font = `${fontSize}px Minecraft`;
@@ -211,9 +206,10 @@ class Rectangles {
 class Start extends ClassLoader {
     constructor(canvas) {
         super(canvas);
-        this.loop = () => {
-            this.draw();
-            requestAnimationFrame(this.loop);
+        this.draw = () => {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.rectangles.draw(this.ctx);
+            this.writeTextToCanvas("Start", 35, this.rectangles.getXPos() + this.rectangles.getWidth() / 2, this.rectangles.getYPos() + this.rectangles.getHeight() * 1.2 / 2, "center");
         };
         this.mouseHandler = (event) => {
             if (event.clientX > this.rectangles.getXPos() &&
@@ -229,25 +225,20 @@ class Start extends ClassLoader {
         };
         this.done = () => {
             if (this.state === "start") {
-                console.log("meme");
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                document.body.style.backgroundImage = "url('src/moving/back.png')";
+                document.body.style.backgroundSize = "cover";
                 return true;
             }
             return false;
         };
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
-        document.body.style.backgroundImage = "url('assets/img/hacker-background.jpg')";
-        document.body.style.backgroundSize = "cover";
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.rectangles = new Rectangles(canvas.width * 0.77 / 2, canvas.height * 1.5 / 2, "red", 70, 200);
         document.addEventListener("click", this.mouseHandler);
         this.draw();
-    }
-    draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.rectangles.draw(this.ctx);
-        this.writeTextToCanvas("Start", 35, this.rectangles.getXPos() + this.rectangles.getWidth() / 2, this.rectangles.getYPos() + this.rectangles.getHeight() * 1.2 / 2, "center");
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "red") {
         this.ctx.font = `${fontSize}px Minecraft`;
@@ -256,8 +247,123 @@ class Start extends ClassLoader {
         this.ctx.fillText(text, xCoordinate, yCoordinate);
     }
 }
-let init = () => new CompleetGame(document.getElementById("canvas"));
-window.addEventListener("load", init);
+class ComputerScreen {
+    constructor(image, xPos, yPos) {
+        this.getXPos = () => {
+            return this.xPos;
+        };
+        this.getYPos = () => {
+            return this.yPos;
+        };
+        this.getWidth = () => {
+            return this.image.width;
+        };
+        this.getHeight = () => {
+            return this.image.height;
+        };
+        this.image = this.loadNewImage(image);
+        this.xPos = xPos;
+        this.yPos = yPos;
+    }
+    loadNewImage(source) {
+        const img = new Image();
+        img.src = source;
+        return img;
+    }
+    draw(ctx) {
+        ctx.drawImage(this.image, this.xPos, this.yPos, 450, 350);
+    }
+}
+class Game {
+    constructor(canvas) {
+        this.loop = () => {
+            this.reload();
+            this.drawScreen(this.ctx);
+            this.draw();
+            requestAnimationFrame(this.loop);
+        };
+        this.draw = () => {
+            this.writeTextToCanvas("Password", 40, this.canvas.width / 2, this.canvas.height / 5, "center", "red");
+            this.writeTextToCanvas("Press 'shift' if you want to try again", 25, this.canvas.width / 2, this.canvas.height / 2.7);
+        };
+        this.drawConditions = () => {
+            if (this.trueOrFalse == "true") {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height / 2 + 140);
+                this.writeTextToCanvas("There is a capital letter", 50, this.canvas.width / 2, this.canvas.height / 2 + 120);
+            }
+            if (this.trueOrFalse == "false") {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height / 2 + 140);
+                this.writeTextToCanvas("There is no capital letter", 50, this.canvas.width / 2, this.canvas.height / 2 + 120);
+            }
+            if (this.numberOrNot == "yes") {
+                this.ctx.clearRect(0, this.canvas.height / 2 + 150, this.canvas.width, this.canvas.height);
+                this.writeTextToCanvas("There is a number", 50, this.canvas.width / 2, this.canvas.height / 2 + 200);
+            }
+            if (this.numberOrNot == "no") {
+                this.ctx.clearRect(0, this.canvas.height / 2 + 150, this.canvas.width, this.canvas.height);
+                this.writeTextToCanvas("There is no number", 50, this.canvas.width / 2, this.canvas.height / 2 + 200);
+            }
+            if (this.shortOrNot == "short") {
+                this.ctx.clearRect(0, this.canvas.height / 2 + 200, this.canvas.width, this.canvas.height);
+                this.writeTextToCanvas("The password should have at least 6 characters", 50, this.canvas.width / 2, this.canvas.height / 2 + 270);
+            }
+            if (this.shortOrNot == "not") {
+                this.ctx.clearRect(0, this.canvas.height / 2 + 200, this.canvas.width, this.canvas.height);
+                this.writeTextToCanvas("The password is long enough", 50, this.canvas.width / 2, this.canvas.height / 2 + 270);
+            }
+        };
+        this.checkPasswrod = () => {
+            const password = document.getElementById("password").value;
+            for (let i = 0; i < password.length; i++) {
+                console.log(password[i]);
+                if (password.length > 5) {
+                    this.shortOrNot = "not";
+                    this.drawConditions();
+                }
+                if (password[i] === "0" || password[i] === "1" || password[i] === "2" || password[i] === "3" || password[i] === "4" || password[i] === "5" || password[i] === "6" || password[i] === "7" || password[i] === "8" || password[i] === "9") {
+                    console.log("number");
+                    this.numberOrNot = "yes";
+                    this.drawConditions();
+                }
+                if (password[i] === "Z" || password[i] === "X" || password[i] === "C" || password[i] === "V" || password[i] === "B" || password[i] === "N" || password[i] === "M" || password[i] === "A" || password[i] === "S" || password[i] === "D" || password[i] === "F" || password[i] === "G" || password[i] === "H" || password[i] === "J" || password[i] === "K" || password[i] === "L" || password[i] === "Q" || password[i] === "W" || password[i] === "E" || password[i] === "R" || password[i] === "T" || password[i] === "Y" || password[i] === "U" || password[i] === "I" || password[i] === "O" || password[i] === "P") {
+                    this.trueOrFalse = "true";
+                    console.log("capital letter");
+                    this.drawConditions();
+                }
+                else if (password[i] === password[i].toLowerCase()) {
+                    console.log(" no capital letter");
+                    this.drawConditions();
+                }
+            }
+        };
+        this.canvas = canvas;
+        this.ctx = this.canvas.getContext("2d");
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        const button = document.getElementById("button");
+        button.addEventListener("click", this.checkPasswrod);
+        this.trueOrFalse = "false";
+        this.numberOrNot = "no";
+        this.shortOrNot = "short";
+        this.keyListener = new KeyboardListener;
+        this.screen = new ComputerScreen("assets/img/screen.png", this.canvas.width / 2.8, this.canvas.height / 15);
+        this.loop();
+    }
+    drawScreen(ctx) {
+        this.screen.draw(ctx);
+    }
+    reload() {
+        if (this.keyListener.isKeyDown(16)) {
+            location.reload();
+        }
+    }
+    writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "#ffe6ff") {
+        this.ctx.font = `${fontSize}px Fantasy`;
+        this.ctx.fillStyle = color;
+        this.ctx.textAlign = alignment;
+        this.ctx.fillText(text, xCoordinate, yCoordinate);
+    }
+}
 class Enemy {
     constructor(canvas) {
         this.moveEnemy = () => {
@@ -292,38 +398,6 @@ class Enemy {
 class FullMarioGame extends ClassLoader {
     constructor(canvas) {
         super(canvas);
-        this.loop = () => {
-            this.enemy.moveEnemy();
-            for (let i = 0; i < this.projectiles.length; i++) {
-                this.projectiles[i].moveProjectiles();
-            }
-            if (this.index > 29) {
-                this.index = 0;
-            }
-            this.frameIndex++;
-            this.player.start();
-            this.player.moveRight();
-            this.player.moveLeft();
-            this.collidesWithProjectile(this.player);
-            this.collidesWithCanvasBorder();
-            this.collidesWithServer();
-            this.checkHealthBar();
-            this.enemy.draw();
-            if (this.frameIndex % 60 === 0) {
-                console.log(`X = ${this.player.getXPos()}  Y = ${this.player.getYPos()}`);
-            }
-            if (this.frameIndex % 70 === 0) {
-                this.projectiles.push(new Projectile(this.canvas, this.enemy.getEnemyXPos(), this.enemy.moveEnemy(), this.generateProjectile()));
-                for (let i = 0; i < this.projectiles.length; i++) {
-                    this.projectiles[i].spawn();
-                }
-            }
-            for (let i = 0; i < this.projectiles.length; i++) {
-                this.projectiles[i].move();
-            }
-            this.draw();
-            requestAnimationFrame(this.loop);
-        };
         this.checkHealthBar = () => {
             if (this.player.getHealth() === 3) {
                 this.healthBar = this.loadNewImage("src/moving/pics/Health Bar Full.png");
@@ -378,8 +452,45 @@ class FullMarioGame extends ClassLoader {
                 this.writeTextToCanvas("You've reached the server", 50, this.canvas.width / 2, this.canvas.height / 2);
             }
         };
-        document.body.style.backgroundImage = "url('src/moving/back.png')";
-        document.body.style.backgroundSize = "cover";
+        this.draw = () => {
+            this.frameIndex++;
+            this.player.start();
+            this.player.moveRight();
+            this.player.moveLeft();
+            this.collidesWithProjectile(this.player);
+            this.collidesWithCanvasBorder();
+            this.collidesWithServer();
+            this.checkHealthBar();
+            this.enemy.draw();
+            if (this.frameIndex % 60 === 0) {
+                console.log(`X = ${this.player.getXPos()}  Y = ${this.player.getYPos()}`);
+            }
+            if (this.frameIndex % 70 === 0) {
+                this.projectiles.push(new Projectile(this.canvas, this.enemy.getEnemyXPos(), this.enemy.moveEnemy(), this.generateProjectile()));
+                for (let i = 0; i < this.projectiles.length; i++) {
+                    this.projectiles[i].spawn();
+                }
+            }
+            for (let i = 0; i < this.projectiles.length; i++) {
+                this.projectiles[i].move();
+            }
+            this.floor.forEach((element) => {
+                element.draw(this.ctx);
+            });
+            this.platform.forEach((element) => {
+                element.draw(this.ctx);
+            });
+            this.ctx.drawImage(this.healthBar, 50, 50);
+            this.ctx.drawImage(this.server, (this.canvas.width / 20) * 18, this.canvas.height * 0.04);
+            this.ctx.drawImage(this.server, (this.canvas.width / 20) * 17.5, this.canvas.height * 0.04);
+            this.enemy.moveEnemy();
+            for (let i = 0; i < this.projectiles.length; i++) {
+                this.projectiles[i].moveProjectiles();
+            }
+            if (this.index > 29) {
+                this.index = 0;
+            }
+        };
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
         this.canvas.width = window.innerWidth;
@@ -431,17 +542,6 @@ class FullMarioGame extends ClassLoader {
             this.floor.push(new Layout((this.floors += 40), (this.canvas.height * 20) / 21, "src/moving/pics/brick.png"));
         }
     }
-    draw() {
-        this.floor.forEach((element) => {
-            element.draw(this.ctx);
-        });
-        this.platform.forEach((element) => {
-            element.draw(this.ctx);
-        });
-        this.ctx.drawImage(this.healthBar, 50, 50);
-        this.ctx.drawImage(this.server, (this.canvas.width / 20) * 18, this.canvas.height * 0.04);
-        this.ctx.drawImage(this.server, (this.canvas.width / 20) * 17.5, this.canvas.height * 0.04);
-    }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "white") {
         this.ctx.font = `${fontSize}px sans-serif`;
         this.ctx.fillStyle = color;
@@ -457,27 +557,6 @@ class FullMarioGame extends ClassLoader {
         return Math.round(Math.random() * (max - min) + min);
     }
 }
-class KeyboardListener {
-    constructor() {
-        this.keyDown = (ev) => {
-            this.keyCodeStates[ev.keyCode] = true;
-        };
-        this.keyUp = (ev) => {
-            this.keyCodeStates[ev.keyCode] = false;
-        };
-        this.keyCodeStates = new Array();
-        window.addEventListener("keydown", this.keyDown);
-        window.addEventListener("keyup", this.keyUp);
-    }
-    isKeyDown(keyCode) {
-        return this.keyCodeStates[keyCode] === true;
-    }
-}
-KeyboardListener.KEY_SPACE = 32;
-KeyboardListener.KEY_LEFT = 37;
-KeyboardListener.KEY_UP = 38;
-KeyboardListener.KEY_RIGHT = 39;
-KeyboardListener.KEY_DOWN = 40;
 class GameEntity {
     constructor(xPos, yPos) {
         this.xPos = xPos;
@@ -501,6 +580,81 @@ class GameEntity {
         ctx.drawImage(this.image, this.xPos, this.yPos);
     }
 }
+class KeyboardListener {
+    constructor() {
+        this.keyCodeStates = new Array();
+        this.keyCodeTyped = new Array();
+        this.previousState = new Array();
+        window.addEventListener("keydown", (ev) => {
+            this.keyCodeStates[ev.keyCode] = true;
+        });
+        window.addEventListener("keyup", (ev) => {
+            this.keyCodeStates[ev.keyCode] = false;
+        });
+    }
+    onFrameStart() {
+        this.keyCodeTyped = new Array();
+        this.keyCodeStates.forEach((val, key) => {
+            if (this.previousState[key] != val && !this.keyCodeStates[key]) {
+                this.keyCodeTyped[key] = true;
+                this.previousState[key] = val;
+            }
+        });
+    }
+    isKeyDown(keyCode) {
+        return this.keyCodeStates[keyCode] == true;
+    }
+    isKeyTyped(keyCode) {
+        return this.keyCodeTyped[keyCode] == true;
+    }
+}
+KeyboardListener.KEY_ENTER = 13;
+KeyboardListener.KEY_SHIFT = 16;
+KeyboardListener.KEY_CTRL = 17;
+KeyboardListener.KEY_ALT = 18;
+KeyboardListener.KEY_ESC = 27;
+KeyboardListener.KEY_SPACE = 32;
+KeyboardListener.KEY_LEFT = 37;
+KeyboardListener.KEY_UP = 38;
+KeyboardListener.KEY_RIGHT = 39;
+KeyboardListener.KEY_DOWN = 40;
+KeyboardListener.KEY_DEL = 46;
+KeyboardListener.KEY_1 = 49;
+KeyboardListener.KEY_2 = 50;
+KeyboardListener.KEY_3 = 51;
+KeyboardListener.KEY_4 = 52;
+KeyboardListener.KEY_5 = 53;
+KeyboardListener.KEY_6 = 54;
+KeyboardListener.KEY_7 = 55;
+KeyboardListener.KEY_8 = 56;
+KeyboardListener.KEY_9 = 57;
+KeyboardListener.KEY_0 = 58;
+KeyboardListener.KEY_A = 65;
+KeyboardListener.KEY_B = 66;
+KeyboardListener.KEY_C = 67;
+KeyboardListener.KEY_D = 68;
+KeyboardListener.KEY_E = 69;
+KeyboardListener.KEY_F = 70;
+KeyboardListener.KEY_G = 71;
+KeyboardListener.KEY_H = 72;
+KeyboardListener.KEY_I = 73;
+KeyboardListener.KEY_J = 74;
+KeyboardListener.KEY_K = 75;
+KeyboardListener.KEY_L = 76;
+KeyboardListener.KEY_M = 77;
+KeyboardListener.KEY_N = 78;
+KeyboardListener.KEY_O = 79;
+KeyboardListener.KEY_P = 80;
+KeyboardListener.KEY_Q = 81;
+KeyboardListener.KEY_R = 82;
+KeyboardListener.KEY_S = 83;
+KeyboardListener.KEY_T = 84;
+KeyboardListener.KEY_U = 85;
+KeyboardListener.KEY_V = 86;
+KeyboardListener.KEY_W = 87;
+KeyboardListener.KEY_X = 88;
+KeyboardListener.KEY_Y = 89;
+KeyboardListener.KEY_Z = 90;
 class Layout extends GameEntity {
     constructor(xPos, yPos, imageUrl) {
         super(xPos, yPos);
