@@ -9,8 +9,8 @@ abstract class ClassLoader {
     public done = ():boolean => {
     return false;
     }
-    
-    public loop =()=>{
-        
+
+    public draw =()=>{
+
     }
 }
