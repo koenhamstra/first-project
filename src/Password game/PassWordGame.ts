@@ -11,6 +11,7 @@ class PassWordGame extends ClassLoader {
 
     private keyListener : KeyboardListener;
     
+
     constructor(canvas: HTMLCanvasElement) {
     super(canvas);
 
@@ -24,22 +25,9 @@ class PassWordGame extends ClassLoader {
     this.numberOrNot = "no"
     this.shortOrNot = "short"
 
+    const button = document.getElementById("button");
+    button.addEventListener("click", this.checkPasswrod);
     
-      const btn = document.createElement("BUTTON");   // Create a <button> element
-      btn.innerHTML = "Check";                   // Insert text
-      document.body.appendChild(btn);
-      btn.style.top=`30%`;
-      btn.style.position="absolute"
-      btn.style.left=`54%`
-      btn.style.margin="-25px 0 0 -25px"
-
-      const input = document.createElement("INPUT");
-      input.innerHTML="";
-      document.body.appendChild(input);
-      input.style.top=`30%`;
-      input.style.position="absolute";
-      input.style.left=`44%`;
-      input.style.margin="-25px 0 0 -25px";
       
     this.keyListener = new KeyboardListener;
     
@@ -48,13 +36,26 @@ class PassWordGame extends ClassLoader {
     
 
   
-    public draw = () =>{      
+    public draw = () =>{    
+      
+      document.getElementById("password-detection").removeAttribute("hidden");
+
       this.writeTextToCanvas("Password", 40, this.canvas.width / 2, this.canvas.height / 5, "center", "red");
       this.writeTextToCanvas("Press 'shift' if you want to try again", 25, this.canvas.width / 2, this.canvas.height / 2.7,);
       this.reload();
       this.drawScreen(this.ctx);
+      this.drawBasics();
     }
+
     
+    
+    private drawBasics = () =>{
+      this.writeTextToCanvas("Password", 40, this.canvas.width / 2, this.canvas.height / 5, "center", "red")
+
+      this.writeTextToCanvas("Press 'Alt' if you want to try again", 25, this.canvas.width / 2, this.canvas.height / 2.7,)
+      
+    }
+
     private drawConditions = () => {
       if(this.trueOrFalse == "true"){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height/2 + 140);
@@ -91,6 +92,7 @@ class PassWordGame extends ClassLoader {
 
     private drawScreen(ctx: CanvasRenderingContext2D) {
       this.screen.draw(ctx)
+     
   }
 
     private checkPasswrod = () =>{
@@ -123,7 +125,7 @@ class PassWordGame extends ClassLoader {
    }
 
    public reload() {
-    if (this.keyListener.isKeyDown(16)) {
+    if (this.keyListener.isKeyDown(18)) {
         location.reload();
     }
   }

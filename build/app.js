@@ -276,10 +276,16 @@ class PassWordGame extends ClassLoader {
     constructor(canvas) {
         super(canvas);
         this.draw = () => {
+            document.getElementById("password-detection").removeAttribute("hidden");
             this.writeTextToCanvas("Password", 40, this.canvas.width / 2, this.canvas.height / 5, "center", "red");
             this.writeTextToCanvas("Press 'shift' if you want to try again", 25, this.canvas.width / 2, this.canvas.height / 2.7);
             this.reload();
             this.drawScreen(this.ctx);
+            this.drawBasics();
+        };
+        this.drawBasics = () => {
+            this.writeTextToCanvas("Password", 40, this.canvas.width / 2, this.canvas.height / 5, "center", "red");
+            this.writeTextToCanvas("Press 'Alt' if you want to try again", 25, this.canvas.width / 2, this.canvas.height / 2.7);
         };
         this.drawConditions = () => {
             if (this.trueOrFalse == "true") {
@@ -338,20 +344,8 @@ class PassWordGame extends ClassLoader {
         this.trueOrFalse = "false";
         this.numberOrNot = "no";
         this.shortOrNot = "short";
-        const btn = document.createElement("BUTTON");
-        btn.innerHTML = "Check";
-        document.body.appendChild(btn);
-        btn.style.top = `30%`;
-        btn.style.position = "absolute";
-        btn.style.left = `54%`;
-        btn.style.margin = "-25px 0 0 -25px";
-        const input = document.createElement("INPUT");
-        input.innerHTML = "";
-        document.body.appendChild(input);
-        input.style.top = `30%`;
-        input.style.position = "absolute";
-        input.style.left = `44%`;
-        input.style.margin = "-25px 0 0 -25px";
+        const button = document.getElementById("button");
+        button.addEventListener("click", this.checkPasswrod);
         this.keyListener = new KeyboardListener;
         this.screen = new ComputerScreen("assets/img/screen.png", this.canvas.width / 2.8, this.canvas.height / 15);
     }
@@ -359,7 +353,7 @@ class PassWordGame extends ClassLoader {
         this.screen.draw(ctx);
     }
     reload() {
-        if (this.keyListener.isKeyDown(16)) {
+        if (this.keyListener.isKeyDown(18)) {
             location.reload();
         }
     }
