@@ -33,8 +33,6 @@ class FullMarioGame extends ClassLoader {
    */
   public constructor(canvas: HTMLCanvasElement) {
     super(canvas);
-    document.body.style.backgroundImage = "url('src/moving/back.png')";
-    document.body.style.backgroundSize = "cover";
 
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
@@ -74,62 +72,6 @@ class FullMarioGame extends ClassLoader {
     // Start the game cycle
 
   }
-
-  /**
-   * Game cycle, basically loop that keeps the game running. It contains all
-   * the logic needed to draw the individual frames.
-   */
-  public loop = () => {
-    this.enemy.moveEnemy();
-
-    for (let i = 0; i < this.projectiles.length; i++) {
-      this.projectiles[i].moveProjectiles();
-    }
-
-    if (this.index > 29) {
-      this.index = 0;
-    }
-
-    this.frameIndex++;
-    this.player.start();
-    this.player.moveRight();
-    this.player.moveLeft();
-    this.collidesWithProjectile(this.player);
-    this.collidesWithCanvasBorder();
-    this.collidesWithServer();
-    this.checkHealthBar();
-    this.enemy.draw();
-
-    if (this.frameIndex % 60 === 0) {
-      console.log(`X = ${this.player.getXPos()}  Y = ${this.player.getYPos()}`);
-    }
-
-    //Creates a new projectile every X amount of frames and pushes the projectile to projectiles[]
-    if (this.frameIndex % 70 === 0) {
-      this.projectiles.push(
-        new Projectile(
-          this.canvas,
-          this.enemy.getEnemyXPos(),
-          this.enemy.moveEnemy(),
-          this.generateProjectile()
-        )
-      );
-      for (let i = 0; i < this.projectiles.length; i++) {
-        this.projectiles[i].spawn();
-      }
-    }
-
-    //Makes sure every projectile in the projectile array moves from right to left
-    for (let i = 0; i < this.projectiles.length; i++) {
-      this.projectiles[i].move();
-    }
-
-    // Draw everything
-    this.draw();
-
-    // Make sure the game actually loops
-    requestAnimationFrame(this.loop);
-  };
 
   /**
    * Function that checks the health of the player and updates the image accordingly
@@ -220,7 +162,7 @@ class FullMarioGame extends ClassLoader {
         this.canvas.height / 2
       );
     }
-  };
+  }
 
   private createPlatform() {
     //create platform 1
@@ -315,7 +257,45 @@ class FullMarioGame extends ClassLoader {
   /**
    * Draw all the necessary items to the screen
    */
-  private draw() {
+  public draw = () => {
+
+    this.frameIndex++;
+    this.player.start();
+    this.player.moveRight();
+    this.player.moveLeft();
+    this.collidesWithProjectile(this.player);
+    this.collidesWithCanvasBorder();
+    this.collidesWithServer();
+    this.checkHealthBar();
+    this.enemy.draw();
+
+    if (this.frameIndex % 60 === 0) {
+      console.log(`X = ${this.player.getXPos()}  Y = ${this.player.getYPos()}`);
+    }
+
+    //Creates a new projectile every X amount of frames and pushes the projectile to projectiles[]
+    if (this.frameIndex % 70 === 0) {
+      this.projectiles.push(
+        new Projectile(
+          this.canvas,
+          this.enemy.getEnemyXPos(),
+          this.enemy.moveEnemy(),
+          this.generateProjectile()
+        )
+      );
+      for (let i = 0; i < this.projectiles.length; i++) {
+        this.projectiles[i].spawn();
+      }
+    }
+
+    //Makes sure every projectile in the projectile array moves from right to left
+    for (let i = 0; i < this.projectiles.length; i++) {
+      this.projectiles[i].move();
+    }
+
+
+
+
     //draw floor
     this.floor.forEach((element) => {
       element.draw(this.ctx);
@@ -339,6 +319,18 @@ class FullMarioGame extends ClassLoader {
       (this.canvas.width / 20) * 17.5,
       this.canvas.height * 0.04
     );
+
+    this.enemy.moveEnemy();
+
+    for (let i = 0; i < this.projectiles.length; i++) {
+      this.projectiles[i].moveProjectiles();
+    }
+
+    if (this.index > 29) {
+      this.index = 0;
+    }
+
+   
   }
 
   /**
