@@ -1,41 +1,54 @@
 class Game {
     constructor(canvas) {
-        this.step = () => {
+        this.loop = () => {
             this.frameIndex++;
             this.index++;
-            console.log(this.index);
-            if (this.frameIndex >= 300) {
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                if (this.index >= 300) {
-                    this.index = 0;
-                }
-                if (this.index === 3) {
-                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                    document.body.style.backgroundColor = "blue";
-                    console.log("hi");
-                    this.writeTextToCanvas("WARNING", 45, this.xPos, this.yPos, "center", "yellow");
-                }
-                if (this.index === 6) {
-                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                    document.body.style.backgroundColor = "red";
-                    this.writeTextToCanvas("WARNING", 45, this.xPos, this.yPos, "center", "yellow");
-                    this.index = 0;
-                    console.log("hohi");
-                }
-            }
-            requestAnimationFrame(this.step);
-            this.draw();
+            requestAnimationFrame(this.loop);
+            this.drawWhatsApp();
             document.addEventListener("click", this.mouseHandler);
+            if (this.warning === true) {
+                this.warningScreen();
+            }
         };
         this.mouseHandler = (event) => {
             if (this.whatsApp_Pic(event)) {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 this.ctx.drawImage(this.messageImage, this.xPos_whatsapp, this.yPos_whatsapp);
-                this.writeTextToCanvas("Accept", 35, this.xPos_answer1, this.yPos_answer, "center", "black");
-                this.writeTextToCanvas("Reject", 35, this.xPos_answer2, this.yPos_answer, "center", "black");
+                this.writeTextToCanvas("Accept", 35, this.rectangle[0].getXPos() + this.rectangle[0].getWidth() / 2, this.rectangle[0].getYPos() + this.rectangle[0].getHeight() / 2, "center", "black");
+                this.writeTextToCanvas("Reject", 35, this.rectangle[1].getXPos() + this.rectangle[1].getWidth() / 2, this.rectangle[1].getYPos() + this.rectangle[1].getHeight() / 2, "center", "black");
+                this.rectangle[0].draw(this.ctx);
+                this.rectangle[1].draw(this.ctx);
+            }
+            if (this.WhatsAppAccept(event)) {
+                this.index = 0;
+                this.warning = true;
+                if (this.index === 100) {
+                    this.warning = false;
+                }
+            }
+            if (this.WhatsAppReject(event)) {
+                this.frameIndex = 0;
+                this.whatsAppImage = this.loadNewImage("assets/img/email.png");
+                this.messageImage = this.emailMessage;
+                this.drawWhatsApp();
             }
         };
-        this.draw = () => {
+        this.warningScreen = () => {
+            if (this.index % 3 === 0) {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                document.body.style.backgroundColor = "blue";
+                console.log("hi");
+                this.writeTextToCanvas("WARNING", 45, this.xPos, this.yPos, "center", "yellow");
+            }
+            if (this.index % 6 === 0) {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                document.body.style.backgroundColor = "red";
+                this.writeTextToCanvas("WARNING", 45, this.xPos, this.yPos, "center", "yellow");
+                this.index = 0;
+                console.log("hohi");
+            }
+        };
+        this.drawWhatsApp = () => {
             if (this.frameIndex === 10) {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 this.ctx.drawImage(this.phoneImage, this.xPos, this.yPos);
@@ -48,6 +61,15 @@ class Game {
         this.whatsApp_Pic = (event) => {
             return event.clientX >= this.xPos_whatsapp && event.clientX < this.xPos_whatsapp + this.whatsAppImage.width && event.clientY >= this.yPos_whatsapp && event.clientY <= this.yPos_whatsapp + this.whatsAppImage.height;
         };
+        this.email_Pic = (event) => {
+            return event.clientX >= this.xPos_whatsapp && event.clientX < this.xPos_whatsapp + this.emailMessage.width && event.clientY >= this.yPos_whatsapp && event.clientY <= this.yPos_whatsapp + this.emailMessage.height;
+        };
+        this.WhatsAppAccept = (event) => {
+            return event.clientX >= this.rectangle[0].getXPos() && event.clientX < this.rectangle[0].getXPos() + this.rectangle[0].getWidth() && event.clientY >= this.rectangle[0].getYPos() && event.clientY <= this.rectangle[0].getYPos() + this.rectangle[0].getHeight();
+        };
+        this.WhatsAppReject = (event) => {
+            return event.clientX >= this.rectangle[1].getXPos() && event.clientX < this.rectangle[1].getXPos() + this.rectangle[1].getWidth() && event.clientY >= this.rectangle[1].getYPos() && event.clientY <= this.rectangle[1].getYPos() + this.rectangle[1].getHeight();
+        };
         this.canvas = canvas;
         document.addEventListener("click", this.mouseHandler);
         this.canvas.width = window.innerWidth;
@@ -58,16 +80,20 @@ class Game {
         this.xPos_whatsapp = this.canvas.width * 0.5 / 2;
         this.yPos_whatsapp = this.canvas.width * 0.5 / 2;
         this.whatsAppImage = this.loadNewImage("assets/img/whatsapp.png");
+        this.emailMessage = this.loadNewImage("assets/img/email-message.png");
         this.xPos_answer1 = this.canvas.width * 8 / 20;
         this.xPos_answer2 = this.canvas.width * 14 / 20;
         this.yPos_answer = this.canvas.height * 17 / 20;
+        this.rectangle = [new Rectangles(this.xPos_answer1, this.yPos_answer, "white", 70, 150),
+            new Rectangles(this.xPos_answer2, this.yPos_answer, "white", 70, 150)];
+        this.warning = false;
         this.ctx = this.canvas.getContext('2d');
         this.messageImage = this.loadNewImage("assets/img/whatsapp-message.png");
         this.frameIndex = 0;
         this.index = 0;
         document.body.style.backgroundColor = "#CCFFE5";
         console.log('start animation');
-        requestAnimationFrame(this.step);
+        this.loop();
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "white") {
         this.ctx.font = `${fontSize}px sans-serif`;
@@ -156,6 +182,33 @@ KeyListener.KEY_W = 87;
 KeyListener.KEY_X = 88;
 KeyListener.KEY_Y = 89;
 KeyListener.KEY_Z = 90;
+class Rectangles {
+    constructor(xPos, yPos, color, height, width) {
+        this.height = height;
+        this.width = width;
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.color = color;
+    }
+    draw(ctx) {
+        ctx.beginPath();
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 5;
+        ctx.strokeRect(this.xPos, this.yPos, this.width, this.height);
+    }
+    getXPos() {
+        return this.xPos;
+    }
+    getYPos() {
+        return this.yPos;
+    }
+    getWidth() {
+        return this.width;
+    }
+    getHeight() {
+        return this.height;
+    }
+}
 console.log("Javascript is working!");
 window.addEventListener('load', () => {
     console.log("Handling the Load event");
