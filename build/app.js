@@ -181,6 +181,58 @@ class Go extends ClassLoader {
         this.ctx.fillText(text, xCoordinate, yCoordinate);
     }
 }
+class LoadingScreen {
+    constructor(canvas) {
+        this.loop = () => {
+            this.draw();
+            requestAnimationFrame(this.loop);
+        };
+        this.mouseHandler = (event) => {
+            if (event.clientX >= this.rectangles.getXPos() &&
+                event.clientX < this.rectangles.getXPos() + this.rectangles.getWidth() &&
+                event.clientY >= this.rectangles.getYPos() &&
+                event.clientY <= this.rectangles.getYPos() + this.rectangles.getHeight()) {
+                this.state = "go";
+            }
+            else {
+                this.state = "no";
+            }
+        };
+        this.done = () => {
+            if (this.state === "go") {
+                document.body.style.backgroundImage = "";
+                document.body.style.backgroundImage =
+                    "url('assets/img/hacker-background.jpg')";
+                return true;
+            }
+            else {
+                return false;
+            }
+        };
+        this.canvas = canvas;
+        this.ctx = this.canvas.getContext("2d");
+        this.state = "";
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        document.body.style.backgroundImage = "url('src/moving/pics/hacker.jpg')";
+        document.body.style.backgroundSize = "cover";
+        this.rectangles = new Rectangles((canvas.width * 0.77) / 2, (canvas.height * 1.5) / 2, "red", 70, 200);
+        this.writeTextToCanvas("Answer the questions correctly to win. Don't take too long, or the hacker will beat you!", 35, this.canvas.width / 2, this.canvas.height / 3);
+        document.addEventListener("click", this.mouseHandler);
+        this.draw();
+    }
+    draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.rectangles.draw(this.ctx);
+        this.writeTextToCanvas("Start", 35, this.rectangles.getXPos() + this.rectangles.getWidth() / 2, this.rectangles.getYPos() + (this.rectangles.getHeight() * 1.2) / 2, "center", "red");
+    }
+    writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "red") {
+        this.ctx.font = `${fontSize}px Minecraft`;
+        this.ctx.fillStyle = color;
+        this.ctx.textAlign = alignment;
+        this.ctx.fillText(text, xCoordinate, yCoordinate);
+    }
+}
 class Rectangles {
     constructor(xPos, yPos, color, height, width) {
         this.height = height;
@@ -375,7 +427,6 @@ class FullMarioGame extends ClassLoader {
                 0 < this.player.getYPos() &&
                 this.canvas.height * 0.1 > this.player.getYPos()) {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                this.writeTextToCanvas("You've reached the server", 50, this.canvas.width / 2, this.canvas.height / 2);
             }
         };
         document.body.style.backgroundImage = "url('src/moving/back.png')";
@@ -457,27 +508,6 @@ class FullMarioGame extends ClassLoader {
         return Math.round(Math.random() * (max - min) + min);
     }
 }
-class KeyboardListener {
-    constructor() {
-        this.keyDown = (ev) => {
-            this.keyCodeStates[ev.keyCode] = true;
-        };
-        this.keyUp = (ev) => {
-            this.keyCodeStates[ev.keyCode] = false;
-        };
-        this.keyCodeStates = new Array();
-        window.addEventListener("keydown", this.keyDown);
-        window.addEventListener("keyup", this.keyUp);
-    }
-    isKeyDown(keyCode) {
-        return this.keyCodeStates[keyCode] === true;
-    }
-}
-KeyboardListener.KEY_SPACE = 32;
-KeyboardListener.KEY_LEFT = 37;
-KeyboardListener.KEY_UP = 38;
-KeyboardListener.KEY_RIGHT = 39;
-KeyboardListener.KEY_DOWN = 40;
 class GameEntity {
     constructor(xPos, yPos) {
         this.xPos = xPos;
@@ -501,6 +531,27 @@ class GameEntity {
         ctx.drawImage(this.image, this.xPos, this.yPos);
     }
 }
+class KeyboardListener {
+    constructor() {
+        this.keyDown = (ev) => {
+            this.keyCodeStates[ev.keyCode] = true;
+        };
+        this.keyUp = (ev) => {
+            this.keyCodeStates[ev.keyCode] = false;
+        };
+        this.keyCodeStates = new Array();
+        window.addEventListener("keydown", this.keyDown);
+        window.addEventListener("keyup", this.keyUp);
+    }
+    isKeyDown(keyCode) {
+        return this.keyCodeStates[keyCode] === true;
+    }
+}
+KeyboardListener.KEY_SPACE = 32;
+KeyboardListener.KEY_LEFT = 37;
+KeyboardListener.KEY_UP = 38;
+KeyboardListener.KEY_RIGHT = 39;
+KeyboardListener.KEY_DOWN = 40;
 class Layout extends GameEntity {
     constructor(xPos, yPos, imageUrl) {
         super(xPos, yPos);

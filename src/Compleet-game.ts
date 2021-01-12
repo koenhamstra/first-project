@@ -5,7 +5,6 @@ class CompleetGame{
         private classLoader:ClassLoader[];
         private level : number
 
-
         public constructor(canvas:HTMLCanvasElement){
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
