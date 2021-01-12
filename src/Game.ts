@@ -50,7 +50,7 @@ class Game {
     private draw = () =>{
       this.writeTextToCanvas("Password", 40, this.canvas.width / 2, this.canvas.height / 5, "center", "red")
 
-      this.writeTextToCanvas("Press 'r' if you want to try again", 25, this.canvas.width / 2, this.canvas.height / 2.7,)
+      this.writeTextToCanvas("Press 'shift' if you want to try again", 25, this.canvas.width / 2, this.canvas.height / 2.7,)
       
     }
     
@@ -121,7 +121,7 @@ class Game {
    }
 
    public reload() {
-    if (this.keyListener.isKeyDown(82)) {
+    if (this.keyListener.isKeyDown(16)) {
         location.reload();
     }
   }
