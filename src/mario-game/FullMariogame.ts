@@ -24,6 +24,7 @@ class FullMarioGame extends ClassLoader {
   private projectiles: Projectile[];
 
   private healthBar: HTMLImageElement;
+  private loadingScreen: LoadingScreen;
 
   /**
    * Initialize the game
@@ -155,12 +156,7 @@ class FullMarioGame extends ClassLoader {
     ) {
       // console.log("asdf");
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.writeTextToCanvas(
-        "You've reached the server",
-        50,
-        this.canvas.width / 2,
-        this.canvas.height / 2
-      );
+      // this.loadingScreen = new LoadingScreen(this.canvas);
     }
   }
 
