@@ -212,12 +212,6 @@ class FullGame {
     ) {
       // console.log("asdf");
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.writeTextToCanvas(
-        "You've reached the server",
-        50,
-        this.canvas.width / 2,
-        this.canvas.height / 2
-      );
     }
   };
 

@@ -19,6 +19,24 @@ KeyboardListener.KEY_LEFT = 37;
 KeyboardListener.KEY_UP = 38;
 KeyboardListener.KEY_RIGHT = 39;
 KeyboardListener.KEY_DOWN = 40;
+class LoadingScreen {
+    constructor(ctx, text, fontsize, xPos, yPos, allignment, colour) {
+        this.ctx = ctx;
+        this.text = text;
+        this.fontsize = fontsize;
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.allignment = allignment;
+        this.colour = colour;
+        this.writeTextToCanvas(this.text, this.fontsize, this.xPos, this.yPos);
+    }
+    writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "white") {
+        this.ctx.font = `${fontSize}px sans-serif`;
+        this.ctx.fillStyle = color;
+        this.ctx.textAlign = alignment;
+        this.ctx.fillText(text, xCoordinate, yCoordinate);
+    }
+}
 let init = () => {
     const KiwiWars = new FullGame(document.getElementById("canvas"));
 };
@@ -139,7 +157,8 @@ class FullGame {
                 0 < this.player.getYPos() &&
                 this.canvas.height * 0.1 > this.player.getYPos()) {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                this.writeTextToCanvas("You've reached the server", 50, this.canvas.width / 2, this.canvas.height / 2);
+                this.LoadingScreen =
+                    new LoadingScreen(this.ctx, "Minigame 1: Try to answer the questions correctly to beat your enemy. Don't take too long!", 35, this.canvas.width / 2, this.canvas.height / 2, "", "orange");
             }
         };
         document.body.style.backgroundImage = "url('src/moving/back.png')";
