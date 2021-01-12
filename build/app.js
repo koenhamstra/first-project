@@ -1,5 +1,17 @@
 class ComputerScreen {
     constructor(image, xPos, yPos) {
+        this.getXPos = () => {
+            return this.xPos;
+        };
+        this.getYPos = () => {
+            return this.yPos;
+        };
+        this.getWidth = () => {
+            return this.image.width;
+        };
+        this.getHeight = () => {
+            return this.image.height;
+        };
         this.image = this.loadNewImage(image);
         this.xPos = xPos;
         this.yPos = yPos;
@@ -23,7 +35,7 @@ class Game {
         };
         this.draw = () => {
             this.writeTextToCanvas("Password", 40, this.canvas.width / 2, this.canvas.height / 5, "center", "red");
-            this.writeTextToCanvas("Press 'r' if you want to try again", 25, this.canvas.width / 2, this.canvas.height / 2.7);
+            this.writeTextToCanvas("Press 'shift' if you want to try again", 25, this.canvas.width / 2, this.canvas.height / 2.7);
         };
         this.drawConditions = () => {
             if (this.trueOrFalse == "true") {
@@ -92,7 +104,7 @@ class Game {
         this.screen.draw(ctx);
     }
     reload() {
-        if (this.keyListener.isKeyDown(82)) {
+        if (this.keyListener.isKeyDown(16)) {
             location.reload();
         }
     }
