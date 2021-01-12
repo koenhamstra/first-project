@@ -2,23 +2,18 @@ class Game {
 
   // The canvas
   private canvas: HTMLCanvasElement;
-
   private ctx: CanvasRenderingContext2D;
-
   private rectangle: Rectangles[];
+
 
   //images 
   private phoneImage: HTMLImageElement;
-
   private whatsAppImage: HTMLImageElement;
-
   private messageImage: HTMLImageElement;
-
-  // private emailImage: HTMLImageElement;
-
+  private emailImage: HTMLImageElement;
   private emailMessage: HTMLImageElement;
-
   private warning: boolean;
+  private verification: HTMLImageElement;
 
   //positions 
   private xPos: number;
@@ -50,16 +45,16 @@ class Game {
     this.yPos = this.canvas.height * 0.3 / 2;
 
     this.phoneImage = this.loadNewImage("assets/img/phone.png");
+    this.verification = this.loadNewImage("assets/img/verification.png")
 
     //X and Y positions for the whatsapp picture 
     this.xPos_whatsapp = this.canvas.width * 0.5 / 2;
-    this.yPos_whatsapp = this.canvas.width * 0.5 / 2;
+    this.yPos_whatsapp = this.canvas.height * 0.5 / 2;
 
     this.whatsAppImage = this.loadNewImage("assets/img/whatsapp.png");
 
-    // this.emailImage = this.loadNewImage("assets/img/email.png");
-
-    this.emailMessage = this.loadNewImage("assets/img/email-message.png")
+    this.emailMessage = this.loadNewImage("assets/img/email-message.jpg");
+    this.emailImage = this.loadNewImage("assets/img/email.png");
 
     // X and Y positions for the answers 1/2
     this.xPos_answer1 = this.canvas.width * 8 / 20;
@@ -68,7 +63,8 @@ class Game {
 
     // create rectangles
     this.rectangle = [new Rectangles(this.xPos_answer1, this.yPos_answer, "white", 70, 150,),
-    new Rectangles(this.xPos_answer2, this.yPos_answer, "white", 70, 150)]
+    new Rectangles(this.xPos_answer2, this.yPos_answer, "white", 70, 150), 
+    new Rectangles(this.canvas.width / 2, this.canvas.height / 2, "white", 100, 500)]
 
     //warningscreen
     this.warning = false;
@@ -77,7 +73,6 @@ class Game {
     this.ctx = this.canvas.getContext('2d');
     //Whatsapp message image  
     this.messageImage = this.loadNewImage("assets/img/whatsapp-message.png")
-
 
     this.frameIndex = 0;
     this.index = 0;
@@ -102,11 +97,12 @@ class Game {
     // Call this method again on the next animation frame
     // The user must hit F5 to reload the game
     requestAnimationFrame(this.loop);
+ 
     this.drawWhatsApp();
     document.addEventListener("click", this.mouseHandler);
 
     if (this.warning === true) {
-      this.warningScreen()
+      this.warningScreen();
     }
 
   }
@@ -121,39 +117,49 @@ class Game {
       this.rectangle[1].draw(this.ctx);
     }
 
+
+    if (this.warningClick(event)){
+      this.frameIndex = 0;
+      document.body.style.backgroundColor = "#CCFFE5";
+      this.warning = false;
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.drawWhatsApp();
+    }
+
+
     if (this.WhatsAppAccept(event)) {
       this.index = 0;
       this.warning = true;
-      if (this.index === 100) {
-        this.warning = false;
-      }
+      this.whatsAppImage = this.emailImage;
+      this.messageImage = this.emailMessage;
     }
 
     if (this.WhatsAppReject(event)) {
       this.frameIndex = 0;
-      this.whatsAppImage = this.loadNewImage("assets/img/email.png")
+      this.whatsAppImage = this.emailImage;
       this.messageImage = this.emailMessage;
       this.drawWhatsApp(); 
     }
-
   }
 
 
   private warningScreen = () => {
+    this.rectangle[2].draw(this.ctx);
     if (this.index % 3 === 0) {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       document.body.style.backgroundColor = "blue";
       console.log("hi");
-      this.writeTextToCanvas("WARNING", 45, this.xPos, this.yPos, "center", "yellow");
+      this.writeTextToCanvas("WARNING", 60, this.xPos, this.yPos, "center", "yellow");
+      this.writeTextToCanvas("CLICK HERE TO STOP", 30, this.rectangle[2].getXPos() + (this.rectangle[2].getWidth()/2), this.rectangle[2].getYPos() + (this.rectangle[2].getHeight()/2), "center", "yellow");
     }
     if (this.index % 6 === 0) {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       document.body.style.backgroundColor = "red";
-      this.writeTextToCanvas("WARNING", 45, this.xPos, this.yPos, "center", "yellow");
+      this.writeTextToCanvas("WARNING", 60, this.xPos, this.yPos, "center", "yellow");
+      this.writeTextToCanvas("CLICK HERE TO STOP", 30, this.rectangle[2].getXPos() + (this.rectangle[2].getWidth()/2), this.rectangle[2].getYPos() + (this.rectangle[2].getHeight()/2), "center", "yellow");
       this.index = 0;
-      console.log("hohi");
+      console.log("hihi");
     }
-
   }
 
   /**
@@ -206,21 +212,20 @@ class Game {
   }
 
 
+
   private whatsApp_Pic = (event: MouseEvent) => {
     return event.clientX >= this.xPos_whatsapp && event.clientX < this.xPos_whatsapp + this.whatsAppImage.width && event.clientY >= this.yPos_whatsapp && event.clientY <= this.yPos_whatsapp + this.whatsAppImage.height;
   }
 
-  private email_Pic = (event : MouseEvent) => {
-    return event.clientX >= this.xPos_whatsapp && event.clientX < this.xPos_whatsapp + this.emailMessage.width && event.clientY >= this.yPos_whatsapp && event.clientY <= this.yPos_whatsapp + this.emailMessage.height;
-  }
-
   private WhatsAppAccept = (event: MouseEvent) => {
     return event.clientX >= this.rectangle[0].getXPos() && event.clientX < this.rectangle[0].getXPos() + this.rectangle[0].getWidth() && event.clientY >= this.rectangle[0].getYPos() && event.clientY <= this.rectangle[0].getYPos() + this.rectangle[0].getHeight();
-
   }
 
   private WhatsAppReject = (event: MouseEvent) => {
     return event.clientX >= this.rectangle[1].getXPos() && event.clientX < this.rectangle[1].getXPos() + this.rectangle[1].getWidth() && event.clientY >= this.rectangle[1].getYPos() && event.clientY <= this.rectangle[1].getYPos() + this.rectangle[1].getHeight();
   }
 
+  private warningClick = (event: MouseEvent) => {
+    return event.clientX >= this.rectangle[2].getXPos() && event.clientX < this.rectangle[2].getXPos() + this.rectangle[2].getWidth() && event.clientY >= this.rectangle[2].getYPos() && event.clientY <= this.rectangle[2].getYPos() + this.rectangle[2].getHeight();
+  }
 }
