@@ -17,9 +17,6 @@ class Begin extends ClassLoader {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
 
-    document.body.style.backgroundImage = "url('assets/img/hacker-background.jpg')";
-    document.body.style.backgroundSize = "cover";
-
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
     
@@ -37,24 +34,12 @@ class Begin extends ClassLoader {
     this.draw();
     
   }
-    
   
-    
-    /**
-    * Method for the Game Loop
-    * Based on the game state some actions have to be executed
-    */
-    public loop = () => {
-    this.done();
-    this.draw();
-    requestAnimationFrame(this.loop);
-    };
   
-    
     /**
     * Function to draw all the cars on the canvas
     */
-    private draw =() => {
+    public draw =() => {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);  
     for(let i = 0; i<this.rectangles.length; i++){
       this.rectangles[i].draw(this.ctx);
@@ -75,6 +60,9 @@ class Begin extends ClassLoader {
 
     public done =()=>{
       if (this.stage ==="characterChosen"){
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        document.body.style.backgroundImage = "url('assets/img/hacker-background.jpg')";
+        document.body.style.backgroundSize = "cover";
         return true;
       }
       else {
