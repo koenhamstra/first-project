@@ -43,19 +43,8 @@ class Player {
     ];
     this.index = 0;
     this.ctx.drawImage(this.array[1], this.xpos, this.ypos);
-
-    //this.jumpLoop();
   }
 
-  /**
-   * Counts frames for jump method
-   * CURRENTLY NOT USED, WE CAN USE THIS FUNCTION LATER IS WE WANT TO PUT A COOLDOWN ON THE JUMP
-   */
-  // public jumpLoop = () => {
-  //   this.jumpIndex++;
-  //   requestAnimationFrame(this.jumpLoop);
-  //   console.log(this.jumpIndex);
-  // };
 
   /**
    * Function that moves the player to the right when the corresponding key is pressed
