@@ -1,11 +1,8 @@
 class Game {
-
   // The canvas
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private rectangle: Rectangles[];
-
-
   //images 
   private phoneImage: HTMLImageElement;
   private whatsAppImage: HTMLImageElement;
@@ -15,78 +12,67 @@ class Game {
   private warning: boolean;
   private verification: HTMLImageElement;
   private itteration: number;
-
   //positions 
   private xPos: number;
   private yPos: number;
-
   private xPos_whatsapp: number;
   private yPos_whatsapp: number;
-
   private xPos_answer1: number;
   private xPos_answer2: number;
   private yPos_answer: number;
-
+  // frameindex and index
   private frameIndex: number;
   private index: number;
 
 
   public constructor(canvas: HTMLElement) {
     this.canvas = <HTMLCanvasElement>canvas;
-
     // Mouse event
     document.addEventListener("click", this.mouseHandler);
-
     //  the canvas 
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
-
     //X and Y positions for the phone picture 
     this.xPos = this.canvas.width * 0.7 / 2;
     this.yPos = this.canvas.height * 0.3 / 2;
-
+    // phone image 
     this.phoneImage = this.loadNewImage("assets/img/phone.png");
+    // verification message
     this.verification = this.loadNewImage("assets/img/verification.png")
-
     //X and Y positions for the whatsapp picture 
     this.xPos_whatsapp = this.canvas.width * 0.5 / 2;
     this.yPos_whatsapp = this.canvas.height * 0.5 / 2;
-
+    //whatsapp logo
     this.whatsAppImage = this.loadNewImage("assets/img/whatsapp.png");
-
+    //email message
     this.emailMessage = this.loadNewImage("assets/img/email-message.jpg");
+    //email logo
     this.emailImage = this.loadNewImage("assets/img/email.png");
-
     // X and Y positions for the answers 1/2
     this.xPos_answer1 = this.canvas.width * 8 / 20;
     this.xPos_answer2 = this.canvas.width * 14 / 20;
     this.yPos_answer = this.canvas.height * 17 / 20;
-
     // create rectangles
     this.rectangle = [new Rectangles(this.xPos_answer1, this.yPos_answer, "white", 70, 150,),
     new Rectangles(this.xPos_answer2, this.yPos_answer, "white", 70, 150),
     new Rectangles(this.canvas.width / 2, this.canvas.height / 2, "white", 100, 500)]
-
     //warningscreen
     this.warning = false;
-
-    // click itteration
+    // click itteration when click on logo
     this.itteration = 0;
-
     // the Canvas rendering context 2D
     this.ctx = this.canvas.getContext('2d');
     //Whatsapp message image  
     this.messageImage = this.loadNewImage("assets/img/whatsapp-message.png")
-
+    //frameindex and index
     this.frameIndex = 0;
     this.index = 0;
-
+    //backgroundcolor
     document.body.style.backgroundColor = "#CCFFE5";
     // Start the animation
     console.log('start animation');
-
+    //loop
     this.loop();
-
   }
 
   /**
@@ -101,14 +87,14 @@ class Game {
     // Call this method again on the next animation frame
     // The user must hit F5 to reload the game
     requestAnimationFrame(this.loop);
-
+    //call the method to draw
     this.drawWhatsApp();
+    //the mousehandler 
     document.addEventListener("click", this.mouseHandler);
-
+    //warningscreen 
     if (this.warning === true) {
       this.warningScreen();
     }
-
   }
 
   private mouseHandler = (event: MouseEvent) => {
@@ -129,8 +115,7 @@ class Game {
         this.writeTextToCanvas("Can you trust this message?", 35, this.canvas.width * 0.75, this.canvas.height * 0.25, "center", "black")
       }
     }
-
-
+    //to click away when the warningscreen is shown
     if (this.warningClick(event)) {
       this.frameIndex = 0;
       document.body.style.backgroundColor = "#CCFFE5";
@@ -138,8 +123,7 @@ class Game {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.drawWhatsApp();
     }
-
-
+    //to click the accept button
     if (this.WhatsAppAccept(event)) {
       this.itteration++;
       this.index = 0;
@@ -152,8 +136,7 @@ class Game {
         this.drawWhatsApp();
       }
     }
-
-
+    //to click the reject button
     if (this.WhatsAppReject(event)) {
       this.itteration++;
       this.frameIndex = 0;
@@ -167,11 +150,9 @@ class Game {
         this.drawWhatsApp();
       }
     }
-
     console.log(this.itteration)
   }
-
-
+  // the warning screen method
   private warningScreen = () => {
       this.rectangle[2].draw(this.ctx);
       if (this.index % 3 === 0) {
@@ -227,7 +208,7 @@ class Game {
 
 
   /**
-   * to draw the phone image and other images like whatsapp and the messages 
+   * to draw the phone image and other images like whatsapp, email and the messages.
    */
   private drawWhatsApp = (): void => {
     if (this.frameIndex === 10) {
@@ -264,23 +245,20 @@ class Game {
       }
     }
   }
-
-
-
+  // click event on the logo image
   private whatsApp_Pic = (event: MouseEvent) => {
     return event.clientX >= this.xPos_whatsapp && event.clientX < this.xPos_whatsapp + this.whatsAppImage.width && event.clientY >= this.yPos_whatsapp && event.clientY <= this.yPos_whatsapp + this.whatsAppImage.height;
   }
-
+  //click event on the accept button
   private WhatsAppAccept = (event: MouseEvent) => {
     return event.clientX >= this.rectangle[0].getXPos() && event.clientX < this.rectangle[0].getXPos() + this.rectangle[0].getWidth() && event.clientY >= this.rectangle[0].getYPos() && event.clientY <= this.rectangle[0].getYPos() + this.rectangle[0].getHeight();
   }
-
+  //click event on the reject button
   private WhatsAppReject = (event: MouseEvent) => {
     return event.clientX >= this.rectangle[1].getXPos() && event.clientX < this.rectangle[1].getXPos() + this.rectangle[1].getWidth() && event.clientY >= this.rectangle[1].getYPos() && event.clientY <= this.rectangle[1].getYPos() + this.rectangle[1].getHeight();
   }
-
+  //click event on the warning click
   private warningClick = (event: MouseEvent) => {
     return event.clientX >= this.rectangle[2].getXPos() && event.clientX < this.rectangle[2].getXPos() + this.rectangle[2].getWidth() && event.clientY >= this.rectangle[2].getYPos() && event.clientY <= this.rectangle[2].getYPos() + this.rectangle[2].getHeight();
   }
-
 }
