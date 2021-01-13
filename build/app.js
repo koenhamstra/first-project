@@ -277,15 +277,13 @@ class PassWordGame extends ClassLoader {
         super(canvas);
         this.draw = () => {
             document.getElementById("password-detection").removeAttribute("hidden");
-            this.writeTextToCanvas("Password", 40, this.canvas.width / 2, this.canvas.height / 5, "center", "red");
-            this.writeTextToCanvas("Press 'shift' if you want to try again", 25, this.canvas.width / 2, this.canvas.height / 2.7);
             this.reload();
             this.drawScreen(this.ctx);
             this.drawBasics();
         };
         this.drawBasics = () => {
-            this.writeTextToCanvas("Password", 40, this.canvas.width / 2, this.canvas.height / 5, "center", "red");
-            this.writeTextToCanvas("Press 'Alt' if you want to try again", 25, this.canvas.width / 2, this.canvas.height / 2.7);
+            this.writeTextToCanvas("Password", 40, (this.screen.getXPos() + this.screen.getWidth()) * 1.15 / 2, (this.screen.getYPos() + this.screen.getHeight()) / 5, "center", "red");
+            this.writeTextToCanvas("Press 'shift' if you want to try again", 25, (this.screen.getXPos() + this.screen.getWidth()) * 1.15 / 2, (this.screen.getYPos() + this.screen.getHeight()) / 2.7);
         };
         this.drawConditions = () => {
             if (this.trueOrFalse == "true") {
@@ -311,6 +309,9 @@ class PassWordGame extends ClassLoader {
             if (this.shortOrNot == "not") {
                 this.ctx.clearRect(0, this.canvas.height / 2 + 200, this.canvas.width, this.canvas.height);
                 this.writeTextToCanvas("The password is long enough", 50, this.canvas.width / 2, this.canvas.height / 2 + 270);
+            }
+            if (this.shortOrNot == "not" && this.numberOrNot == "yes" && this.trueOrFalse == "true") {
+                document.getElementById("ready").removeAttribute("hidden");
             }
         };
         this.checkPasswrod = () => {
