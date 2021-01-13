@@ -29,9 +29,9 @@ class Game {
     console.log(this.player1);
   
     this.rectangles = [
-       new Rectangles(100, 600, "red", 70, 400), //0
-       new Rectangles(570, 600, "red", 70, 400), //1
-       new Rectangles(1100, 600, "red", 70, 400), //2
+       new Rectangles(this.canvas.width/ 18, this.canvas.height/ 1.2, "red", 70, 400), //0
+       new Rectangles(this.canvas.width/ 2.65, this.canvas.height/ 1.2, "red", 70, 400), //1
+       new Rectangles(this.canvas.width / 1.4, this.canvas.height/ 1.2, "red", 70, 400), //2
     ]
   
     // add an mouse event

@@ -92,9 +92,9 @@ class Game {
         this.player2 = new Player("Greek Arrow", 100, 250, "assets/img/walk 1 (1).png");
         console.log(this.player1);
         this.rectangles = [
-            new Rectangles(100, 600, "red", 70, 400),
-            new Rectangles(570, 600, "red", 70, 400),
-            new Rectangles(1100, 600, "red", 70, 400),
+            new Rectangles(this.canvas.width / 18, this.canvas.height / 1.2, "red", 70, 400),
+            new Rectangles(this.canvas.width / 2.65, this.canvas.height / 1.2, "red", 70, 400),
+            new Rectangles(this.canvas.width / 1.4, this.canvas.height / 1.2, "red", 70, 400),
         ];
         document.addEventListener("click", this.mouseHandler);
         this.numberOfQuestion = 1;
