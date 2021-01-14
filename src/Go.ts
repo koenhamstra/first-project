@@ -21,7 +21,7 @@ class Go  extends ClassLoader{
         document.body.style.backgroundImage = "url('src/moving/back 1.jpg')";
         document.body.style.backgroundSize = `cover`;
     
-        this.rectangles =new Rectangles(canvas.width*1.5/2 , canvas.height*1.7/2, "yellow", 70, 200);
+        this.rectangles =new Rectangles(this.canvas.width*9/12 , canvas.height*1.7/2, "yellow", 70, 200);
     
         // add an mouse event
         document.addEventListener("click", this.mouseHandler);
