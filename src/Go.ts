@@ -15,8 +15,8 @@ class Go  extends ClassLoader{
 
         this.state="";
             
-        this.canvas.width = 1500;
-        this.canvas.height = 1080;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
 
         document.body.style.backgroundImage = "url('src/moving/back 1.jpg')";
         document.body.style.backgroundSize = `cover`;
