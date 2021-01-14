@@ -1,6 +1,6 @@
 #password-detection{
   position: absolute;
-top: 30%;
+top: 27%;
 left: 44%;
 margin: -25px 0 0 -25px;
 }
@@ -46,4 +46,236 @@ margin: -25px 0 0 -25px;
   width: 10%;
   height:10%;
   border-radius: 20px;
+}
+
+#answer1{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 8%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer2{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 40%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer3{
+  background-color:white;
+  position: absolute;
+  top: 88%;
+  left: 73%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer4{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 8%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer5{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 40%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer6{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 73%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer7{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 8%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer8{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 40%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer9{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 73%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer10{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 8%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer11{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 40%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer12{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 73%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer13{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 8%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer14{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 40%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer15{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 73%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer16{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 8%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer17{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 40%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer18{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 73%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer19{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 8%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer20{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 40%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
+}
+#answer21{
+  background-color: white;
+  position: absolute;
+  top: 88%;
+  left: 73%;
+  margin:-25px 0 0 -25px ;
+  width: 25%;
+  height:10%;
+  border-radius: 20px;
+  font-size: 30px;
 }

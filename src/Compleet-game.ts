@@ -10,7 +10,7 @@ class CompleetGame{
         this.ctx = this.canvas.getContext("2d");
         this.classLoader=[
         new Go (canvas),
-        new Loadingscreen(canvas,"Weclome Agent 21 🕵️‍♂️ in BBKA Agency , Be carefull From the enemy shots, reach the server on top right to skip the level","Use left and right arrows to move the player and press Space to jump","src/moving/back.png"),
+        new Loadingscreen(canvas,"Weclome Agent 21 🕵️‍♂️ in BBKA Agency , Be carefull from the enemy shots, reach the server on top right to skip the level","Use left and right arrows to move the player and press Space to jump","src/moving/back.png"),
         new FullMarioGame(canvas,"src/moving/back 2.jpg",3),
         new Loadingscreen(canvas,"Well done!🤩 Now We need your skills to create a strong password for the computer, good luck! 🤙","", "assets/img/background.jpg"),
         new PassWordGame(canvas),
@@ -20,10 +20,10 @@ class CompleetGame{
         new RacingGame(canvas,"src/moving/back 2.jpg"),
         new Loadingscreen(canvas,"Wow you are an amazing agent!🤩 But we still need you! 🤙 move faster to the server 💪","", "src/moving/back.png"),
         new FullMarioGame(canvas,"src/moving/back 2.jpg",15),
-        new Loadingscreen(canvas,"Amazing work!🤩 Now we want you to tell us what are the safe messages on the phones we need you focus good on it otherwise we will lose our war against the hackers","", ""),
+        new Loadingscreen(canvas,"Amazing work!🤩 ","Now we want you to tell us what are the safe messages on the phones we need you focus good on it otherwise we will lose our war against the hackers", ""),
         new MalwareGame(canvas,0),
-        new Loadingscreen(canvas,"Well done Agent 21 🕵️‍♂️ , you completed this mission 💪, see you on your next assignment 👋 ","",""),
-        new Loadingscreen (canvas, "To restart the game refresh the page. Thanks for playing our BBKA game 👋","","")
+        new Loadingscreen(canvas,"Well done Agent 21 🕵️‍♂️ , you completed this mission 💪, see you on your next assignment 👋 ","","src/moving/back 2.jpg"),
+        new EndScreen (canvas, "Press 'r' to restart the game. Thanks for playing our BBKA game 👋","","")
     ];
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;

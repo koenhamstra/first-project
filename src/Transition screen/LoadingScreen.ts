@@ -24,7 +24,7 @@ class Loadingscreen extends ClassLoader{
     this.writeTextToCanvas(
       this.ctx,
       this.text,
-      35,
+      30,
       this.canvas.width / 2,
       this.canvas.height / 3,
       "center",
@@ -33,7 +33,7 @@ class Loadingscreen extends ClassLoader{
     this.writeTextToCanvas(
       this.ctx,
       this.text2,
-      35,
+      30,
       this.canvas.width / 2,
       this.canvas.height *1.6/ 3,
       "center",
@@ -60,6 +60,8 @@ class Loadingscreen extends ClassLoader{
     }
     return false
   };
+
+  
 
   /**
    * Writes text to the canvas

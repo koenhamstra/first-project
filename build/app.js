@@ -34,7 +34,7 @@ class CompleetGame {
         this.ctx = this.canvas.getContext("2d");
         this.classLoader = [
             new Go(canvas),
-            new Loadingscreen(canvas, "Weclome Agent 21 🕵️‍♂️ in BBKA Agency , Be carefull From the enemy shots, reach the server on top right to skip the level", "Use left and right arrows to move the player and press Space to jump", "src/moving/back.png"),
+            new Loadingscreen(canvas, "Weclome Agent 21 🕵️‍♂️ in BBKA Agency , Be carefull from the enemy shots, reach the server on top right to skip the level", "Use left and right arrows to move the player and press Space to jump", "src/moving/back.png"),
             new FullMarioGame(canvas, "src/moving/back 2.jpg", 3),
             new Loadingscreen(canvas, "Well done!🤩 Now We need your skills to create a strong password for the computer, good luck! 🤙", "", "assets/img/background.jpg"),
             new PassWordGame(canvas),
@@ -44,15 +44,47 @@ class CompleetGame {
             new RacingGame(canvas, "src/moving/back 2.jpg"),
             new Loadingscreen(canvas, "Wow you are an amazing agent!🤩 But we still need you! 🤙 move faster to the server 💪", "", "src/moving/back.png"),
             new FullMarioGame(canvas, "src/moving/back 2.jpg", 15),
-            new Loadingscreen(canvas, "Amazing work!🤩 Now we want you to tell us what are the safe messages on the phones we need you focus good on it otherwise we will lose our war against the hackers", "", ""),
+            new Loadingscreen(canvas, "Amazing work!🤩 ", "Now we want you to tell us what are the safe messages on the phones we need you focus good on it otherwise we will lose our war against the hackers", ""),
             new MalwareGame(canvas, 0),
-            new Loadingscreen(canvas, "Well done Agent 21 🕵️‍♂️ , you completed this mission 💪, see you on your next assignment 👋 ", "", ""),
-            new Loadingscreen(canvas, "To restart the game refresh the page. Thanks for playing our BBKA game 👋", "", "")
+            new Loadingscreen(canvas, "Well done Agent 21 🕵️‍♂️ , you completed this mission 💪, see you on your next assignment 👋 ", "", "src/moving/back 2.jpg"),
+            new EndScreen(canvas, "Press 'r' to restart the game. Thanks for playing our BBKA game 👋", "", "")
         ];
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.level = 0;
         this.loop();
+    }
+}
+class EndScreen extends ClassLoader {
+    constructor(canvasId, text, text2, nextBackground) {
+        super(canvasId, new Audio("assets/levels-music/Pixel-City-Groovin.mp3"));
+        this.draw = () => {
+            this.writeTextToCanvas(this.ctx, this.text, 30, this.canvas.width / 2, this.canvas.height / 3, "center", "#08E275");
+            this.writeTextToCanvas(this.ctx, this.text2, 30, this.canvas.width / 2, this.canvas.height * 1.6 / 3, "center", "#08E275");
+            this.restart();
+        };
+        this.restart = () => {
+            if (this.keyListener.isKeyDown(82)) {
+                location.reload();
+            }
+        };
+        this.canvas = canvasId;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        this.ctx = this.canvas.getContext("2d");
+        this.keyListener = new KeyboardListener();
+        this.text = text;
+        this.text2 = text2;
+        this.nextBackGround = nextBackground;
+    }
+    writeTextToCanvas(ctx, text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "red") {
+        ctx.font = `${fontSize}px Minecraft`;
+        ctx.fillStyle = color;
+        ctx.textAlign = alignment;
+        ctx.fillText(text, xCoordinate, yCoordinate);
+    }
+    randomNumber(min, max) {
+        return Math.round(Math.random() * (max - min) + min);
     }
 }
 class Go extends ClassLoader {
@@ -89,11 +121,11 @@ class Go extends ClassLoader {
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
         this.state = "";
-        this.canvas.width = 1500;
-        this.canvas.height = 1080;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
         document.body.style.backgroundImage = "url('src/moving/back 1.jpg')";
         document.body.style.backgroundSize = `cover`;
-        this.rectangles = new Rectangles(canvas.width / 2, canvas.height * 1.5 / 2, "yellow", 70, 200);
+        this.rectangles = new Rectangles(this.canvas.width * 9 / 12, canvas.height * 1.7 / 2, "yellow", 70, 200);
         document.addEventListener("click", this.mouseHandler);
         this.draw();
     }
@@ -204,7 +236,7 @@ class MalwareGame extends ClassLoader {
                     this.writeTextToCanvas("you can trust this message because it is an in app verification", 35, this.canvas.width / 2, this.canvas.height * 0.1, "center", "black");
                 }
             }
-            if (this.frameIndex === 150) {
+            if (this.frameIndex === 200) {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 this.ctx.drawImage(this.whatsAppImage, this.xPos_whatsapp, this.yPos_whatsapp);
                 if (this.itteration >= 0) {
@@ -354,8 +386,8 @@ class PassWordGame extends ClassLoader {
         };
         this.drawBasics = () => {
             this.drawScreen(this.ctx);
-            this.writeTextToCanvas("Password", 40, (this.screen.getXPos() + this.screen.getWidth()) * 1.15 / 2, (this.screen.getYPos() + this.screen.getHeight()) / 5, "center", "red");
-            this.writeTextToCanvas("Press 'Alt' if you want to try again", 25, (this.screen.getXPos() + this.screen.getWidth()) * 1.15 / 2, (this.screen.getYPos() + this.screen.getHeight()) / 2.7);
+            this.writeTextToCanvas("Password", 40, (this.screen.getXPos() + this.screen.getWidth()) * 1.08 / 2, (this.screen.getYPos() + this.screen.getHeight()) / 5, "center", "red");
+            this.writeTextToCanvas("Press 'Alt' if you want to try again", 25, (this.screen.getXPos() + this.screen.getWidth()) * 1.08 / 2, (this.screen.getYPos() + this.screen.getHeight()) / 2.7);
         };
         this.drawConditions = () => {
             if (this.trueOrFalse == "true") {
@@ -478,7 +510,7 @@ class PlayerRacing {
         this._distance = distanceRaced;
     }
     smoothDistance() {
-        this.xPosition += 0.5;
+        this.xPosition += 20;
     }
     roughDistance() {
         this.xPosition += 200;
@@ -511,60 +543,82 @@ class PlayerRacing {
 class RacingGame extends ClassLoader {
     constructor(canvas, nextBackGround) {
         super(canvas, new Audio("assets/levels-music/Fishbowl-Acrobatics.mp3"));
-        this.loop = () => {
-            this.gameState = "animate";
-            this.draw();
-            requestAnimationFrame(this.loop);
-        };
         this.draw = () => {
+            this.gameState = "animate";
+            this.draw1();
+            this.restartGame();
+            requestAnimationFrame(this.draw);
+        };
+        this.draw1 = () => {
             this.gameState = "animate";
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.player1.draw(this.ctx);
             this.player2.draw(this.ctx);
-            for (let i = 0; i < this.rectangles.length; i++) {
-                this.rectangles[i].draw(this.ctx);
-            }
             if (this.numberOfQuestion === 1) {
                 this.writeTextToCanvas("Which password is good?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
-                this.writeTextToCanvas("12345", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("GoodPassword2020", 40, this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("myname", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
+                document.getElementById("answer1").removeAttribute("hidden");
+                document.getElementById("answer2").removeAttribute("hidden");
+                document.getElementById("answer3").removeAttribute("hidden");
             }
             if (this.numberOfQuestion === 2) {
+                document.getElementById("answer1").setAttribute("hidden", "hidden");
+                document.getElementById("answer2").setAttribute("hidden", "hidden");
+                document.getElementById("answer3").setAttribute("hidden", "hidden");
+                document.getElementById("answer4").removeAttribute("hidden");
+                document.getElementById("answer5").removeAttribute("hidden");
+                document.getElementById("answer6").removeAttribute("hidden");
                 this.writeTextToCanvas("How to protect your computer?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
-                this.writeTextToCanvas("Use firewall", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("Be careless", 40, this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("Do not use firewall", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
             }
             if (this.numberOfQuestion === 3) {
+                document.getElementById("answer4").setAttribute("hidden", "hidden");
+                document.getElementById("answer5").setAttribute("hidden", "hidden");
+                document.getElementById("answer6").setAttribute("hidden", "hidden");
+                document.getElementById("answer7").removeAttribute("hidden");
+                document.getElementById("answer8").removeAttribute("hidden");
+                document.getElementById("answer9").removeAttribute("hidden");
                 this.writeTextToCanvas("What do you do when you detect strange activity on your social media account?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
-                this.writeTextToCanvas("Nothing", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("Change your password", 40, this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("Sell your device", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
             }
             if (this.numberOfQuestion === 4) {
+                document.getElementById("answer7").setAttribute("hidden", "hidden");
+                document.getElementById("answer8").setAttribute("hidden", "hidden");
+                document.getElementById("answer9").setAttribute("hidden", "hidden");
+                document.getElementById("answer10").removeAttribute("hidden");
+                document.getElementById("answer11").removeAttribute("hidden");
+                document.getElementById("answer12").removeAttribute("hidden");
                 this.writeTextToCanvas("Is it good to use your name as a password?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
-                this.writeTextToCanvas("No", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("Yes", 40, this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("No matter", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
             }
             if (this.numberOfQuestion === 5) {
+                document.getElementById("answer10").setAttribute("hidden", "hidden");
+                document.getElementById("answer11").setAttribute("hidden", "hidden");
+                document.getElementById("answer12").setAttribute("hidden", "hidden");
+                document.getElementById("answer13").removeAttribute("hidden");
+                document.getElementById("answer14").removeAttribute("hidden");
+                document.getElementById("answer15").removeAttribute("hidden");
                 this.writeTextToCanvas("Is it good the password to consist uppercase letters, lowercase letters and numbers?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
-                this.writeTextToCanvas("No matter", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("No", 40, this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("Yes", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
             }
             if (this.numberOfQuestion === 6) {
+                document.getElementById("answer13").setAttribute("hidden", "hidden");
+                document.getElementById("answer14").setAttribute("hidden", "hidden");
+                document.getElementById("answer15").setAttribute("hidden", "hidden");
+                document.getElementById("answer16").removeAttribute("hidden");
+                document.getElementById("answer17").removeAttribute("hidden");
+                document.getElementById("answer18").removeAttribute("hidden");
                 this.writeTextToCanvas("Is it good to use your birth date as a password?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
-                this.writeTextToCanvas("Yes", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("No", 40, this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("No matter", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
             }
             if (this.numberOfQuestion === 7) {
+                document.getElementById("answer16").setAttribute("hidden", "hidden");
+                document.getElementById("answer17").setAttribute("hidden", "hidden");
+                document.getElementById("answer18").setAttribute("hidden", "hidden");
+                document.getElementById("answer19").removeAttribute("hidden");
+                document.getElementById("answer20").removeAttribute("hidden");
+                document.getElementById("answer21").removeAttribute("hidden");
                 this.writeTextToCanvas("Is it a good practice to give your password to your friends?", 40, this.canvas.width / 2, this.canvas.height / 1.3, "center", "black");
-                this.writeTextToCanvas("Yes", 40, this.canvas.width / 5.3, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("No matter", 40, this.canvas.width / 2, this.canvas.height / 1.11, "center", "black");
-                this.writeTextToCanvas("No", 40, this.canvas.width / 1.18, this.canvas.height / 1.11, "center", "black");
+            }
+            if (this.numberOfQuestion === 8) {
+                document.getElementById("answer19").setAttribute("hidden", "hidden");
+                document.getElementById("answer20").setAttribute("hidden", "hidden");
+                document.getElementById("answer21").setAttribute("hidden", "hidden");
+                this.numberOfQuestion = 1;
             }
             if (this.gameState === "animate") {
                 if (this.player1.getxPostition() < this.player1.getDistance()) {
@@ -580,7 +634,7 @@ class RacingGame extends ClassLoader {
             if (this.gameState === "end1") {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 this.player1.stopThePlayer();
-                this.writeTextToCanvas(`You lost the game :( `, 60, this.canvas.width / 2, this.canvas.height / 2, "center", "red");
+                this.writeTextToCanvas(`You lost the game :( Press "r" if you want to try again `, 60, this.canvas.width / 2, this.canvas.height / 1.3, "center", "red");
             }
             if (this.gameState === "end2") {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -589,40 +643,41 @@ class RacingGame extends ClassLoader {
                 this.gameState = "you win";
             }
         };
-        this.mouseHandler = (event) => {
-            console.log(`xPos ${event.clientX}, yPos ${event.clientY}`);
-            for (let i = 0; i < this.rectangles.length; i++) {
-                if (this.numberOfQuestion === 1 && this.detectingRect(event, 1)) {
-                    this.player2.roughDistance();
-                    this.numberOfQuestion = 2;
-                }
-                if (this.numberOfQuestion === 2 && this.detectingRect(event, 0)) {
-                    this.player2.roughDistance();
-                    this.numberOfQuestion = 3;
-                }
-                if (this.numberOfQuestion === 3 && this.detectingRect(event, 1)) {
-                    this.player2.roughDistance();
-                    this.numberOfQuestion = 4;
-                }
-                if (this.numberOfQuestion === 4 && this.detectingRect(event, 0)) {
-                    this.player2.roughDistance();
-                    this.numberOfQuestion = 5;
-                }
-                if (this.numberOfQuestion === 5 && this.detectingRect(event, 2)) {
-                    this.player2.roughDistance();
-                    this.numberOfQuestion = 6;
-                }
-                if (this.numberOfQuestion === 6 && this.detectingRect(event, 1)) {
-                    this.player2.roughDistance();
-                    this.numberOfQuestion = 7;
-                }
-                if (this.numberOfQuestion === 7 && this.detectingRect(event, 1)) {
-                    this.player2.roughDistance();
-                }
+        this.rightAnswer = () => {
+            this.numberOfQuestion++;
+            this.player2.roughDistance();
+        };
+        this.wrongAnswer = () => {
+            this.numberOfQuestion++;
+        };
+        this.restartGame = () => {
+            if (this.keyListener.isKeyDown(82)) {
+                new RacingGame(this.canvas, "src/moving/back 2.jpg");
             }
         };
         this.done = () => {
             if (this.gameState === "you win") {
+                document.getElementById("answer1").setAttribute("hidden", "hidden");
+                document.getElementById("answer2").setAttribute("hidden", "hidden");
+                document.getElementById("answer3").setAttribute("hidden", "hidden");
+                document.getElementById("answer4").setAttribute("hidden", "hidden");
+                document.getElementById("answer5").setAttribute("hidden", "hidden");
+                document.getElementById("answer6").setAttribute("hidden", "hidden");
+                document.getElementById("answer7").setAttribute("hidden", "hidden");
+                document.getElementById("answer8").setAttribute("hidden", "hidden");
+                document.getElementById("answer9").setAttribute("hidden", "hidden");
+                document.getElementById("answer10").setAttribute("hidden", "hidden");
+                document.getElementById("answer11").setAttribute("hidden", "hidden");
+                document.getElementById("answer12").setAttribute("hidden", "hidden");
+                document.getElementById("answer13").setAttribute("hidden", "hidden");
+                document.getElementById("answer14").setAttribute("hidden", "hidden");
+                document.getElementById("answer15").setAttribute("hidden", "hidden");
+                document.getElementById("answer16").setAttribute("hidden", "hidden");
+                document.getElementById("answer17").setAttribute("hidden", "hidden");
+                document.getElementById("answer18").setAttribute("hidden", "hidden");
+                document.getElementById("answer19").setAttribute("hidden", "hidden");
+                document.getElementById("answer20").setAttribute("hidden", "hidden");
+                document.getElementById("answer21").setAttribute("hidden", "hidden");
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 document.body.style.backgroundImage = `url('${this.nextBackground}')`;
                 document.body.style.backgroundSize = "cover";
@@ -632,24 +687,55 @@ class RacingGame extends ClassLoader {
         };
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
+        this.keyListener = new KeyboardListener();
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.player1 = new PlayerRacing("Bullet", 100, 50, "assets/img/enemy.png");
         this.player2 = new PlayerRacing("Greek Arrow", 100, 250, "assets/img/walk 1.png");
-        this.rectangles = [
-            new Rectangles(this.canvas.width / 18, this.canvas.height / 1.2, "red", 70, 400),
-            new Rectangles(this.canvas.width / 2.65, this.canvas.height / 1.2, "red", 70, 400),
-            new Rectangles(this.canvas.width / 1.4, this.canvas.height / 1.2, "red", 70, 400),
-        ];
+        const button1 = document.getElementById("answer1");
+        button1.addEventListener("click", this.wrongAnswer);
+        const button2 = document.getElementById("answer2");
+        button2.addEventListener("click", this.rightAnswer);
+        const button3 = document.getElementById("answer3");
+        button3.addEventListener("click", this.wrongAnswer);
+        const button4 = document.getElementById("answer4");
+        button4.addEventListener("click", this.rightAnswer);
+        const button5 = document.getElementById("answer5");
+        button5.addEventListener("click", this.wrongAnswer);
+        const button6 = document.getElementById("answer6");
+        button6.addEventListener("click", this.wrongAnswer);
+        const button7 = document.getElementById("answer7");
+        button7.addEventListener("click", this.wrongAnswer);
+        const button8 = document.getElementById("answer8");
+        button8.addEventListener("click", this.rightAnswer);
+        const button9 = document.getElementById("answer9");
+        button9.addEventListener("click", this.wrongAnswer);
+        const button10 = document.getElementById("answer10");
+        button10.addEventListener("click", this.rightAnswer);
+        const button11 = document.getElementById("answer11");
+        button11.addEventListener("click", this.wrongAnswer);
+        const button12 = document.getElementById("answer12");
+        button12.addEventListener("click", this.wrongAnswer);
+        const button13 = document.getElementById("answer13");
+        button13.addEventListener("click", this.wrongAnswer);
+        const button14 = document.getElementById("answer14");
+        button14.addEventListener("click", this.wrongAnswer);
+        const button15 = document.getElementById("answer15");
+        button15.addEventListener("click", this.rightAnswer);
+        const button16 = document.getElementById("answer16");
+        button16.addEventListener("click", this.wrongAnswer);
+        const button17 = document.getElementById("answer17");
+        button17.addEventListener("click", this.rightAnswer);
+        const button18 = document.getElementById("answer18");
+        button18.addEventListener("click", this.wrongAnswer);
+        const button19 = document.getElementById("answer19");
+        button19.addEventListener("click", this.wrongAnswer);
+        const button20 = document.getElementById("answer20");
+        button20.addEventListener("click", this.wrongAnswer);
+        const button21 = document.getElementById("answer21");
+        button21.addEventListener("click", this.rightAnswer);
         this.nextBackground = nextBackGround;
-        document.addEventListener("click", this.mouseHandler);
         this.numberOfQuestion = 1;
-    }
-    detectingRect(event, i) {
-        return event.clientX >= this.rectangles[i].getXPos() &&
-            event.clientX < this.rectangles[i].getXPos() + this.rectangles[i].getWidth() &&
-            event.clientY >= this.rectangles[i].getYPos() &&
-            event.clientY <= this.rectangles[i].getYPos() + this.rectangles[i].getHeight();
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "red") {
         this.ctx.font = `${fontSize}px Minecraft`;
@@ -662,8 +748,8 @@ class Loadingscreen extends ClassLoader {
     constructor(canvasId, text, text2, nextBackground) {
         super(canvasId, new Audio("assets/levels-music/Pixel-City-Groovin.mp3"));
         this.draw = () => {
-            this.writeTextToCanvas(this.ctx, this.text, 35, this.canvas.width / 2, this.canvas.height / 3, "center", "#08E275");
-            this.writeTextToCanvas(this.ctx, this.text2, 35, this.canvas.width / 2, this.canvas.height * 1.6 / 3, "center", "#08E275");
+            this.writeTextToCanvas(this.ctx, this.text, 30, this.canvas.width / 2, this.canvas.height / 3, "center", "#08E275");
+            this.writeTextToCanvas(this.ctx, this.text2, 30, this.canvas.width / 2, this.canvas.height * 1.6 / 3, "center", "#08E275");
             this.writeTextToCanvas(this.ctx, "Press SPACE to start", 40, this.canvas.width / 2, (this.canvas.height / 3) * 2, "center", "red");
         };
         this.done = () => {

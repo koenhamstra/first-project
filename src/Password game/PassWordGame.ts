@@ -44,8 +44,8 @@ class PassWordGame extends ClassLoader {
   private drawBasics = () =>{
     // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawScreen(this.ctx);
-    this.writeTextToCanvas("Password", 40, (this.screen.getXPos()+this.screen.getWidth())*1.15 / 2, (this.screen.getYPos()+this.screen.getHeight()) / 5, "center", "red")
-    this.writeTextToCanvas("Press 'Alt' if you want to try again", 25, (this.screen.getXPos()+this.screen.getWidth())*1.15 / 2, (this.screen.getYPos()+this.screen.getHeight()) / 2.7,)
+    this.writeTextToCanvas("Password", 40, (this.screen.getXPos()+this.screen.getWidth())*1.08 / 2, (this.screen.getYPos()+this.screen.getHeight()) / 5, "center", "red")
+    this.writeTextToCanvas("Press 'Alt' if you want to try again", 25, (this.screen.getXPos()+this.screen.getWidth())*1.08 / 2, (this.screen.getYPos()+this.screen.getHeight()) / 2.7,)
 
   }
 
