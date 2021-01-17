@@ -65,7 +65,7 @@ class Go  extends ClassLoader{
         public done = () =>{
             if (this.state === "go") {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                document.body.style.backgroundImage = "url('src/moving/back 2.jpg')";
+                document.body.style.backgroundImage = "url('src/moving/back2.jpg')";
                 document.body.style.backgroundSize = "cover";
                 return true;
             } else {
