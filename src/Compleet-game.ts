@@ -12,7 +12,7 @@ class CompleetGame{
         new Go (canvas),
         new Loadingscreen(canvas,"Weclome Agent 21 🕵️‍♂️ in BBKA Agency , Be carefull from the enemy shots, reach the server on top right to skip the level","Use left and right arrows to move the player and press Space to jump","src/moving/back.png"),
         new FullMarioGame(canvas,"src/moving/back 2.jpg",3),
-        new Loadingscreen(canvas,"Well done!🤩 Now We need your skills to create a strong password for the computer, good luck! 🤙","", "assets/img/background.jpg"),
+        new Loadingscreen(canvas,"Well done!🤩 Now we need your skills to create a strong password for the computer, good luck! 🤙","", "assets/img/background.jpg"),
         new PassWordGame(canvas),
         new Loadingscreen(canvas,"Well done 🤩, You secure our server now. Thank you for your help! let's move on","","src/moving/back.png"),
         new FullMarioGame(canvas,"src/moving/back 2.jpg",7),

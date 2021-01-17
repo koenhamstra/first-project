@@ -19,11 +19,15 @@ class PlayerRacing {
     }
 
     public smoothDistance() {
-        this.xPosition += 20;
+        this.xPosition += 0.5;
     }
 
     public roughDistance() {
         this.xPosition += 200;
+    }
+
+    public backDistance() {
+        this.xPosition -= 100;
     }
 
 

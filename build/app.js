@@ -36,7 +36,7 @@ class CompleetGame {
             new Go(canvas),
             new Loadingscreen(canvas, "Weclome Agent 21 🕵️‍♂️ in BBKA Agency , Be carefull from the enemy shots, reach the server on top right to skip the level", "Use left and right arrows to move the player and press Space to jump", "src/moving/back.png"),
             new FullMarioGame(canvas, "src/moving/back 2.jpg", 3),
-            new Loadingscreen(canvas, "Well done!🤩 Now We need your skills to create a strong password for the computer, good luck! 🤙", "", "assets/img/background.jpg"),
+            new Loadingscreen(canvas, "Well done!🤩 Now we need your skills to create a strong password for the computer, good luck! 🤙", "", "assets/img/background.jpg"),
             new PassWordGame(canvas),
             new Loadingscreen(canvas, "Well done 🤩, You secure our server now. Thank you for your help! let's move on", "", "src/moving/back.png"),
             new FullMarioGame(canvas, "src/moving/back 2.jpg", 7),
@@ -475,7 +475,7 @@ class PassWordGame extends ClassLoader {
         this.shortOrNot = "short";
         const button = document.getElementById("button");
         button.addEventListener("click", this.checkPasswrod);
-        this.keyListener = new KeyboardListener;
+        this.keyListener = new KeyboardListener();
         this.screen = new ComputerScreen("assets/img/screen.png", this.canvas.width / 2.8, this.canvas.height / 15);
         this.rectengle = new Rectangles(canvas.width * 3 / 4, canvas.height / 2, "yellow", 70, 200);
         document.addEventListener("click", this.goToNext);
@@ -510,10 +510,13 @@ class PlayerRacing {
         this._distance = distanceRaced;
     }
     smoothDistance() {
-        this.xPosition += 20;
+        this.xPosition += 0.5;
     }
     roughDistance() {
         this.xPosition += 200;
+    }
+    backDistance() {
+        this.xPosition -= 100;
     }
     stopThePlayer() {
         this.xPosition += 0;
@@ -543,13 +546,12 @@ class PlayerRacing {
 class RacingGame extends ClassLoader {
     constructor(canvas, nextBackGround) {
         super(canvas, new Audio("assets/levels-music/Fishbowl-Acrobatics.mp3"));
-        this.draw = () => {
+        this.loop = () => {
             this.gameState = "animate";
-            this.draw1();
-            this.restartGame();
-            requestAnimationFrame(this.draw);
+            this.draw();
+            requestAnimationFrame(this.loop);
         };
-        this.draw1 = () => {
+        this.draw = () => {
             this.gameState = "animate";
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.player1.draw(this.ctx);
@@ -632,9 +634,12 @@ class RacingGame extends ClassLoader {
                 }
             }
             if (this.gameState === "end1") {
+                this.setHidden();
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                document.getElementById("newTry").removeAttribute("hidden");
+                document.getElementById("tryAgain").removeAttribute("hidden");
                 this.player1.stopThePlayer();
-                this.writeTextToCanvas(`You lost the game :( Press "r" if you want to try again `, 60, this.canvas.width / 2, this.canvas.height / 1.3, "center", "red");
+                this.writeTextToCanvas(`You lost the game :( Press the button if you want to try again `, 60, this.canvas.width / 2, this.canvas.height / 1.3, "center", "red");
             }
             if (this.gameState === "end2") {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -649,35 +654,21 @@ class RacingGame extends ClassLoader {
         };
         this.wrongAnswer = () => {
             this.numberOfQuestion++;
-        };
-        this.restartGame = () => {
-            if (this.keyListener.isKeyDown(82)) {
-                new RacingGame(this.canvas, "src/moving/back 2.jpg");
+            if (this.player2.getxPostition() > 100) {
+                this.player2.backDistance();
             }
+        };
+        this.reloadGame = () => {
+            console.log("new try");
+            document.getElementById("tryAgain").setAttribute("hidden", "hidden");
+            this.gameState = "animate";
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.player1.startPosition(50);
+            this.player2.startPosition(250);
         };
         this.done = () => {
             if (this.gameState === "you win") {
-                document.getElementById("answer1").setAttribute("hidden", "hidden");
-                document.getElementById("answer2").setAttribute("hidden", "hidden");
-                document.getElementById("answer3").setAttribute("hidden", "hidden");
-                document.getElementById("answer4").setAttribute("hidden", "hidden");
-                document.getElementById("answer5").setAttribute("hidden", "hidden");
-                document.getElementById("answer6").setAttribute("hidden", "hidden");
-                document.getElementById("answer7").setAttribute("hidden", "hidden");
-                document.getElementById("answer8").setAttribute("hidden", "hidden");
-                document.getElementById("answer9").setAttribute("hidden", "hidden");
-                document.getElementById("answer10").setAttribute("hidden", "hidden");
-                document.getElementById("answer11").setAttribute("hidden", "hidden");
-                document.getElementById("answer12").setAttribute("hidden", "hidden");
-                document.getElementById("answer13").setAttribute("hidden", "hidden");
-                document.getElementById("answer14").setAttribute("hidden", "hidden");
-                document.getElementById("answer15").setAttribute("hidden", "hidden");
-                document.getElementById("answer16").setAttribute("hidden", "hidden");
-                document.getElementById("answer17").setAttribute("hidden", "hidden");
-                document.getElementById("answer18").setAttribute("hidden", "hidden");
-                document.getElementById("answer19").setAttribute("hidden", "hidden");
-                document.getElementById("answer20").setAttribute("hidden", "hidden");
-                document.getElementById("answer21").setAttribute("hidden", "hidden");
+                this.setHidden();
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 document.body.style.backgroundImage = `url('${this.nextBackground}')`;
                 document.body.style.backgroundSize = "cover";
@@ -687,7 +678,6 @@ class RacingGame extends ClassLoader {
         };
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
-        this.keyListener = new KeyboardListener();
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.player1 = new PlayerRacing("Bullet", 100, 50, "assets/img/enemy.png");
@@ -734,8 +724,33 @@ class RacingGame extends ClassLoader {
         button20.addEventListener("click", this.wrongAnswer);
         const button21 = document.getElementById("answer21");
         button21.addEventListener("click", this.rightAnswer);
+        const newTry = document.getElementById("newTry");
+        newTry.addEventListener("click", this.reloadGame);
         this.nextBackground = nextBackGround;
         this.numberOfQuestion = 1;
+    }
+    setHidden() {
+        document.getElementById("answer1").setAttribute("hidden", "hidden");
+        document.getElementById("answer2").setAttribute("hidden", "hidden");
+        document.getElementById("answer3").setAttribute("hidden", "hidden");
+        document.getElementById("answer4").setAttribute("hidden", "hidden");
+        document.getElementById("answer5").setAttribute("hidden", "hidden");
+        document.getElementById("answer6").setAttribute("hidden", "hidden");
+        document.getElementById("answer7").setAttribute("hidden", "hidden");
+        document.getElementById("answer8").setAttribute("hidden", "hidden");
+        document.getElementById("answer9").setAttribute("hidden", "hidden");
+        document.getElementById("answer10").setAttribute("hidden", "hidden");
+        document.getElementById("answer11").setAttribute("hidden", "hidden");
+        document.getElementById("answer12").setAttribute("hidden", "hidden");
+        document.getElementById("answer13").setAttribute("hidden", "hidden");
+        document.getElementById("answer14").setAttribute("hidden", "hidden");
+        document.getElementById("answer15").setAttribute("hidden", "hidden");
+        document.getElementById("answer16").setAttribute("hidden", "hidden");
+        document.getElementById("answer17").setAttribute("hidden", "hidden");
+        document.getElementById("answer18").setAttribute("hidden", "hidden");
+        document.getElementById("answer19").setAttribute("hidden", "hidden");
+        document.getElementById("answer20").setAttribute("hidden", "hidden");
+        document.getElementById("answer21").setAttribute("hidden", "hidden");
     }
     writeTextToCanvas(text, fontSize = 20, xCoordinate, yCoordinate, alignment = "center", color = "red") {
         this.ctx.font = `${fontSize}px Minecraft`;

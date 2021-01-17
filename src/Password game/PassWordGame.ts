@@ -25,22 +25,24 @@ class PassWordGame extends ClassLoader {
 
   const button = document.getElementById("button");
   button.addEventListener("click", this.checkPasswrod);
-  this.keyListener = new KeyboardListener;
+  this.keyListener = new KeyboardListener();
   this.screen = new ComputerScreen("assets/img/screen.png", this.canvas.width/2.8, this.canvas.height/15);
   this.rectengle= new Rectangles(canvas.width*3/4 , canvas.height/2,"yellow",70,200);
   document.addEventListener("click", this.goToNext);
 
   }
   
-
-
+ /**
+    * Method for the Game Loop
+    * Based on the game state some actions have to be executed
+    */
   public draw = () =>{    
     document.getElementById("password-detection").removeAttribute("hidden");
     this.reload();
     this.drawBasics();
   }
   
-  
+  //Draws the basics on the screen
   private drawBasics = () =>{
     // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawScreen(this.ctx);
@@ -49,6 +51,7 @@ class PassWordGame extends ClassLoader {
 
   }
 
+  //draws the conditions
   private drawConditions = () => {
     if(this.trueOrFalse == "true"){
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height/2 + 140);
@@ -86,6 +89,7 @@ class PassWordGame extends ClassLoader {
     
   }
 
+  //goes to the next stage when you press the rectangle
   private goToNext =(event:MouseEvent)=>{
     if (
       event.clientX >= this.rectengle.getXPos() &&
@@ -103,11 +107,13 @@ class PassWordGame extends ClassLoader {
   
   }
 
+  //draws the screen
   private drawScreen(ctx: CanvasRenderingContext2D) {
     this.screen.draw(ctx)
    
 }
 
+  //checks whether the password contains all of the conditions for good password
   private checkPasswrod = () =>{
     const password = (<HTMLInputElement>document.getElementById("password")).value;
 
@@ -137,6 +143,7 @@ class PassWordGame extends ClassLoader {
     }
  }
 
+ //restarts the game when you press "Alt"
  public reload() {
   if (this.keyListener.isKeyDown(18)) {
       new PassWordGame(this.canvas);
@@ -144,7 +151,7 @@ class PassWordGame extends ClassLoader {
   }
 }
 
-
+//If the password is good, it goes to the next stage
 public done =() : boolean=> {
   if (this.state === "go"){
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
