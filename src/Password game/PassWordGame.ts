@@ -157,7 +157,7 @@ public done =() : boolean=> {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     document.getElementById("password-detection").setAttribute("hidden","hidden");
     console.log(this.state);
-    document.body.style.backgroundImage = "url('src/moving/back 2.jpg')";
+    document.body.style.backgroundImage = "url('src/moving/back2.jpg')";
     document.body.style.backgroundSize = "cover";
     return true
   }
