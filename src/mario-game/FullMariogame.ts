@@ -27,7 +27,7 @@ class FullMarioGame extends ClassLoader {
 
   private gameState : string ;
 
-  private nextBackGround: string;
+
 
   private speedProjectTile : number;
 
@@ -37,13 +37,12 @@ class FullMarioGame extends ClassLoader {
    * @param {HTMLCanvasElement} canvas - The canvas element that the game
    * should be rendered upon
    */
-  public constructor(canvas: HTMLCanvasElement, background: string, speedProjectTile:number) {
+  public constructor(canvas: HTMLCanvasElement, speedProjectTile:number) {
     super(canvas, new Audio("assets/levels-music/8-Bit-Perplexion.mp3"));
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
-    this.nextBackGround=background;
 
     this.keyboardListener = new KeyboardListener();
     this.speedProjectTile = speedProjectTile;
@@ -339,7 +338,7 @@ class FullMarioGame extends ClassLoader {
 
   public done =() : boolean=>{
     if (this.gameState==="done") {
-      document.body.style.backgroundImage = `url(${this.nextBackGround})`;
+      document.body.style.backgroundImage = "url('src/moving/back2.jpg')"
       document.body.style.backgroundSize = "cover";
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       return true
