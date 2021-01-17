@@ -35,18 +35,18 @@ class CompleetGame {
         this.classLoader = [
             new Go(canvas),
             new Loadingscreen(canvas, "Weclome Agent 21 🕵️‍♂️ in BBKA Agency , Be carefull from the enemy shots, reach the server on top right to skip the level", "Use left and right arrows to move the player and press Space to jump", "src/moving/back.png"),
-            new FullMarioGame(canvas, "src/moving/back 2.jpg", 3),
+            new FullMarioGame(canvas, 3),
             new Loadingscreen(canvas, "Well done!🤩 Now we need your skills to create a strong password for the computer, good luck! 🤙", "", "assets/img/background.jpg"),
             new PassWordGame(canvas),
             new Loadingscreen(canvas, "Well done 🤩, You secure our server now. Thank you for your help! let's move on", "", "src/moving/back.png"),
-            new FullMarioGame(canvas, "src/moving/back 2.jpg", 7),
+            new FullMarioGame(canvas, 7),
             new Loadingscreen(canvas, "Wow you are getting better!🤩 Now answer the questions faster than the hacker to kick him out! 🤙  Good luck 💪", "", "assets/img/Racing-gameBackGround.png"),
-            new RacingGame(canvas, "src/moving/back 2.jpg"),
+            new RacingGame(canvas, "src/moving/back2.jpg"),
             new Loadingscreen(canvas, "Wow you are an amazing agent!🤩 But we still need you! 🤙 move faster to the server 💪", "", "src/moving/back.png"),
-            new FullMarioGame(canvas, "src/moving/back 2.jpg", 15),
-            new Loadingscreen(canvas, "Amazing work!🤩 ", "Now we want you to tell us what are the safe messages on the phones we need you focus good on it otherwise we will lose our war against the hackers", ""),
+            new FullMarioGame(canvas, 15),
+            new Loadingscreen(canvas, "Amazing work!🤩 Now we want you to tell us what the safe messages are on the phone.", "We need you to focus good right now otherwise we will lose our war against the hackers.", ""),
             new MalwareGame(canvas, 0),
-            new Loadingscreen(canvas, "Well done Agent 21 🕵️‍♂️ , you completed this mission 💪, see you on your next assignment 👋 ", "", "src/moving/back 2.jpg"),
+            new Loadingscreen(canvas, "Well done Agent 21 🕵️‍♂️ , you completed this mission 💪, see you on your next assignment 👋 ", "", "src/moving/back2.jpg"),
             new EndScreen(canvas, "Press 'r' to restart the game. Thanks for playing our BBKA game 👋", "", "")
         ];
         this.canvas.width = window.innerWidth;
@@ -110,7 +110,7 @@ class Go extends ClassLoader {
         this.done = () => {
             if (this.state === "go") {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                document.body.style.backgroundImage = "url('src/moving/back 2.jpg')";
+                document.body.style.backgroundImage = "url('src/moving/back2.jpg')";
                 document.body.style.backgroundSize = "cover";
                 return true;
             }
@@ -236,7 +236,7 @@ class MalwareGame extends ClassLoader {
                     this.writeTextToCanvas("you can trust this message because it is an in app verification", 35, this.canvas.width / 2, this.canvas.height * 0.1, "center", "black");
                 }
             }
-            if (this.frameIndex === 200) {
+            if (this.frameIndex === 500) {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 this.ctx.drawImage(this.whatsAppImage, this.xPos_whatsapp, this.yPos_whatsapp);
                 if (this.itteration >= 0) {
@@ -302,7 +302,7 @@ class MalwareGame extends ClassLoader {
         this.done = () => {
             if (this.itteration === 4) {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                document.body.style.backgroundImage = "url('src/moving/back 2.jpg')";
+                document.body.style.backgroundImage = "url('src/moving/back2.jpg')";
                 document.body.style.backgroundSize = "cover";
                 return true;
             }
@@ -460,7 +460,7 @@ class PassWordGame extends ClassLoader {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 document.getElementById("password-detection").setAttribute("hidden", "hidden");
                 console.log(this.state);
-                document.body.style.backgroundImage = "url('src/moving/back 2.jpg')";
+                document.body.style.backgroundImage = "url('src/moving/back2.jpg')";
                 document.body.style.backgroundSize = "cover";
                 return true;
             }
@@ -827,7 +827,7 @@ class Enemy {
     }
 }
 class FullMarioGame extends ClassLoader {
-    constructor(canvas, background, speedProjectTile) {
+    constructor(canvas, speedProjectTile) {
         super(canvas, new Audio("assets/levels-music/8-Bit-Perplexion.mp3"));
         this.checkHealthBar = () => {
             if (this.player.getHealth() === 3) {
@@ -925,7 +925,7 @@ class FullMarioGame extends ClassLoader {
         };
         this.done = () => {
             if (this.gameState === "done") {
-                document.body.style.backgroundImage = `url(${this.nextBackGround})`;
+                document.body.style.backgroundImage = "url('src/moving/back2.jpg')";
                 document.body.style.backgroundSize = "cover";
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 return true;
@@ -936,7 +936,6 @@ class FullMarioGame extends ClassLoader {
         this.ctx = this.canvas.getContext("2d");
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.nextBackGround = background;
         this.keyboardListener = new KeyboardListener();
         this.speedProjectTile = speedProjectTile;
         this.floor = [];
