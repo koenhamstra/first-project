@@ -170,7 +170,7 @@ class Rectangles {
 }
 class MalwareGame extends ClassLoader {
     constructor(canvas, itteration) {
-        super(canvas, new Audio("assets/levels-music/Pixel-City-Groovin.mp3"));
+        super(canvas, new Audio("assets/levels-music/Fishbowl-Acrobatics.mp3"));
         this.draw = () => {
             this.frameIndex++;
             this.index++;
